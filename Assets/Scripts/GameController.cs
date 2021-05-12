@@ -7,12 +7,21 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
+    public enum InfoCollective { None, Total, Full };
+    public enum InfoPest {None, Neighbors, Full};
     
-  // variables to configure
+    // variables to configure
+    private const int neighborLimit = 2;
+
+    private const InfoCollective coachIcLevel = InfoCollective.None;
+    private const InfoPest coachIpLevel = InfoPest.Full;
+
+
     private const int nbPlayers = 5; // the total number of players
     
     private const int maxYear = 10; // the max number of years played. 
-    private const double easeOfPestControl = 1.0;
+    private const double easeOfPestControl = 1.0; //
+    
 
     //  variables that are going to be updated during the game. 
     private int year = 1;
@@ -58,18 +67,11 @@ public class GameController : MonoBehaviour
         // display year
         yearText.text = year.ToString();
 
-
-
         // make sure that the fake waiting box is not displayed
         popupDialog.SetActive(false);
 
         // init the coach's section
-        eventManager.CoachSays("");
-
-        // select the coach type
-        // TODO
-
-       
+        eventManager.CoachSays("");     
 
         isReady = true;
 
@@ -232,6 +234,16 @@ public class GameController : MonoBehaviour
     {
        return isReady;
     }
+
+    public InfoCollective GetCoachIcLevel() 
+    {
+        return coachIcLevel;
+    }
+
+    public InfoPest GetCoachIpLevel()
+    {
+        return coachIpLevel;
+    } 
 
     
 }

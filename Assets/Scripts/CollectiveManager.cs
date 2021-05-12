@@ -7,7 +7,7 @@ public class CollectiveManager : MonoBehaviour
 {      
     Text[] playerText;
     Text[] contributionText;
-
+    int[] contributionPerPlayer;
     Text totalText;
     Text totalContributionText;
 
@@ -29,19 +29,28 @@ public class CollectiveManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       StartCoroutine(UpdateTotal());
+       StartCoroutine(UpdateView());
     }
 
-    private IEnumerator UpdateTotal()
+    private IEnumerator UpdateView()
     {
         yield return new WaitUntil(() => isReady);
         //update total contribution
         int totalContribution = 0;
         for(int i = 0; i < nbPlayers ; i++)
         {
-            totalContribution = totalContribution + int.Parse(contributionText[i].text);
+            totalContribution = totalContribution + contributionPerPlayer[i];
+            if(gameController.GetCoachIcLevel() == GameController.InfoCollective.Full) 
+            {
+                contributionText[i].text = contributionPerPlayer[i].ToString();
+            }
+            
         }
-        totalContributionText.text = totalContribution.ToString();
+        if(gameController.GetCoachIcLevel() == GameController.InfoCollective.Full || gameController.GetCoachIcLevel() == GameController.InfoCollective.Total)
+        {
+            totalContributionText.text = totalContribution.ToString();
+        }  
+        
     }
 
     public IEnumerator InitNumberOfPlayers()
@@ -52,28 +61,49 @@ public class CollectiveManager : MonoBehaviour
 
         playerText = new Text[nbPlayers];
         contributionText = new Text[nbPlayers];
+        contributionPerPlayer = new int[nbPlayers];
 
-        for(int i = 0 ; i < nbPlayers ; i++) 
+
+        if(gameController.GetCoachIcLevel() == GameController.InfoCollective.None)
         {
-            playerText[i] = Instantiate(prefabPlayerText, transform);
-            playerText[i].text = "Player " + i;
-            contributionText[i]  = Instantiate(prefabContributionText, transform);
-            contributionText[i].text = "0";
-            if(i == gameController.GetActivePlayerId()) 
+            GameObject.Find("CollectiveSection").SetActive(false);
+        }
+        else
+        {
+            // Only displays the contribution of each player if the coach info level is full
+
+            if(gameController.GetCoachIcLevel() == GameController.InfoCollective.Full) 
             {
-                playerText[i].text = "You";
+                for(int i = 0 ; i < nbPlayers ; i++) 
+                {
+                    playerText[i] = Instantiate(prefabPlayerText, transform);
+                    playerText[i].text = "Player " + i;
+                    contributionText[i]  = Instantiate(prefabContributionText, transform);
+                    contributionText[i].text = "0";
+                    if(i == gameController.GetActivePlayerId()) 
+                    {
+                        playerText[i].text = "You";
+                    }
+                }
+            }
+            
+            // Only displayes the total contribution if the coach info level is full or total
+            if(gameController.GetCoachIcLevel() == GameController.InfoCollective.Total || gameController.GetCoachIcLevel() == GameController.InfoCollective.Full) 
+            {
+                totalText = Instantiate(prefabPlayerText, transform);
+                totalText.text = "Total";
+                totalContributionText = Instantiate(prefabContributionText, transform);
+                totalContributionText.text = "0";
             }
         }
-        totalText = Instantiate(prefabPlayerText, transform);
-        totalText.text = "Total";
-        totalContributionText = Instantiate(prefabContributionText, transform);
-        totalContributionText.text = "0";
 
+        
+        
         isReady = true;
     }
 
     public void ChangeContribution(int playerID, int contribution) 
     {
-        contributionText[playerID].text = contribution.ToString();
+        contributionPerPlayer[playerID] = contribution;
     }
 }
