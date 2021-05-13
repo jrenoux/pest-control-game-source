@@ -14,6 +14,7 @@ public class FundManager : MonoBehaviour
     private const int initFunds = 5; // the initial amount of money for each player
     private int[] availableFund; // the amount of money of each player. 
     private const int revenuePerYear = 2; // they money each player gets each turn from their paddies
+    private int latestContribution = 0;
 
 
     // Start is called before the first frame update
@@ -66,28 +67,33 @@ public class FundManager : MonoBehaviour
     public void Pay() 
     {
         //called when the player clicks the "Pay" button. Starts the round manager
-        int contribution = int.Parse(amountInput.text);
+        latestContribution = int.Parse(amountInput.text);
 
         // the contribution is valid, we start the round
         // we remove the amount paid from available funds
-        availableFund[gameController.GetActivePlayerId()] = availableFund[gameController.GetActivePlayerId()] - contribution;
-        coachManager.InformAmountContributed(contribution);
-        // and we play the round (with coach's feedback and all
-        gameController.PlayRound(contribution);
+        availableFund[gameController.GetActivePlayerId()] = availableFund[gameController.GetActivePlayerId()] - latestContribution;
+        coachManager.InformAmountContributed(latestContribution);
+
+        // and we tell the game manager that we are switching to the next state
+        gameController.NextState();
 
         // and we empty the input field
         amountInput.text = "0";
     }
 
 
-    public IEnumerator CollectRevenue()
+    public void CollectRevenue()
     {
-        yield return new WaitForSeconds(5);
         for(int i = gameController.GetPestLocation() + 1 ; i < gameController.GetNbPlayers() ; i++) 
         {
             availableFund[i] = availableFund[i] + revenuePerYear;
         }
         coachManager.InformRevenueEarned(revenuePerYear);
+    }
+
+    public int GetLatestContribution()
+    {
+        return latestContribution;
     }
 
 }

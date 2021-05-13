@@ -19,7 +19,9 @@ public class CoachManager : MonoBehaviour
     public Text messageText;
 
     private GameController gameController;
+    public GameObject gridObject;
     private GridManager gridManager;
+    public GameObject messagePanel;
 
     private bool isReady = false;
     private int nbPlayers = 0;
@@ -64,7 +66,17 @@ public class CoachManager : MonoBehaviour
 
     public void InformPestControlFailure(int newPestLocation)
     {
+
+        Debug.Log("informPestControlFailure");
         string message = "";
+        if(coachIpLevel == InfoPest.None)
+        {
+            // we don't need to know anything, 
+            // TODO problem: will create a lot of nested function calls... 
+            gameController.NextState();
+            return;
+        }
+
         if(coachIpLevel == InfoPest.Full) 
         {
             message = "The pest has reached the farm of Player " + newPestLocation;
@@ -80,6 +92,7 @@ public class CoachManager : MonoBehaviour
             }
         }
         messageText.text = message;
+        messagePanel.SetActive(true);
     }
 
     public void InformPestControlSuccess(int pestLocation)
@@ -87,6 +100,13 @@ public class CoachManager : MonoBehaviour
         string message = "";
         
         // check the level of the coach manager before sending the message
+        if(coachIpLevel == InfoPest.None)
+        {
+            // we don't need to do anything
+            // TODO problem: will create a lot of nested function calls... 
+            gameController.NextState();
+            return;
+        }
         if(coachIpLevel == InfoPest.Full) 
         {
             message = "The Pest Control was successful";
@@ -103,6 +123,7 @@ public class CoachManager : MonoBehaviour
         }
 
         messageText.text = message;
+        messagePanel.SetActive(true);
         // TODO there will be some graphic changes as well here
         
     }
@@ -111,12 +132,14 @@ public class CoachManager : MonoBehaviour
     {
         string message = "You have spent " + activePlayerContribution + " GP";
         messageText.text = message;
+        messagePanel.SetActive(true);
     }
 
     public void InformRevenueEarned(int revenue)
     {
-        string message = "You have earned " + revenue + " GP from your part";
+        string message = "You have earned " + revenue + " GP from your farm";
         messageText.text = message;
+        messagePanel.SetActive(true);
     }
 
     public IEnumerator InitCoachManager()
@@ -131,12 +154,19 @@ public class CoachManager : MonoBehaviour
         }
         else
         {
-            gridManager = GameObject.Find("CollectiveGrid").GetComponent<GridManager>();
+            gridManager = gridObject.GetComponent<GridManager>();
             gridManager.InitGrid(nbPlayers, (coachIcLevel == InfoCollective.Full));  
         }     
         messageText.text = "";
+        messagePanel.SetActive(false);
            
         isReady = true;
+    }
+
+    public void OnClickOK()
+    {
+        messagePanel.SetActive(false);
+        gameController.NextState();
     }
 
 }
