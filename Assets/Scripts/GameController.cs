@@ -122,7 +122,7 @@ public class GameController : MonoBehaviour
 
         if(p < threshold)
         {
-            coachManager.InformPestControlSuccess(true);
+            coachManager.InformPestControlSuccess(pestLocation);
             // do some fancy animation stuff?
             // TODO
             StartCoroutine(fundManager.CollectRevenue());
@@ -134,9 +134,10 @@ public class GameController : MonoBehaviour
             }
         }
         else
-        {   
-            coachManager.InformPestControlSuccess(false);
-            pestLocation = pestLocation + 1;
+        {  
+            pestLocation = pestLocation + 1; 
+            coachManager.InformPestControlFailure(pestLocation);
+           
             // we check if the pest reached the current player
             if(pestLocation == activePlayer) 
             {

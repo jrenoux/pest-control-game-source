@@ -12,7 +12,7 @@ public class CoachManager : MonoBehaviour
 
 
     private const InfoCollective coachIcLevel = InfoCollective.Full;
-    private const InfoPest coachIpLevel = InfoPest.Full;
+    private const InfoPest coachIpLevel = InfoPest.Neighbors;
 
 
     // fields to link with the UI
@@ -23,21 +23,14 @@ public class CoachManager : MonoBehaviour
 
     private bool isReady = false;
     private int nbPlayers = 0;
+    private int activePlayerId = -1;
 
     
     // Start is called before the first frame update
     void Start()
     {
         gameController = GameObject.Find("GameManager").GetComponent<GameController>();
-        gridManager = GameObject.Find("CollectiveGrid").GetComponent<GridManager>();
-        if(coachIcLevel == InfoCollective.None)
-        {
-            GameObject.Find("CollectiveSection").SetActive(false);
-        }
-        else
-        {
-            StartCoroutine(InitCollectiveSection());
-        }
+        StartCoroutine(InitCoachManager());
     }
 
     // Update is called once per frame
@@ -69,20 +62,49 @@ public class CoachManager : MonoBehaviour
         
     }
 
-    public void InformPestControlSuccess(bool successful)
+    public void InformPestControlFailure(int newPestLocation)
     {
         string message = "";
-        if(successful)
+        if(coachIpLevel == InfoPest.Full) 
+        {
+            message = "The pest has reached the farm of Player " + newPestLocation;
+        }
+        else if(coachIpLevel == InfoPest.Neighbors)
+        {
+            // checks how far away the pest is
+            int distance = activePlayerId - newPestLocation;
+            // if it was unsuccessful and is now close to the player
+            if(distance <= neighborLimit)
+            {
+                message = "The pest has reached the farm of Player " + newPestLocation;
+            }
+        }
+        messageText.text = message;
+    }
+
+    public void InformPestControlSuccess(int pestLocation)
+    {
+        string message = "";
+        
+        // check the level of the coach manager before sending the message
+        if(coachIpLevel == InfoPest.Full) 
         {
             message = "The Pest Control was successful";
-        }   
-        else
+        }
+        else if(coachIpLevel == InfoPest.Neighbors)
         {
-            message = "The Pest Cotnrol was unsuccessful";
+            // checks how far away the pest is
+            int distance = activePlayerId - pestLocation;
+            // if it was unsuccessful and is now close to the player
+            if(distance <= neighborLimit)
+            {
+                message = "The Pest Control was successful";
+            }
         }
 
-        // checks the level of the coach manager
         messageText.text = message;
+        // TODO there will be some graphic changes as well here
+        
     }
 
     public void InformAmountContributed(int activePlayerContribution)
@@ -97,16 +119,24 @@ public class CoachManager : MonoBehaviour
         messageText.text = message;
     }
 
-    public IEnumerator InitCollectiveSection()
+    public IEnumerator InitCoachManager()
     {
         yield return new WaitUntil(() => gameController.IsReady());
-
         nbPlayers = gameController.GetNbPlayers();
-        
-        gridManager.InitGrid(nbPlayers, (coachIcLevel == InfoCollective.Full));      
+        activePlayerId = gameController.GetActivePlayerId();
 
+        if(coachIcLevel == InfoCollective.None)
+        {
+            GameObject.Find("CollectiveSection").SetActive(false);
+        }
+        else
+        {
+            gridManager = GameObject.Find("CollectiveGrid").GetComponent<GridManager>();
+            gridManager.InitGrid(nbPlayers, (coachIcLevel == InfoCollective.Full));  
+        }     
+        messageText.text = "";
+           
         isReady = true;
-
     }
 
 }
