@@ -33,7 +33,7 @@ public class GameController : MonoBehaviour
     private System.Random random;
     private bool isReady = false;
     private bool latestPestControlSuccess = false;
-
+    private bool gameStateHasChanged = false;
 
     CoachManager coachManager;
     FundManager fundManager;
@@ -75,6 +75,8 @@ public class GameController : MonoBehaviour
         endGamePanel.SetActive(false);
 
         contributionPerPlayer = new int[nbPlayers];
+        gameStateHasChanged = false;
+
         for(int i = 0 ; i < nbPlayers ; i++)
         {
             contributionPerPlayer[i] = 0;
@@ -88,24 +90,51 @@ public class GameController : MonoBehaviour
     {
         if(currentGameState == GameStates.GameEnded)
         {
-            // display end of the game message
-            if(pestLocation == activePlayer)
-            {
-                // the player has lost due the pest spreading to their paddy
-                // TODO
-            }
-            else
-            {
-                // the player has made it through the max number of rounds
-                // TODO
-            }
-
+            // nothing to do
         }
         else
         {
             // display the new stuff
             // update the year
             yearText.text =  year.ToString();
+            // go to the next step if game state has changed
+            if(gameStateHasChanged)
+            {
+                gameStateHasChanged = false;
+                switch (currentGameState)
+                {
+                    case GameStates.WaitingForPlayerInput:
+                        Debug.Log("State = Waiting for active player input");
+                        PrepareForPlayerInput();
+                        break;
+                    case GameStates.ConfirmPlayerInput:
+                        Debug.Log("State = Confirm player input");
+                        ConfirmPlayerInput();
+                        break;
+                    case GameStates.WaitingForOtherPlayers:
+                        Debug.Log("State = Waiting for other players input");
+                        StartCoroutine(PlayArtificialPlayersRound());
+                        break;
+                    case GameStates.PerformingPestControl:
+                        StartCoroutine(PerformPestControl());
+                        Debug.Log("State = Performing pest control");
+                        break;
+                    case GameStates.ConfirmPestControl:
+                        ConfirmPestControl();
+                        Debug.Log("State = Confirm pest control status");
+                        break;
+                    case GameStates.CollectRevenue:
+                        CollectRevenue();
+                        Debug.Log("State = Collect revenue");
+                        break;
+                    case GameStates.PrepareForNextYear:
+                        PrepareForNextYear();
+                        Debug.Log("State = Prepare for next year");
+                        break;
+                    
+                }
+
+            }
         }
     }
 
@@ -114,39 +143,7 @@ public class GameController : MonoBehaviour
         int stateId = (int)currentGameState;
         stateId = (stateId + 1 ) % (Enum.GetNames(typeof(GameStates)).Length -1 );
         currentGameState = (GameStates)stateId;
-
-        switch (currentGameState)
-        {
-            case GameStates.WaitingForPlayerInput:
-                Debug.Log("State = Waiting for active player input");
-                PrepareForPlayerInput();
-                break;
-            case GameStates.ConfirmPlayerInput:
-                Debug.Log("State = Confirm player input");
-                ConfirmPlayerInput();
-                break;
-            case GameStates.WaitingForOtherPlayers:
-                Debug.Log("State = Waiting for other players input");
-                StartCoroutine(PlayArtificialPlayersRound());
-                break;
-            case GameStates.PerformingPestControl:
-                StartCoroutine(PerformPestControl());
-                Debug.Log("State = Performing pest control");
-                break;
-            case GameStates.ConfirmPestControl:
-                ConfirmPestControl();
-                Debug.Log("State = Confirm pest control status");
-                break;
-            case GameStates.CollectRevenue:
-                CollectRevenue();
-                Debug.Log("State = Collect revenue");
-                break;
-            case GameStates.PrepareForNextYear:
-                PrepareForNextYear();
-                Debug.Log("State = Prepare for next year");
-                break;
-            
-        }
+        gameStateHasChanged = true;
     }
 
     public void EndGame()
@@ -187,7 +184,7 @@ public class GameController : MonoBehaviour
     IEnumerator PlayArtificialPlayersRound()
     {
         ActivatePopup("Waiting for other players");
-        int timeToWait = random.Next(2, 10);
+        int timeToWait = random.Next(2, 5);
         yield return new WaitForSeconds(timeToWait);
         DeactivatePopup();
      

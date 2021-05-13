@@ -12,7 +12,7 @@ public class CoachManager : MonoBehaviour
 
 
     private const InfoCollective coachIcLevel = InfoCollective.Full;
-    private const InfoPest coachIpLevel = InfoPest.Neighbors;
+    private const InfoPest coachIpLevel = InfoPest.None;
 
 
     // fields to link with the UI
