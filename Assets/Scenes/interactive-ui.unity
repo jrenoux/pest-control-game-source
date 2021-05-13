@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 29553683}
   - component: {fileID: 29553682}
+  - component: {fileID: 29553684}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -170,6 +171,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &29553684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 29553681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 976e6f5e94fdbc20f9751ea5c4cdc8dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  messageText: {fileID: 1072679838}
 --- !u!1 &142727124
 GameObject:
   m_ObjectHideFlags: 0
@@ -512,7 +526,6 @@ GameObject:
   - component: {fileID: 376600424}
   - component: {fileID: 376600423}
   - component: {fileID: 376600426}
-  - component: {fileID: 376600427}
   m_Layer: 5
   m_Name: CollectiveGrid
   m_TagString: Untagged
@@ -610,25 +623,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 376600421}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8241db7f79b764353afd028fddc77bad, type: 3}
+  m_Script: {fileID: 11500000, guid: b2f42edefdd58422b9242f98e0e82226, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   prefabPlayerText: {fileID: 7844718373364998183, guid: 287e6f26fb2df46f087a72e0ff883c2b, type: 3}
   prefabContributionText: {fileID: 5417347796766298918, guid: eca63433d8a96a591a3ea57f78b0f902, type: 3}
---- !u!114 &376600427
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 376600421}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalFit: 0
-  m_VerticalFit: 0
 --- !u!1 &389737705
 GameObject:
   m_ObjectHideFlags: 0

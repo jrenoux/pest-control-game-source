@@ -6,17 +6,8 @@ using UnityEngine.UI;
 
 
 public class GameController : MonoBehaviour
-{
-    public enum InfoCollective { None, Total, Full };
-    public enum InfoPest {None, Neighbors, Full};
-    
+{    
     // variables to configure
-    private const int neighborLimit = 2;
-
-    private const InfoCollective coachIcLevel = InfoCollective.None;
-    private const InfoPest coachIpLevel = InfoPest.Full;
-
-
     private const int nbPlayers = 5; // the total number of players
     
     private const int maxYear = 10; // the max number of years played. 
@@ -28,7 +19,7 @@ public class GameController : MonoBehaviour
     private int activePlayer; // the id of the human player, is randomly chosen each time
     private int pestLocation = -1; // contains the location of the pest (only the highest number)
     private bool gameEnded = false; // put to true when the current player lost their paddy or when maxYear has been reached
-
+    private int[] contributionPerPlayer;
 
 
     // attributes for the UI
@@ -39,9 +30,8 @@ public class GameController : MonoBehaviour
 
 
     // references to the other controllers we'll need to use
-    EventMessageManager eventManager;
+    CoachManager coachManager;
     FundManager fundManager;
-    CollectiveManager collectiveManager;
 
     // other useful variables
     private System.Random random;
@@ -53,9 +43,8 @@ public class GameController : MonoBehaviour
     void Start() 
     {
 
-        eventManager = GameObject.Find("EventSection").GetComponent<EventMessageManager>();
+        coachManager = GameObject.Find("GameManager").GetComponent<CoachManager>();
         fundManager = GameObject.Find("FundSection").GetComponent<FundManager>();
-        collectiveManager = GameObject.Find("CollectiveGrid").GetComponent<CollectiveManager>();
         // init the random generator
         random = new System.Random();
         // Choose the id of the active player
@@ -68,10 +57,13 @@ public class GameController : MonoBehaviour
         yearText.text = year.ToString();
 
         // make sure that the fake waiting box is not displayed
-        popupDialog.SetActive(false);
+        popupDialog.SetActive(false); 
 
-        // init the coach's section
-        eventManager.CoachSays("");     
+        contributionPerPlayer = new int[nbPlayers];
+        for(int i = 0 ; i < nbPlayers ; i++)
+        {
+            contributionPerPlayer[i] = 0;
+        }
 
         isReady = true;
 
@@ -107,13 +99,15 @@ public class GameController : MonoBehaviour
 
     public void PlayRound(int playerContribution) 
     {
-        StartCoroutine(PlayOtherPlayersRound(playerContribution)); 
+        StartCoroutine(PlayGameRound(playerContribution)); 
     }
 
 
     private int GetContribution(int agentNb) 
     {
-        return 0;
+        int contribution = 0;
+        contributionPerPlayer[agentNb] = contribution;
+        return contribution;
     }
 
     private IEnumerator PerformPestControl(int totalContribution)
@@ -128,7 +122,7 @@ public class GameController : MonoBehaviour
 
         if(p < threshold)
         {
-            eventManager.CoachSays("The Pest Control was successful");
+            coachManager.InformPestControlSuccess(true);
             // do some fancy animation stuff?
             // TODO
             StartCoroutine(fundManager.CollectRevenue());
@@ -141,7 +135,7 @@ public class GameController : MonoBehaviour
         }
         else
         {   
-            eventManager.CoachSays("The Pest Control was unsuccessful");
+            coachManager.InformPestControlSuccess(false);
             pestLocation = pestLocation + 1;
             // we check if the pest reached the current player
             if(pestLocation == activePlayer) 
@@ -178,7 +172,7 @@ public class GameController : MonoBehaviour
             if(i != activePlayer) 
             {
                 int playerContribution = GetContribution(i);
-                collectiveManager.ChangeContribution(i, playerContribution);
+                contributionPerPlayer[i] = playerContribution;
                 totalContribution = totalContribution + GetContribution(i);
             }
         }
@@ -200,16 +194,15 @@ public class GameController : MonoBehaviour
         return pestLocation;
     }
 
-    IEnumerator PlayOtherPlayersRound(int activePlayerContribution)
+    IEnumerator PlayGameRound(int activePlayerContribution)
     {
         ActivatePopup("Waiting for other players");
         int timeToWait = random.Next(2, 10);
         yield return new WaitForSeconds(timeToWait);
         DeactivatePopup();
      
-        // update the collective manager
-        // TODO do it better to take the coach level into account
-        collectiveManager.ChangeContribution(activePlayer, activePlayerContribution);
+        // update each agent's contribution
+        contributionPerPlayer[activePlayer] = activePlayerContribution;
 
         // get other players' contribution
         int totalContribution = GetContributionFromOtherPlayers() + activePlayerContribution;
@@ -235,15 +228,8 @@ public class GameController : MonoBehaviour
        return isReady;
     }
 
-    public InfoCollective GetCoachIcLevel() 
+    public int GetContributionFrom(int playerId)
     {
-        return coachIcLevel;
+        return contributionPerPlayer[playerId];
     }
-
-    public InfoPest GetCoachIpLevel()
-    {
-        return coachIpLevel;
-    } 
-
-    
 }

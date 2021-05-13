@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class FundManager : MonoBehaviour
 {
     GameController gameController;
-    EventMessageManager eventManager;
+    CoachManager coachManager;
 
     public Text fundValueText; // field used to dislay the current amount of money available for the active player
     public Text amountInput;
@@ -20,7 +20,7 @@ public class FundManager : MonoBehaviour
     void Start()
     {
         gameController = GameObject.Find("GameManager").GetComponent<GameController>();
-        eventManager = GameObject.Find("EventSection").GetComponent<EventMessageManager>();
+        coachManager = GameObject.Find("GameManager").GetComponent<CoachManager>();
        
         // init the funds for each player
         availableFund = new int[gameController.GetNbPlayers()];
@@ -71,7 +71,7 @@ public class FundManager : MonoBehaviour
         // the contribution is valid, we start the round
         // we remove the amount paid from available funds
         availableFund[gameController.GetActivePlayerId()] = availableFund[gameController.GetActivePlayerId()] - contribution;
-        eventManager.CoachSays("You have spent " + contribution + " GP");
+        coachManager.InformAmountContributed(contribution);
         // and we play the round (with coach's feedback and all
         gameController.PlayRound(contribution);
 
@@ -87,8 +87,7 @@ public class FundManager : MonoBehaviour
         {
             availableFund[i] = availableFund[i] + revenuePerYear;
         }
-
-        eventManager.CoachSays("You've earned " + revenuePerYear + " GP from your farm");
+        coachManager.InformRevenueEarned(revenuePerYear);
     }
 
 }
