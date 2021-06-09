@@ -5,9 +5,7 @@ using UnityEngine.UI;
 
 public class FundManager : MonoBehaviour
 {
-    GameController gameController;
-    CoachManager coachManager;
-
+    GameControllerScript gameController;
     public Text fundValueText; // field used to dislay the current amount of money available for the active player
     public Text amountInput;
 
@@ -20,8 +18,7 @@ public class FundManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gameController = GameObject.Find("GameManager").GetComponent<GameController>();
-        coachManager = GameObject.Find("GameManager").GetComponent<CoachManager>();
+        gameController = GameObject.Find("GameController").GetComponent<GameControllerScript>();
        
         // init the funds for each player
         availableFund = new int[gameController.GetNbPlayers()];
@@ -72,7 +69,6 @@ public class FundManager : MonoBehaviour
         // the contribution is valid, we start the round
         // we remove the amount paid from available funds
         availableFund[gameController.GetActivePlayerId()] = availableFund[gameController.GetActivePlayerId()] - latestContribution;
-        coachManager.InformAmountContributed(latestContribution);
 
         // and we tell the game manager that we are switching to the next state
         gameController.NextState();
@@ -84,11 +80,12 @@ public class FundManager : MonoBehaviour
 
     public void CollectRevenue()
     {
-        for(int i = gameController.GetPestLocation() + 1 ; i < gameController.GetNbPlayers() ; i++) 
+        // TODO : only consider still active players
+        for(int i = 0 ; i < gameController.GetNbPlayers() ; i++) 
         {
-            availableFund[i] = availableFund[i] + revenuePerYear;
+            availableFund[i] = availableFund[i] + 1;
         }
-        coachManager.InformRevenueEarned(revenuePerYear);
+        
     }
 
     public int GetLatestContribution()
