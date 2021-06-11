@@ -83,7 +83,7 @@ public class FundManager : MonoBehaviour
         // TODO : only consider still active players
         for(int i = 0 ; i < gameController.GetNbPlayers() ; i++) 
         {
-            availableFund[i] = availableFund[i] + 1;
+            availableFund[i] = availableFund[i] + revenuePerYear;
         }
         
     }
@@ -91,6 +91,11 @@ public class FundManager : MonoBehaviour
     public int GetLatestContribution()
     {
         return latestContribution;
+    }
+
+    public int getRevenuePerYear() 
+    {
+        return revenuePerYear;
     }
 
 }
