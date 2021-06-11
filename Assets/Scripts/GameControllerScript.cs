@@ -24,6 +24,7 @@ public class GameControllerScript : MonoBehaviour
 
     /////////////////////////////////////////////////////////////////////// game configuration
     private const int nbPlayers = 5; // the total number of players
+    private Player[] playerList;
     
     private const int maxYear = 15; // the max number of years played. 
     private const double easeOfPestControl = 0.2; // how easy it is to stop the pest spreading
@@ -78,6 +79,8 @@ public class GameControllerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Init the player list
+        // TODO
 
         // init the other UI managers
         fundManager = fundSection.GetComponent<FundManager>();
