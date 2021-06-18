@@ -1,3 +1,4 @@
+using System;
 public class Player 
 {
     public enum PlayerType  {
@@ -18,11 +19,15 @@ public class Player
 
     private FundManager fundManager;
 
-    public Player(int id, PlayerType t, (int , int) location, FundManager manager = null)
+    private Random random;
+
+    public Player(int id, PlayerType t, (int , int) location, FundManager manager)
     {
         this.id = id;
         type = t;
         farmLocation = location;
+        this.fundManager = manager;
+        this.random = new Random();
 
         switch(type)
         {
@@ -79,9 +84,30 @@ public class Player
     
     private int CalculateEgoisticContribution()
     {  
+        int c_max = this.fund - fundManager.getRevenuePerYear();
+        int d_max = 5;
+
+        // calculate distance to pest
+        int distance = CalculateDistanceToPest();
+
+        double mean = (- c_max / d_max ) * distance + c_max;
+        double deviation = 1;
+
+        int contribution = (int)Math.Round(SampleGaussian(random, mean, deviation));
         // TODO 
-        return 0;
+        return contribution;
     }
+
+    public double SampleGaussian(Random random, double mean, double stddev)
+        {
+            // The method requires sampling from a uniform random of (0,1]
+            // but Random.NextDouble() returns a sample of [0,1).
+            double x1 = 1 - random.NextDouble();
+            double x2 = 1 - random.NextDouble();
+
+            double y1 = Math.Sqrt(-2.0 * Math.Log(x1)) * Math.Cos(2.0 * Math.PI * x2);
+            return y1 * stddev + mean;
+        }
 
     public void SetContribution(int contribution)
     {
@@ -97,5 +123,10 @@ public class Player
     public int GetId()
     {
         return this.id;
+    }
+
+    private int CalculateDistanceToPest()
+    {
+        return 2;
     }
 }

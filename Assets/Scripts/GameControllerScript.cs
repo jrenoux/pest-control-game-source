@@ -31,7 +31,7 @@ public class GameControllerScript : MonoBehaviour
 
     private const int seed = 314;
 
-    private const Player.PlayerType artificialPlayerType = Player.PlayerType.PROSOCIAL;
+    private const Player.PlayerType artificialPlayerType = Player.PlayerType.EGOISTIC;
 
     //////////////////////////////////////////////////////////////////////// private variables
     private int year = 1;
@@ -89,6 +89,10 @@ public class GameControllerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        // init the other UI managers
+        fundManager = fundSection.GetComponent<FundManager>();
+        
         // Init the player list
         // TODO
 
@@ -97,7 +101,7 @@ public class GameControllerScript : MonoBehaviour
         {
             if (i != humanPlayerId)
             {
-                activePlayerList.Add(new Player(i, artificialPlayerType, farmsLocations[i]));
+                activePlayerList.Add(new Player(i, artificialPlayerType, farmsLocations[i], fundManager));
             }
             else
             {
@@ -105,8 +109,6 @@ public class GameControllerScript : MonoBehaviour
             }
         }
 
-        // init the other UI managers
-        fundManager = fundSection.GetComponent<FundManager>();
 
         // init the variables we will use
         currentGameState = GameStates.WaitingForPlayerInput;
