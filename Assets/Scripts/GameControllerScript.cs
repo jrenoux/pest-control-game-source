@@ -24,16 +24,18 @@ public class GameControllerScript : MonoBehaviour
 
     /////////////////////////////////////////////////////////////////////// game configuration
     private const int nbPlayers = 5; // the total number of players
-    private Player[] playerList;
+    private List<Player> activePlayerList;
     
     private const int maxYear = 15; // the max number of years played. 
     private const double easeOfPestControl = 0.2; // how easy it is to stop the pest spreading
 
     private const int seed = 314;
 
+    private const Player.PlayerType artificialPlayerType = Player.PlayerType.PROSOCIAL;
+
     //////////////////////////////////////////////////////////////////////// private variables
     private int year = 1;
-    private int activePlayer = 4; // id of the active player 
+    private int humanPlayerId = 4; // id of the active player 
      // shows each turn which new tile becomes affected by the pest (x, y coordinates)
     private (int x, int y)[] pestProgression = {   
                                         (-2, -5), // initial pest location
@@ -50,13 +52,21 @@ public class GameControllerScript : MonoBehaviour
                                         (1, -3), 
                                         (1, -1)
                                     };
+
+    private (int x, int y)[] farmsLocations = {
+                                        (0, -5),
+                                        (0, -3),
+                                        (3, -4), 
+                                        (-2, -1),
+                                        (1, -1)
+    };
+
     private int pestProgressionIndex = 0; // contain the  index of the current pest progression
     private GameStates currentGameState = GameStates.WaitingForPlayerInput;
 
     private Tile pestTile; // the tile used for the pest
     private bool pestTileToAdd = false;
     private System.Random random;
-    private int[] contributionPerPlayer; // contains the list of contribution for all of the players
     private bool latestPestControlSuccess = false;
 
     //////////////////////////////////////////////////////////////////////// UI attributes
@@ -82,6 +92,19 @@ public class GameControllerScript : MonoBehaviour
         // Init the player list
         // TODO
 
+        activePlayerList = new List<Player>();
+        for (int i = 0 ; i < nbPlayers ; i++) 
+        {
+            if (i != humanPlayerId)
+            {
+                activePlayerList.Add(new Player(i, artificialPlayerType, farmsLocations[i]));
+            }
+            else
+            {
+                activePlayerList.Add(new Player(i, Player.PlayerType.HUMAN, farmsLocations[i], fundManager));
+            }
+        }
+
         // init the other UI managers
         fundManager = fundSection.GetComponent<FundManager>();
 
@@ -90,11 +113,6 @@ public class GameControllerScript : MonoBehaviour
         random = new System.Random(seed);
 
         gameStateHasChanged = false;
-        contributionPerPlayer = new int[nbPlayers];
-        for(int i = 0 ; i < nbPlayers ; i++)
-        {
-            contributionPerPlayer[i] = 0;
-        }
 
 
         // init the game display
@@ -214,21 +232,14 @@ public class GameControllerScript : MonoBehaviour
     {
         ActivatePopup("Waiting for other players");
         int timeToWait = random.Next(2, 5);
-        timeToWait = 0;     
         yield return new WaitForSeconds(timeToWait);
         DeactivatePopup();
      
-        // update active player's contribution
-        contributionPerPlayer[activePlayer] = fundManager.GetLatestContribution();
-
         // get other players' contribution
         // TODO
-        for(int i = 0 ; i < nbPlayers ; i++)
+        foreach(Player player in activePlayerList)
         {
-            if (i != activePlayer)
-            {
-                contributionPerPlayer[i] = GetContribution(i);
-            }
+            player.CalculateContribution();
         }
         
         NextState();
@@ -238,12 +249,14 @@ public class GameControllerScript : MonoBehaviour
     {
         ActivatePopup("Performing Pest Control");
 
-        yield return new WaitForSeconds(0);
+        yield return new WaitForSeconds(3);
 
         int totalContribution = 0;
-        for(int i = 0 ; i < nbPlayers ; i++)
+
+        foreach(Player player in activePlayerList)
         {
-            totalContribution = totalContribution + contributionPerPlayer[i];
+            totalContribution = totalContribution + player.GetContribution();
+            Debug.Log("Player " + player.GetId() + " paid " + player.GetContribution());
         }
 
         double threshold = (easeOfPestControl * totalContribution) / (1 + easeOfPestControl * totalContribution);
@@ -265,13 +278,25 @@ public class GameControllerScript : MonoBehaviour
             
             pestProgressionIndex = pestProgressionIndex + 1; 
             latestPestControlSuccess = false;
-           
-            // we check if the pest reached the current player
-            // TODO
+                        
             Debug.Log("Pest progression index = " + pestProgressionIndex);
             Debug.Log("pest progression length = " + pestProgression.Length);
 
             ActivateConfirmPopup("The pest control was unseccussful, the pest has progressed");
+
+            // we check if the pest reached an artificial player
+            foreach(Player pl in activePlayerList)
+            {
+                var pestX = pestProgression[pestProgressionIndex].x;
+                var pestY = pestProgression[pestProgressionIndex].y;
+                if(pl.GetFarmLocation().x == pestX && pl.GetFarmLocation().y == pestY)
+                {
+                    // it has reached the player, which is out of the game
+                    // we remove it from the list
+                    activePlayerList.Remove(pl);
+                }
+            }
+
             if(pestProgressionIndex == pestProgression.Length - 1)
             {
                 EndGame();
@@ -304,7 +329,10 @@ public class GameControllerScript : MonoBehaviour
 
     void CollectRevenue()
     {
-        fundManager.CollectRevenue();
+        foreach(Player player in activePlayerList)
+        {
+            player.CollectRevenue(fundManager.getRevenuePerYear());
+        }
         ActivateConfirmPopup("You've earned " + fundManager.getRevenuePerYear() + " GP from your farm.");
     }
 
@@ -347,13 +375,6 @@ public class GameControllerScript : MonoBehaviour
         confirmPopup.SetActive(false);
     }
 
-    private int GetContribution(int playerId)
-    {
-        // TODO 
-        // and to move in another file
-        return 1;
-    }
-
     public void EndGame()
     {
         currentGameState = GameStates.GameEnded;
@@ -378,9 +399,9 @@ public class GameControllerScript : MonoBehaviour
         return nbPlayers;
     }
 
-    public int GetActivePlayerId()
+    public Player GetHumanPlayer()
     {
-        return activePlayer;
+        return activePlayerList[humanPlayerId];
     }
 
     public void OnConfirmPopupClicked() 

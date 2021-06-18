@@ -27,21 +27,22 @@ public class FundManager : MonoBehaviour
             availableFund[i] = initFunds;
         };
 
+        // TODO wait for manager to start
         // display init fund
-        fundValueText.text = availableFund[gameController.GetActivePlayerId()].ToString();
+        fundValueText.text = gameController.GetHumanPlayer().GetFund().ToString();
     }
 
     // Update is called once per frame
     void Update()
     {
-        fundValueText.text = availableFund[gameController.GetActivePlayerId()].ToString();
+        fundValueText.text = gameController.GetHumanPlayer().GetFund().ToString();
     }
 
     public void IncreaseAmount() 
     {
 
         int contribution = int.Parse(amountInput.text);
-        if(contribution < availableFund[gameController.GetActivePlayerId()])
+        if(contribution < gameController.GetHumanPlayer().GetFund())
         {
             contribution = contribution + 1;
             amountInput.text = contribution.ToString();
@@ -68,24 +69,14 @@ public class FundManager : MonoBehaviour
 
         // the contribution is valid, we start the round
         // we remove the amount paid from available funds
-        availableFund[gameController.GetActivePlayerId()] = availableFund[gameController.GetActivePlayerId()] - latestContribution;
+        gameController.GetHumanPlayer().SetContribution(latestContribution);
+
 
         // and we tell the game manager that we are switching to the next state
         gameController.NextState();
 
         // and we empty the input field
         amountInput.text = "0";
-    }
-
-
-    public void CollectRevenue()
-    {
-        // TODO : only consider still active players
-        for(int i = 0 ; i < gameController.GetNbPlayers() ; i++) 
-        {
-            availableFund[i] = availableFund[i] + revenuePerYear;
-        }
-        
     }
 
     public int GetLatestContribution()
