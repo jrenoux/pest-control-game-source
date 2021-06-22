@@ -11,5 +11,10 @@ public static class TilesResourcesLoader
     {
         return Resources.Load("Tiles/sand_E") as Tile;
     }
+
+    public static Tile GetOwnFarmTile()
+    {
+        return Resources.Load("Tiles/building_own_farm_E") as Tile;
+    }
 }
 
