@@ -9,6 +9,7 @@ public class GameControllerScript : MonoBehaviour
 {
 
     private enum GameStates {
+                                Init,
                                 Tutorial,
                                 WaitingForPlayerInput,
                                 ConfirmPlayerInput,
@@ -84,7 +85,13 @@ public class GameControllerScript : MonoBehaviour
     public Text confirmPopupText;
 
     public GameObject initOverlay;
-
+    public GameObject tutorialPopup;
+    private TutorialStep[] tutorials = {
+                                        new TutorialStep(200, 200, "Tutorial 1 / 5", "Message A", "Next", 100, 100, 90),
+                                        new TutorialStep(500, 500, "Tutorial 2 / 5", "Message B", "Next", 200, 200, 135),
+                                        new TutorialStep(200, 200, "Tutorial 3 / 5", "Message C", "Start Game", 100, 100, 270)
+    };
+    private int currentTutorial = 0;
 
     //////////////////////////////////////////////////////////////////////// Other managers
     FundManager fundManager;
@@ -120,7 +127,7 @@ public class GameControllerScript : MonoBehaviour
 
 
         // init the variables we will use
-        currentGameState = GameStates.Tutorial;
+        currentGameState = GameStates.Init;
 
         gameStateHasChanged = false;
 
@@ -161,6 +168,11 @@ public class GameControllerScript : MonoBehaviour
                 gameStateHasChanged = false;
                 switch (currentGameState)
                 {
+                    case GameStates.Tutorial:
+                        Debug.Log("State = Tutorial");
+                        BlockPlayerInput();
+                        UpdateTutorialPanel();
+                        break;
                     case GameStates.WaitingForPlayerInput:
                         Debug.Log("State = Waiting for active player input");
                         PrepareForPlayerInput();
@@ -213,7 +225,9 @@ public class GameControllerScript : MonoBehaviour
 
     public void StartTutorial()
     {
+        currentTutorial = 0;
         initOverlay.SetActive(false);
+        NextState();
     }
 
     ////////////////////////////////////////////////// State Machine Functions
@@ -224,6 +238,46 @@ public class GameControllerScript : MonoBehaviour
         currentGameState = (GameStates)stateId;
         gameStateHasChanged = true;
     }
+
+    public void BlockPlayerInput()
+    {
+        // put the buttons and inactivable
+        upButton.interactable = false;
+        downButton.interactable = false;
+        payButton.interactable = false;
+    }
+
+    private void UpdateTutorialPanel()
+    {
+        tutorialPopup.transform.position = tutorials[currentTutorial].PopupPositionDelta;
+        Text[] texts = tutorialPopup.GetComponentsInChildren<Text>();
+        Text tutorialTitle = texts[0];
+        Text tutorialMessage = texts[1];
+        Text tutorialButtonText = texts[2];
+        tutorialTitle.text = tutorials[currentTutorial].Title;
+        tutorialMessage.text = tutorials[currentTutorial].Message;
+        tutorialButtonText.text = tutorials[currentTutorial].ButtonText;
+        Image[] images = tutorialPopup.GetComponentsInChildren<Image>();
+        Image arrow = images[1];
+        arrow.transform.position = tutorials[currentTutorial].ArrowPositionDelta;
+        arrow.transform.rotation = tutorials[currentTutorial].ArrowRotationDelta;
+    }
+
+    public void NextTutorial()
+    {
+        currentTutorial++;
+        if (currentTutorial == tutorials.Length)
+        {
+            //end of tutorial andstart game
+            tutorialPopup.SetActive(false);
+            NextState();
+        }
+        else
+        {
+            UpdateTutorialPanel();
+        }
+    }
+
 
     public void PrepareForPlayerInput()
     {
