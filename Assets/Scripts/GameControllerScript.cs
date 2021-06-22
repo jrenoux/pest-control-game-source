@@ -108,6 +108,10 @@ public class GameControllerScript : MonoBehaviour
             else
             {
                 activePlayerList.Add(new Player(i, Player.PlayerType.HUMAN, farmsLocations[i], fundManager, this, random));
+                Tile farmTile = TilesResourcesLoader.GetOwnFarmTile();
+                int farmX = farmsLocations[i].x;
+                int farmY = farmsLocations[i].y;
+                tilemap.SetTile(new Vector3Int(farmX, farmY, 0), farmTile);
             }
         }
 
