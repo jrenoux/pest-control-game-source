@@ -87,9 +87,12 @@ public class GameControllerScript : MonoBehaviour
     public GameObject initOverlay;
     public GameObject tutorialPopup;
     private TutorialStep[] tutorials = {
-                                        new TutorialStep(200, 200, "Tutorial 1 / 5", "Message A", "Next", 100, 100, 90),
-                                        new TutorialStep(500, 500, "Tutorial 2 / 5", "Message B", "Next", 200, 200, 135),
-                                        new TutorialStep(200, 200, "Tutorial 3 / 5", "Message C", "Start Game", 100, 100, 270)
+                                        new TutorialStep(230, 370, "Tutorial 1 / 6", "Next", 500, 350, 90, "This is your farm, it gives you 2GP per year as long as it's safe from the pest. If the pest reaches you, you lose the game."),
+                                        new TutorialStep(640, 180, "Tutorial 2 / 6", "Next", 360, 170, 270, "This is the pest. If farmers don't do anything, it will spread each turn to one neighboring tile. To prevent the spreading, a collective of all the farmers have been formed."),
+                                        new TutorialStep(400, 420, "Tutorial 3 / 6", "Next", 440, 160, 0, "Each farmer can contribute GP to the collective, and the more GP the collective gathers, the more efficient it will be to prevent the spread."),
+                                        new TutorialStep(330, 420, "Tutorial 4 / 6", "Next", 300, 160, 0, "This is were you choose how much you want to contribute to the collective this year."),
+                                        new TutorialStep(230, 420, "Tutorial 5 / 6", "Next", 100, 160, 0, "This is the amount of GP you have available."),
+                                        new TutorialStep(240, 240, "Tutorial 6 / 6", "Start Game", 100, 480, 180, "This is the year counter. If you reach year 15, you win the game!")
     };
     private int currentTutorial = 0;
 
