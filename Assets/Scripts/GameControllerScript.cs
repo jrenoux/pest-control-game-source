@@ -9,6 +9,7 @@ public class GameControllerScript : MonoBehaviour
 {
 
     private enum GameStates {
+                                Tutorial,
                                 WaitingForPlayerInput,
                                 ConfirmPlayerInput,
                                 WaitingForOtherPlayers,
@@ -81,7 +82,9 @@ public class GameControllerScript : MonoBehaviour
 
     public GameObject confirmPopup;
     public Text confirmPopupText;
-    
+
+    public GameObject initOverlay;
+
 
     //////////////////////////////////////////////////////////////////////// Other managers
     FundManager fundManager;
@@ -117,8 +120,7 @@ public class GameControllerScript : MonoBehaviour
 
 
         // init the variables we will use
-        currentGameState = GameStates.WaitingForPlayerInput;
-        
+        currentGameState = GameStates.Tutorial;
 
         gameStateHasChanged = false;
 
@@ -207,6 +209,11 @@ public class GameControllerScript : MonoBehaviour
 
             pestTileToAdd = false;
         }
+    }
+
+    public void StartTutorial()
+    {
+        initOverlay.SetActive(false);
     }
 
     ////////////////////////////////////////////////// State Machine Functions
