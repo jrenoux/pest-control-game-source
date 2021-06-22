@@ -242,6 +242,14 @@ public class GameControllerScript : MonoBehaviour
         gameStateHasChanged = true;
     }
 
+
+    public void StartRound()
+    {
+        currentGameState = GameStates.WaitingForPlayerInput;
+        gameStateHasChanged = true;
+    }
+
+
     public void BlockPlayerInput()
     {
         // put the buttons and inactivable
@@ -417,7 +425,7 @@ public class GameControllerScript : MonoBehaviour
         }
         if(currentGameState != GameStates.GameEnded)
         {
-            NextState();
+            StartRound();
         }
 
     }
