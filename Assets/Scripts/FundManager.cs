@@ -26,10 +26,6 @@ public class FundManager : MonoBehaviour
         {
             availableFund[i] = initFunds;
         };
-
-        // TODO wait for manager to start
-        // display init fund
-        fundValueText.text = gameController.GetHumanPlayer().GetFund().ToString();
     }
 
     // Update is called once per frame
