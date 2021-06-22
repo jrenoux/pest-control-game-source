@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 public class Player 
 {
     public enum PlayerType  {
@@ -19,15 +20,17 @@ public class Player
 
     private FundManager fundManager;
 
-    private Random random;
+    private GameControllerScript gameManager;
+    private GaussianRandom gaussianRandom;
 
-    public Player(int id, PlayerType t, (int , int) location, FundManager manager)
+    public Player(int id, PlayerType t, (int , int) location, FundManager manager, GameControllerScript gameController, System.Random random)
     {
         this.id = id;
         type = t;
         farmLocation = location;
         this.fundManager = manager;
-        this.random = new Random();
+        this.gameManager = gameController;
+        this.gaussianRandom = new GaussianRandom(random);
 
         switch(type)
         {
@@ -40,7 +43,6 @@ public class Player
             case PlayerType.HUMAN:
             break;
         } 
-        
     }
 
     public (int x, int y) GetFarmLocation()
@@ -89,25 +91,18 @@ public class Player
 
         // calculate distance to pest
         int distance = CalculateDistanceToPest();
+        //Debug.Log("Player " + id + ": Pest is " + distance + " tiles away");
 
         double mean = (- c_max / d_max ) * distance + c_max;
         double deviation = 1;
 
-        int contribution = (int)Math.Round(SampleGaussian(random, mean, deviation));
-        // TODO 
+        double gaussian = gaussianRandom.NextGaussian(mean, deviation);
+        Debug.Log("Gaussian : " + gaussian);
+
+        int contribution = (int)Math.Round(gaussian);
+         
         return contribution;
     }
-
-    public double SampleGaussian(Random random, double mean, double stddev)
-        {
-            // The method requires sampling from a uniform random of (0,1]
-            // but Random.NextDouble() returns a sample of [0,1).
-            double x1 = 1 - random.NextDouble();
-            double x2 = 1 - random.NextDouble();
-
-            double y1 = Math.Sqrt(-2.0 * Math.Log(x1)) * Math.Cos(2.0 * Math.PI * x2);
-            return y1 * stddev + mean;
-        }
 
     public void SetContribution(int contribution)
     {
@@ -127,6 +122,49 @@ public class Player
 
     private int CalculateDistanceToPest()
     {
-        return 2;
+        // for each pest tile, we calculate the distance and keep the shortest
+        (int x, int y)[] pestTiles = gameManager.GetPestTiles();
+        int minDistance = 6;
+        
+        for(int i = 0 ; i < pestTiles.Length ; i++)
+        {
+            int distance = hexDistance(pestTiles[i], this.farmLocation);
+            if(distance < minDistance)
+            {
+                minDistance = distance;
+            }
+        }
+
+        return minDistance;
+    }
+
+    private int hexDistance((int x, int y) hex1, (int x, int y) hex2)
+    {
+        if(hex1.x == hex2.x)
+        {
+            return Math.Abs(hex2.y - hex1.y);
+        }
+        else if (hex1.y == hex2.y)
+        {
+            return Math.Abs(hex2.x - hex1.x);
+        }
+        else
+        {
+            int dx = Math.Abs(hex2.x - hex1.x);
+            int dy = Math.Abs(hex2.y - hex1.y);
+            if(hex1.y < hex2.y)
+            {
+                int distance = dx + dy - (int)Math.Ceiling(dx / 2.0);
+                //Debug.Log("Player " + id + ", D-" + hex1 + "-" + hex2 + ": " + distance);
+                return distance;
+            }
+            else
+            {
+                int distance = dx + dy - (int)Math.Floor(dx / 2.0);
+                //Debug.Log("Player " + id + ", D-" + hex1 + "-" + hex2 + ": " + distance);
+                return distance;
+            }
+
+        }
     }
 }

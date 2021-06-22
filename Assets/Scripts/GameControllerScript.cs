@@ -90,6 +90,8 @@ public class GameControllerScript : MonoBehaviour
     void Start()
     {
 
+        random = new System.Random(seed);
+
         // init the other UI managers
         fundManager = fundSection.GetComponent<FundManager>();
         
@@ -101,18 +103,18 @@ public class GameControllerScript : MonoBehaviour
         {
             if (i != humanPlayerId)
             {
-                activePlayerList.Add(new Player(i, artificialPlayerType, farmsLocations[i], fundManager));
+                activePlayerList.Add(new Player(i, artificialPlayerType, farmsLocations[i], fundManager, this, random));
             }
             else
             {
-                activePlayerList.Add(new Player(i, Player.PlayerType.HUMAN, farmsLocations[i], fundManager));
+                activePlayerList.Add(new Player(i, Player.PlayerType.HUMAN, farmsLocations[i], fundManager, this, random));
             }
         }
 
 
         // init the variables we will use
         currentGameState = GameStates.WaitingForPlayerInput;
-        random = new System.Random(seed);
+        
 
         gameStateHasChanged = false;
 
@@ -405,6 +407,17 @@ public class GameControllerScript : MonoBehaviour
     {
         return activePlayerList[humanPlayerId];
     }
+
+    public (int x, int y)[] GetPestTiles() 
+    {
+        (int x, int y)[] pestTiles = new (int, int)[this.pestProgressionIndex + 1];
+        for (int i = 0 ; i <= pestProgressionIndex ; i++)
+        {
+            pestTiles[i] = pestProgression[i];
+        } 
+
+        return pestTiles;
+    } 
 
     public void OnConfirmPopupClicked() 
     {
