@@ -29,31 +29,17 @@ public class GameControllerScript : MonoBehaviour
     private List<Player> activePlayerList;
     
     private const int maxYear = 15; // the max number of years played. 
-    private const double easeOfPestControl = 0.2; // how easy it is to stop the pest spreading
+    private const double easeOfPestControl = 0.01; // how easy it is to stop the pest spreading
 
-    private const int seed = 314;
+    private int? seed = null;
 
     private const Player.PlayerType artificialPlayerType = Player.PlayerType.EGOISTIC;
+
+    private (int x, int y)  initialPestTile = (-2, -5);
 
     //////////////////////////////////////////////////////////////////////// private variables
     private int year = 1;
     private int humanPlayerId = 4; // id of the active player 
-     // shows each turn which new tile becomes affected by the pest (x, y coordinates)
-    private (int x, int y)[] pestProgression = {   
-                                        (-2, -5), // initial pest location
-                                        (-1, -4), // 1
-                                        (-1, -3), // 2 
-                                        (-1, -5), //3
-                                        (0, -2), 
-                                        (0, -5), //5
-                                        (-1, -1), //6
-                                        (0, -3), //7
-                                        (-2, -1), 
-                                        (0, -1), //9
-                                        (1, -5), 
-                                        (1, -3), 
-                                        (1, -1)
-                                    };
 
     private (int x, int y)[] farmsLocations = {
                                         (0, -5),
@@ -63,11 +49,12 @@ public class GameControllerScript : MonoBehaviour
                                         (1, -1)
     };
 
-    private int pestProgressionIndex = 0; // contain the  index of the current pest progression
     private GameStates currentGameState = GameStates.WaitingForPlayerInput;
 
+    private PestController pestController;
+
     private Tile pestTile; // the tile used for the pest
-    private bool pestTileToAdd = false;
+    private Nullable<(int x, int y)> pestTileToAdd =  null;
     private System.Random random;
     private bool latestPestControlSuccess = false;
 
@@ -96,14 +83,25 @@ public class GameControllerScript : MonoBehaviour
     };
     private int currentTutorial = 0;
 
+
+
     //////////////////////////////////////////////////////////////////////// Other managers
     FundManager fundManager;
 
     // Start is called before the first frame update
     void Start()
     {
-
-        random = new System.Random(seed);
+        if(seed == null)
+        {
+            random = new System.Random();
+        }
+        else
+        {
+            random = new System.Random(seed.Value);
+        }
+        
+        
+        pestController = new PestController(random, initialPestTile);
 
         // init the other UI managers
         fundManager = fundSection.GetComponent<FundManager>();
@@ -116,11 +114,11 @@ public class GameControllerScript : MonoBehaviour
         {
             if (i != humanPlayerId)
             {
-                activePlayerList.Add(new Player(i, artificialPlayerType, farmsLocations[i], fundManager, this, random));
+                activePlayerList.Add(new Player(i, artificialPlayerType, farmsLocations[i], fundManager, pestController, random));
             }
             else
             {
-                activePlayerList.Add(new Player(i, Player.PlayerType.HUMAN, farmsLocations[i], fundManager, this, random));
+                activePlayerList.Add(new Player(i, Player.PlayerType.HUMAN, farmsLocations[i], fundManager, pestController, random));
                 Tile farmTile = TilesResourcesLoader.GetOwnFarmTile();
                 int farmX = farmsLocations[i].x;
                 int farmY = farmsLocations[i].y;
@@ -139,9 +137,7 @@ public class GameControllerScript : MonoBehaviour
         yearValue.text = year.ToString();
 
         pestTile = TilesResourcesLoader.GetPestTile();
-        int initPestX = pestProgression[0].x;
-        int initPestY = pestProgression[0].y;
-        tilemap.SetTile(new Vector3Int(initPestX, initPestY,0), pestTile);
+        tilemap.SetTile(new Vector3Int(initialPestTile.x, initialPestTile.y,0), pestTile);
 
         popupDialog.SetActive(false);
         confirmPopup.SetActive(true);
@@ -216,15 +212,13 @@ public class GameControllerScript : MonoBehaviour
 
     void UpdatePestProgression()
     {
-        if(pestTileToAdd) 
+        if(pestTileToAdd != null) 
         {
             // get the location of the new pest tile depending on the year
-            int pestTileX = pestProgression[pestProgressionIndex].x;
-            int pestTileY = pestProgression[pestProgressionIndex].y;
-            Debug.Log("x = " + pestTileX + ", y = " + pestTileY);
-            tilemap.SetTile(new Vector3Int(pestTileX, pestTileY, 0), pestTile);
+            Debug.Log("x = " + pestTileToAdd.Value.x + ", y = " + pestTileToAdd.Value.y);
+            tilemap.SetTile(new Vector3Int(pestTileToAdd.Value.x, pestTileToAdd.Value.y, 0), pestTile);
 
-            pestTileToAdd = false;
+            pestTileToAdd = null;
         }
     }
 
@@ -354,42 +348,33 @@ public class GameControllerScript : MonoBehaviour
         }
         else
         {  
-            
-            pestProgressionIndex = pestProgressionIndex + 1; 
             latestPestControlSuccess = false;
-                        
-            Debug.Log("Pest progression index = " + pestProgressionIndex);
-            Debug.Log("pest progression length = " + pestProgression.Length);
 
             SendNotification("The pest control was unseccussful, the pest has progressed");
+            pestTileToAdd = pestController.GetNextPestTile();
 
             // we check if the pest reached an artificial player
-            foreach(Player pl in activePlayerList)
+            var activePlayerCopy = new List<Player>(activePlayerList);
+            foreach(Player pl in activePlayerCopy)
             {
-                var pestX = pestProgression[pestProgressionIndex].x;
-                var pestY = pestProgression[pestProgressionIndex].y;
-                if(pl.GetFarmLocation().x == pestX && pl.GetFarmLocation().y == pestY)
+                if(pl.GetFarmLocation().x == pestTileToAdd.Value.y 
+                && pl.GetFarmLocation().y == pestTileToAdd.Value.y)
                 {
                     // it has reached the player, which is out of the game
                     // we remove it from the list
                     activePlayerList.Remove(pl);
+                    if(pl.IsHuman())
+                    {
+                        LoseGame();
+                    }
                 }
-            }
-
-            if(pestProgressionIndex == pestProgression.Length - 1)
-            {
-                EndGame();
             }
         }
 
         if(currentGameState != GameStates.GameEnded)
         {
-            pestTileToAdd = true;
-            
+            NextState();
         }
-
-                    
-        NextState();
     }
 
     void ConfirmPestControl() 
@@ -422,7 +407,7 @@ public class GameControllerScript : MonoBehaviour
         year = year + 1;
         if(year > maxYear)
         {
-            EndGame();
+            WinGame();
         }
         if(currentGameState != GameStates.GameEnded)
         {
@@ -452,23 +437,26 @@ public class GameControllerScript : MonoBehaviour
         confirmPopup.SetActive(true);
     }
 
-    public void EndGame()
+    public void LoseGame()
     {
         currentGameState = GameStates.GameEnded;
         // TODO
         // do stuff here
         Debug.Log("End of the game");
-        
-        if(pestProgressionIndex == pestProgression.Length - 1)
-        {
-            ActivatePopup("GAME OVER \\ The Pest has reached your farm");
-        }
-        else
-        {
-            ActivatePopup("CONGRATULATIONS \\ You have reached the end of the game");
-        }
-        
-        
+
+        // check
+        ActivatePopup("GAME OVER \\ The Pest has reached your farm");
+    }
+
+    public void WinGame()
+    {
+        currentGameState = GameStates.GameEnded;
+        // TODO
+        // do stuff here
+        Debug.Log("End of the game");
+
+        ActivatePopup("CONGRATULATIONS \\ You have reached the end of the game");
+  
     }
 
     public int GetNbPlayers() 
@@ -480,17 +468,5 @@ public class GameControllerScript : MonoBehaviour
     {
         return activePlayerList[humanPlayerId];
     }
-
-    public (int x, int y)[] GetPestTiles() 
-    {
-        (int x, int y)[] pestTiles = new (int, int)[this.pestProgressionIndex + 1];
-        for (int i = 0 ; i <= pestProgressionIndex ; i++)
-        {
-            pestTiles[i] = pestProgression[i];
-        } 
-
-        return pestTiles;
-    } 
-
 
 }

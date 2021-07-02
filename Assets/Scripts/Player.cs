@@ -20,16 +20,16 @@ public class Player
 
     private FundManager fundManager;
 
-    private GameControllerScript gameManager;
+    private PestController pestManager;
     private GaussianRandom gaussianRandom;
 
-    public Player(int id, PlayerType t, (int , int) location, FundManager manager, GameControllerScript gameController, System.Random random)
+    public Player(int id, PlayerType t, (int , int) location, FundManager manager, PestController pestController, System.Random random)
     {
         this.id = id;
         type = t;
         farmLocation = location;
         this.fundManager = manager;
-        this.gameManager = gameController;
+        this.pestManager = pestController;
         this.gaussianRandom = new GaussianRandom(random);
 
         switch(type)
@@ -97,7 +97,7 @@ public class Player
         double deviation = 1;
 
         double gaussian = gaussianRandom.NextGaussian(mean, deviation);
-        Debug.Log("Gaussian : " + gaussian);
+        //Debug.Log("Gaussian : " + gaussian);
 
         int contribution = (int)Math.Round(gaussian);
          
@@ -123,7 +123,7 @@ public class Player
     private int CalculateDistanceToPest()
     {
         // for each pest tile, we calculate the distance and keep the shortest
-        (int x, int y)[] pestTiles = gameManager.GetPestTiles();
+        (int x, int y)[] pestTiles = pestManager.GetPestTiles();
         int minDistance = 6;
         
         for(int i = 0 ; i < pestTiles.Length ; i++)
@@ -166,5 +166,14 @@ public class Player
             }
 
         }
+    }
+
+    public bool IsHuman()
+    {
+        if(this.type == PlayerType.HUMAN)
+        {
+            return true;
+        }
+        return false;
     }
 }
