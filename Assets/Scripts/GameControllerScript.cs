@@ -144,7 +144,9 @@ public class GameControllerScript : MonoBehaviour
         tilemap.SetTile(new Vector3Int(initPestX, initPestY,0), pestTile);
 
         popupDialog.SetActive(false);
-        confirmPopup.SetActive(false);
+        confirmPopup.SetActive(true);
+        confirmPopupText.text = "";
+        initOverlay.SetActive(true);
 
         
     }
@@ -310,10 +312,10 @@ public class GameControllerScript : MonoBehaviour
 
     IEnumerator PlayArtificialPlayersRound()
     {
-        ActivatePopup("Waiting for other players");
+        SendNotification("Waiting for other players");
         int timeToWait = random.Next(2, 5);
         yield return new WaitForSeconds(timeToWait);
-        DeactivatePopup();
+        //DeactivatePopup();
      
         // get other players' contribution
         // TODO
@@ -327,7 +329,7 @@ public class GameControllerScript : MonoBehaviour
 
     IEnumerator PerformPestControl()
     {
-        ActivatePopup("Performing Pest Control");
+        SendNotification("Performing Pest Control");
 
         yield return new WaitForSeconds(3);
 
@@ -343,14 +345,11 @@ public class GameControllerScript : MonoBehaviour
         double p = random.NextDouble();
         Debug.Log("threshold = " + threshold);
         Debug.Log("p = " + p);
-
-
-        DeactivatePopup();
-
+        
         if(p < threshold)
         {
             latestPestControlSuccess = true;
-            ActivateConfirmPopup("The pest control was successful");
+            SendNotification("The pest control was successful");
             
         }
         else
@@ -362,7 +361,7 @@ public class GameControllerScript : MonoBehaviour
             Debug.Log("Pest progression index = " + pestProgressionIndex);
             Debug.Log("pest progression length = " + pestProgression.Length);
 
-            ActivateConfirmPopup("The pest control was unseccussful, the pest has progressed");
+            SendNotification("The pest control was unseccussful, the pest has progressed");
 
             // we check if the pest reached an artificial player
             foreach(Player pl in activePlayerList)
@@ -381,8 +380,6 @@ public class GameControllerScript : MonoBehaviour
             {
                 EndGame();
             }
-            
-
         }
 
         if(currentGameState != GameStates.GameEnded)
@@ -390,6 +387,9 @@ public class GameControllerScript : MonoBehaviour
             pestTileToAdd = true;
             
         }
+
+                    
+        NextState();
     }
 
     void ConfirmPestControl() 
@@ -413,7 +413,8 @@ public class GameControllerScript : MonoBehaviour
         {
             player.CollectRevenue(fundManager.getRevenuePerYear());
         }
-        ActivateConfirmPopup("You've earned " + fundManager.getRevenuePerYear() + " GP from your farm.");
+        SendNotification("You've earned " + fundManager.getRevenuePerYear() + " GP from your farm.");
+        NextState();
     }
 
     void PrepareForNextYear()
@@ -441,18 +442,14 @@ public class GameControllerScript : MonoBehaviour
 
     private void DeactivatePopup()
     {
+        popupDialogText.text = "";
         popupDialog.SetActive(false);    
     }
 
-    private void ActivateConfirmPopup(string message) 
+    private void SendNotification(string message) 
     {
         confirmPopupText.text = message;
         confirmPopup.SetActive(true);
-    }
-
-    private void DeactivateConfirmPopup()
-    {
-        confirmPopup.SetActive(false);
     }
 
     public void EndGame()
@@ -494,14 +491,6 @@ public class GameControllerScript : MonoBehaviour
 
         return pestTiles;
     } 
-
-    public void OnConfirmPopupClicked() 
-    {
-        DeactivateConfirmPopup();
-        NextState();
-    }
-
-
 
 
 }
