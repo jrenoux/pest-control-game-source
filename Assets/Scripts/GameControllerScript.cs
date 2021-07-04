@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Tilemaps;
@@ -58,6 +60,8 @@ public class GameControllerScript : MonoBehaviour
     private System.Random random;
     private bool latestPestControlSuccess = false;
 
+    private World theWorld;
+
     //////////////////////////////////////////////////////////////////////// UI attributes
     public Tilemap tilemap;
     public Text yearValue;
@@ -91,6 +95,11 @@ public class GameControllerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        string worldJson = File.ReadAllText(@"Config/world.json");
+        theWorld = JsonConvert.DeserializeObject<World>(worldJson);
+       
+        InitWorld();
+
         if(seed == null)
         {
             random = new System.Random();
@@ -145,6 +154,21 @@ public class GameControllerScript : MonoBehaviour
         initOverlay.SetActive(true);
 
         
+    }
+
+    private void InitWorld()
+    {
+        // 1. paint the tiles for the map
+
+
+        // 2. paint the farms with the right colors
+
+
+        // 3. check if pestProgression is empty of not (if empty: random, if not: scripted)
+
+
+        // 4. pain the initial pest location
+
     }
 
     // Update is called once per frame

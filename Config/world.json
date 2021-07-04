@@ -1,0 +1,18 @@
+{
+    "minX": -2, 
+    "maxX": 2,
+    "minY": -5,
+    "maxY": -1, 
+    "humanPlayer": "yellow",
+    "farmsLocations": {
+        "red": {"x": 0, "y": -5},
+        "blue": {"x": 0, "y": -3},
+        "green": {"x": 2, "y": -4},
+        "yellow": {"x": 1, "y": -1},
+        "brown": {"x" : -2, "y" :  -1}
+    },
+    "initialPestLocation": {"x": -2, "y": -5},
+    "pestProgression": [
+
+    ]
+}
