@@ -290,6 +290,11 @@ public class GameControllerScript : MonoBehaviour
             break;
 
             case "semiscripted":
+            if(PestHasProgressed())
+            {
+                pestTile = theWorld.GetNextPestTileSemiScripted();
+                theWorld.SpawnPestTile(pestTile);
+            }
             // TODO
             break;
 
@@ -321,6 +326,7 @@ public class GameControllerScript : MonoBehaviour
 
         double threshold = (easeOfPestControl * totalContribution) / (1 + easeOfPestControl * totalContribution);
         double p = random.NextDouble();
+        Debug.Log("p: " + p + ", threshold: " + threshold);
         
         if(p < threshold)
         {

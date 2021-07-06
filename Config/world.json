@@ -46,7 +46,7 @@
 
     "pestProgression": {
         "initialPestLocation" : {"x": -2, "y": -5},
-        "type": "scripted",
+        "type": "semiscripted",
         "pattern": [
             {"x": -1, "y": -5},
             {"x": -1, "y": -4},
@@ -55,15 +55,6 @@
             {"x": 0, "y": -2},
             {"x": 0, "y": -5},
             {"x": -1, "y": -1}
-        ],
-        "years": [
-            2, 
-            4, 
-            7, 
-            8, 
-            9, 
-            11, 
-            14
         ]
 
     }

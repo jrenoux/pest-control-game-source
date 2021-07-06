@@ -196,9 +196,26 @@ public class World
 
     public GridTile GetNextPestTileScripted()
     {
+        if(pestSpreadingIndex >= pestProgression.years.Count)
+        {
+            Debug.LogError("The pest spreading index is higher than available scripted tiles");
+            return null;
+        }
         if(pestProgression.years[pestSpreadingIndex] == currentYear)
         {
             GridTile tile =  GetTileFromLocation(pestProgression.pattern[pestSpreadingIndex]);
+            pestSpreadingIndex = pestSpreadingIndex + 1;
+            Debug.Log("The pest has spread to " + tile.coordinates);
+            return tile;
+        }
+        return null;
+    }
+
+    public GridTile GetNextPestTileSemiScripted()
+    {
+        if(pestSpreadingIndex < pestProgression.pattern.Count)
+        {
+            GridTile tile = GetTileFromLocation(pestProgression.pattern[pestSpreadingIndex]);
             pestSpreadingIndex = pestSpreadingIndex + 1;
             Debug.Log("The pest has spread to " + tile.coordinates);
             return tile;
