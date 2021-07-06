@@ -9,9 +9,6 @@ public class FundManager : MonoBehaviour
     public Text fundValueText; // field used to dislay the current amount of money available for the active player
     public Text amountInput;
 
-    private const int initFunds = 5; // the initial amount of money for each player
-    private int[] availableFund; // the amount of money of each player. 
-    private const int revenuePerYear = 2; // they money each player gets each turn from their paddies
     private int latestContribution = 0;
 
 
@@ -19,26 +16,25 @@ public class FundManager : MonoBehaviour
     void Start()
     {
         gameController = GameObject.Find("GameController").GetComponent<GameControllerScript>();
-       
-        // init the funds for each player
-        availableFund = new int[gameController.GetNbPlayers()];
-        for (int i = 0; i < gameController.GetNbPlayers(); i++)
-        {
-            availableFund[i] = initFunds;
-        };
     }
 
     // Update is called once per frame
     void Update()
     {
-        fundValueText.text = gameController.GetHumanPlayer().GetFund().ToString();
+        if(!gameController.GameEnded())
+        {
+            if(gameController.GetHumanPlayer() != null)
+            {
+                fundValueText.text = gameController.GetHumanPlayer().wallet.ToString();
+            }
+        }
     }
 
     public void IncreaseAmount() 
     {
 
         int contribution = int.Parse(amountInput.text);
-        if(contribution < gameController.GetHumanPlayer().GetFund())
+        if(contribution < gameController.GetHumanPlayer().wallet)
         {
             contribution = contribution + 1;
             amountInput.text = contribution.ToString();
@@ -74,15 +70,4 @@ public class FundManager : MonoBehaviour
         // and we empty the input field
         amountInput.text = "0";
     }
-
-    public int GetLatestContribution()
-    {
-        return latestContribution;
-    }
-
-    public int getRevenuePerYear() 
-    {
-        return revenuePerYear;
-    }
-
 }

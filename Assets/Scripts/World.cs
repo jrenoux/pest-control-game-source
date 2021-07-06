@@ -12,14 +12,12 @@ public class World
     public int minY {get; set;}
     public int maxY {get; set;}
 
-    public string humanPlayer {get; set;}
-    public Dictionary<string, Location> farmsLocations {get; set;}
-    public List<Location> pestProgressionPattern {get; set;}
-    public List<GridTile> currentPestProgression {get;}
+    public int maxYear {get; set;}
 
-    private PestController pestController;
+    public Player humanPlayer {get; set;}
 
-    public Location initialPestLocation {get; set;}
+    public PestProgression pestProgression {get; set;}
+
 
     private HashSet<GridTile> tileList;
 
@@ -27,56 +25,60 @@ public class World
 
     private Tilemap tilemap;
 
-    private Tile pestTileObject =  TilesResourcesLoader.GetPestTile();
+    public List<Player> activePlayers {get; set;}
 
-    public enum PestControllerTypes {
-        Scripted,
-        Random,
-    }
+    public int currentYear {get; set;} 
+
+    Tile pestTileObject;
+
+    private int pestSpreadingIndex;
+
     
-    private PestControllerTypes type;
-
     public World() {
         tileList = new HashSet<GridTile>();
-        currentPestProgression = new List<GridTile>();
+        random = RandomSingleton.GetInstance();
+        humanPlayer = null;
+        pestTileObject =  TilesResourcesLoader.GetPestTile();
+        currentYear = 1;
+        pestSpreadingIndex = 0;
     }
 
-    public void Init(Tilemap tm, System.Random r)
+    public void Init(Tilemap tm)
     {
-        this.tilemap = tm;
-        this.random = r;
-        //1. Create the farms in the tile list
-        foreach(string playerColor in farmsLocations.Keys)
+        // make some routine check
+        if(!ValidateConfig())
         {
-            Location playerFarmLocation = farmsLocations[playerColor];
-            Tile playerTileObject = TilesResourcesLoader.GetPlayerTile(playerColor);
-            // creates the tile
-            GridTile playerTile = new GridTile(GridTile.GridTileType.FARM, playerFarmLocation);
-            tileList.Add(playerTile);
+            return;
+        }
 
+        this.tilemap = tm;
+        //1. Create the farms in the tile list
+        foreach(Player player in activePlayers)
+        {
+            Tile playerTileObject = TilesResourcesLoader.GetPlayerTile(player.id);
+            // creates the tile
+            GridTile playerTile = new GridTile(GridTile.GridTileType.FARM, player.farmLocation);
+            tileList.Add(playerTile);
             // paint it
             this.tilemap.SetTile(playerTile.coordinates, playerTileObject);
         
         }
 
         //2. Create the initial pest location
-        GridTile pestTile = new GridTile(GridTile.GridTileType.PEST, initialPestLocation);
+        GridTile pestTile = new GridTile(GridTile.GridTileType.PEST, pestProgression.initialPestLocation);
         // add it in the list
         tileList.Add(pestTile);
-        currentPestProgression.Add(pestTile);
-
+        pestProgression.currentPestProgression.Add(pestTile);
+        
         // paint it
         this.tilemap.SetTile(pestTile.coordinates, pestTileObject);
 
         // 3. Create the rest as grass tiles
         Tile grassTileObject = TilesResourcesLoader.GetGrassTile();
-        Debug.Log("MinX = " + minX + ", MaxX = " + maxX);
-        Debug.Log("MinY = " + minY + ", MaxY = " + maxY);
         for(int x = minX ; x <= maxX ; x++)
         {
             for(int y = minY ; y <= maxY ; y++)
             {
-                Debug.Log("x = " + x + ", y = " + y);
                 GridTile grassTile = new GridTile(GridTile.GridTileType.GRASS, new Location(x, y));
                 if(!tileList.Contains(grassTile))
                 {
@@ -86,86 +88,132 @@ public class World
             }
         }
 
-
-        // 3. check if pestProgression is present of not (if non present: random, if not: scripted)
-        if(this.pestProgressionPattern == null)
-        {   
-            // random
-            type = PestControllerTypes.Random;
-            Debug.Log("It's random");
-        }
-        else
-        {
-            // scripted
-            type = PestControllerTypes.Scripted;
-            Debug.Log("It's scripted");
-        }
-
         // Put the camera at center and right zoom to see the whole map
         // TODO
 
-    }
-
-    public void GetNeighbors(GridTile origin)
-    {
-        // TODO
-    }
-    
-    public GridTile GetNextPestTile() 
-    {
-        switch(type) 
+        // set the world reference for each player and store   the human player for easier access
+        foreach (Player player in activePlayers)
         {
-            case PestControllerTypes.Random:
-            return  GetNextPestTileRandom();
-
-            case PestControllerTypes.Scripted:
-            return GetNextPestTileScripted();
+            if(player.type.Equals("human"))
+            {
+                humanPlayer = player;
+            }
+            player.theWorld = this;
         }
-        return null; // weird that this is needed
+        if(humanPlayer == null)
+        {
+            Debug.LogError("No human player found");    
+        }
+    
     }
 
-    private GridTile GetNextPestTileRandom()
+    public bool ValidateConfig()
     {
-        Debug.Log("GetNextPestTileRandom");
+        // test that if the pest says scripted, then all info is here
+        if(pestProgression.type.Equals("scripted")) 
+        {
+            if(pestProgression.pattern == null || pestProgression.years == null)
+            {
+                Debug.LogError("Pest progression set to scripted, but pattern or years field empty");
+                return false;
+            }
+            if(pestProgression.years.Count != pestProgression.pattern.Count)
+            {
+                Debug.LogError("Pest progression pattern and years have different size");
+                return false;
+            }
+            if(pestProgression.pattern.Count > maxYear)
+            {
+                Debug.LogError("Pest progression pattern and years is higher than the max number of years");
+                return false;
+            }
+        }
+        
+        if(pestProgression.type.Equals("semiscripted") 
+        && pestProgression.pattern == null)
+        {
+            Debug.LogError("Pest progression set to semi-scripted, but pattern field is empty");
+            return false;
+        }
+
+        return true;
+    } 
+
+    public void SpawnPestTile(GridTile pestTile) 
+    {
+        if(pestTile != null)
+        {
+            // add the tile to the pestStatus
+            pestProgression.currentPestProgression.Add(pestTile);
+
+            // change the pest type in the tile list
+            pestTile.type = GridTile.GridTileType.PEST;
+    
+            // draw it
+            this.tilemap.SetTile(pestTile.coordinates, pestTileObject);
+
+            // we check if the pest reached a player
+            bool found = false;
+            Player playerToRemove = null;
+            foreach(Player player in activePlayers)
+            {
+                if(player.farmLocation.x == pestTile.coordinates.x 
+                && player.farmLocation.y == pestTile.coordinates.y)
+                {
+                    // it has reached the player, which is out of the game
+                    // we remove it from the list
+                    found = true;
+                    playerToRemove = player;
+ 
+                    break;
+                }
+            }
+            if(found)
+            {
+                activePlayers.Remove(playerToRemove);
+            }
+        }
+    }
+
+    public GridTile GetNextPestTileRandom()
+    {
         // find all the "candidates" i.e. all the tiles non pested and adjacent to a pested tile
         List<GridTile> candidates = FindCandidateTiles();
 
-        foreach(var c in candidates)
-        {
-            Debug.Log("Candidate: " + c);
-        }
+//        foreach(var c in candidates)
+//        {
+//            Debug.Log("Candidate: " + c);
+//        }
         // select a tile among the candidates
         int index = random.Next(0, candidates.Count);
         GridTile newPestTile = candidates[index];
 
-        // add the tile to the pestStatus
-        currentPestProgression.Add(newPestTile);
-
-        // change the pest type in the tile list
-        newPestTile.type = GridTile.GridTileType.PEST;
-    
-        // draw it
-        this.tilemap.SetTile(newPestTile.coordinates, pestTileObject);
+        
 
         // return the tile
         return newPestTile;
     }
 
-    private GridTile GetNextPestTileScripted()
+    public GridTile GetNextPestTileScripted()
     {
+        if(pestProgression.years[pestSpreadingIndex] == currentYear)
+        {
+            GridTile tile =  GetTileFromLocation(pestProgression.pattern[pestSpreadingIndex]);
+            pestSpreadingIndex = pestSpreadingIndex + 1;
+            Debug.Log("The pest has spread to " + tile.coordinates);
+            return tile;
+        }
         return null;
     }
 
     private List<GridTile> FindCandidateTiles()
     {
-        Debug.Log("FindCandidateTiles");
         List<GridTile> candidates = new List<GridTile>();
-       foreach(var pestedTile in currentPestProgression)
+       foreach(var pestedTile in pestProgression.currentPestProgression)
        {
-           Debug.Log(pestedTile);
            foreach(var neighbor in Neighbors(pestedTile))
            {
-               if(!candidates.Contains(neighbor) && !this.currentPestProgression.Contains(neighbor))
+               if(!candidates.Contains(neighbor) && !pestProgression.currentPestProgression.Contains(neighbor))
                {
                    candidates.Add(neighbor);
                }
@@ -224,69 +272,66 @@ public class World
         }
         return null;
     }
-}
-
-public class Location
-{
-    public int x {get; set;}
-    public int y {get; set;}
-
-    public Location(int x, int y)
-    {
-        this.x = x;
-        this.y = y;
-    }
-
-
-}
-
-public class GridTile
-{
-    public enum GridTileType {
-        GRASS, 
-        PEST, 
-        FARM
-    }
-    public Vector3Int coordinates {get;}
-    public GridTileType type {get; set;}
-    public GridTile(GridTileType tileType, Location location)
-    {
-        this.type = tileType;
-        this.coordinates  = new Vector3Int(location.x, location.y, 0);
-    }
-
-    // override object.Equals
-    public override bool Equals(object obj)
-    {
-        //
-        // See the full list of guidelines at
-        //   http://go.microsoft.com/fwlink/?LinkID=85237
-        // and also the guidance for operator== at
-        //   http://go.microsoft.com/fwlink/?LinkId=85238
-        //
-        
-        if (obj == null)
-        {
-            return false;
-        }
-        
-        var other = obj as GridTile;
-        if(this.coordinates == other.coordinates)
-        {
-            return true;
-        }
-        return false;
-    }
     
-    // override object.GetHashCode
-    public override int GetHashCode()
+    public GridTile GetTileFromLocation(Location location)
     {
-        return this.coordinates.GetHashCode();
+        foreach(GridTile t in tileList)
+        {
+            if(t.coordinates.x == location.x 
+            && t.coordinates.y == location.y)
+            {
+                return t;
+            }
+        }
+        return null;
     }
 
-    public override string ToString()
+    public int CalculateDistanceToPest(Location location)
     {
-        return "(" + type + ")(" + coordinates + ")";
+        GridTile locationTile = GetTileFromCoordinates(new Vector3Int(location.x, location.y, 0));
+        int minDistance = Math.Max(Math.Abs(maxX - minX), Math.Abs(maxY - minY)) + 1; // not sure if this is right
+        foreach(var pestTile in pestProgression.currentPestProgression)
+        {
+            int distance = hexDistance(pestTile, locationTile);
+            if(distance < minDistance)
+            {
+                minDistance = distance;
+            }
+        }
+
+        return minDistance;
+
     }
-    
+
+    private int hexDistance(GridTile hex1, GridTile hex2)
+    {
+        if(hex1.coordinates.x == hex2.coordinates.x)
+        {
+            return Math.Abs(hex2.coordinates.y - hex1.coordinates.y);
+        }
+        else if (hex1.coordinates.y == hex2.coordinates.y)
+        {
+            return Math.Abs(hex2.coordinates.x - hex1.coordinates.x);
+        }
+        else
+        {
+            int dx = Math.Abs(hex2.coordinates.x - hex1.coordinates.x);
+            int dy = Math.Abs(hex2.coordinates.y - hex1.coordinates.y);
+            if(hex1.coordinates.y < hex2.coordinates.y)
+            {
+                int distance = dx + dy - (int)Math.Ceiling(dx / 2.0);
+                //Debug.Log("Player " + id + ", D-" + hex1 + "-" + hex2 + ": " + distance);
+                return distance;
+            }
+            else
+            {
+                int distance = dx + dy - (int)Math.Floor(dx / 2.0);
+                //Debug.Log("Player " + id + ", D-" + hex1 + "-" + hex2 + ": " + distance);
+                return distance;
+            }
+
+        }
+    }
 }
+
+

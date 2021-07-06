@@ -3,13 +3,68 @@
     "maxX": 2,
     "minY": -5,
     "maxY": -1, 
-    "humanPlayer": "yellow",
-    "farmsLocations": {
-        "red": {"x": 0, "y": -5},
-        "blue": {"x": 0, "y": -3},
-        "green": {"x": 2, "y": -4},
-        "yellow": {"x": 1, "y": -1},
-        "grey": {"x" : -2, "y" :  -1}
-    },
-    "initialPestLocation": {"x": -2, "y": -5}
+    "maxYear": 15,
+
+
+    "activePlayers": [
+        {
+            "id": "red",
+            "type": "egoistic",
+            "farmLocation": {"x": 0, "y": -5},
+            "wallet": 5, 
+            "revenuePerYear": 2
+        },
+        {
+            "id": "blue",
+            "type": "egoistic",
+            "farmLocation": {"x": 0, "y": -3},
+            "wallet": 5, 
+            "revenuePerYear": 2
+        },
+        {
+            "id": "green",
+            "type": "egoistic",
+            "farmLocation": {"x": 2, "y": -4},
+            "wallet": 5, 
+            "revenuePerYear": 2
+        },
+        {
+            "id": "yellow",
+            "type": "human",
+            "farmLocation": {"x": 1, "y": -1},
+            "wallet": 5, 
+            "revenuePerYear": 2
+        },
+        {
+            "id": "grey",
+            "type": "egoistic",
+            "farmLocation": {"x": -2, "y": -1},
+            "wallet": 5, 
+            "revenuePerYear": 2
+        }
+    ],
+
+    "pestProgression": {
+        "initialPestLocation" : {"x": -2, "y": -5},
+        "type": "scripted",
+        "pattern": [
+            {"x": -1, "y": -5},
+            {"x": -1, "y": -4},
+            {"x": -1, "y": -3},
+            {"x": -1, "y": -2},
+            {"x": 0, "y": -2},
+            {"x": 0, "y": -5},
+            {"x": -1, "y": -1}
+        ],
+        "years": [
+            2, 
+            4, 
+            7, 
+            8, 
+            9, 
+            11, 
+            14
+        ]
+
+    }
 }

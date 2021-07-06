@@ -27,34 +27,15 @@ public class GameControllerScript : MonoBehaviour
     private bool gameStateHasChanged = false;
 
     /////////////////////////////////////////////////////////////////////// game configuration
-    private const int nbPlayers = 5; // the total number of players
-    private List<Player> activePlayerList;
-    
-    private const int maxYear = 15; // the max number of years played. 
     private const double easeOfPestControl = 0.01; // how easy it is to stop the pest spreading
 
     private int? seed = null;
 
-    private const Player.PlayerType artificialPlayerType = Player.PlayerType.EGOISTIC;
-
     //////////////////////////////////////////////////////////////////////// private variables
-    private int year = 1;
-    private int humanPlayerId = 4; // id of the active player 
-
-    private (int x, int y)[] farmsLocations = {
-                                        (0, -5),
-                                        (0, -3),
-                                        (2, -4), 
-                                        (-2, -1),
-                                        (1, -1)
-    };
-
-    private GameStates currentGameState = GameStates.WaitingForPlayerInput;
+    private GameStates currentGameState = GameStates.WaitingForPlayerInput ;
 
     
     private System.Random random;
-    private bool latestPestControlSuccess = false;
-
     private World theWorld;
 
     //////////////////////////////////////////////////////////////////////// UI attributes
@@ -93,54 +74,37 @@ public class GameControllerScript : MonoBehaviour
 
         if(seed == null)
         {
-            random = new System.Random();
+            random = RandomSingleton.GetInstance();
         }
         else
         {
-            random = new System.Random(seed.Value);
+            random = RandomSingleton.GetInstance(seed.Value);
         }
-        
+
+        // init the world
         string worldJson = File.ReadAllText(@"Config/world.json");
         this.theWorld = JsonConvert.DeserializeObject<World>(worldJson);
        
-        theWorld.Init(this.tilemap, random);
-
+        theWorld.Init(this.tilemap);
         
 
         // init the other UI managers
         fundManager = fundSection.GetComponent<FundManager>();
-        
-        // Init the player list
-        // TODO
-
-        activePlayerList = new List<Player>();
-        for (int i = 0 ; i < nbPlayers ; i++) 
-        {
-            if (i != humanPlayerId)
-            {
-                activePlayerList.Add(new Player(i, artificialPlayerType, farmsLocations[i], fundManager, theWorld, random));
-            }
-            else
-            {
-                activePlayerList.Add(new Player(i, Player.PlayerType.HUMAN, farmsLocations[i], fundManager, theWorld, random));
-            }
-        }
-
 
         // init the variables we will use
         currentGameState = GameStates.Init;
 
         gameStateHasChanged = false;
 
-
-        // init the game display
-        yearValue.text = year.ToString();
-
         popupDialog.SetActive(false);
         confirmPopup.SetActive(true);
         confirmPopupText.text = "";
         initOverlay.SetActive(true);
 
+
+
+        // init the game display
+        yearValue.text = theWorld.currentYear.ToString();
         
     }
 
@@ -156,7 +120,7 @@ public class GameControllerScript : MonoBehaviour
         {   
             // display the new stuff
             // update the year
-            yearValue.text =  year.ToString();
+            yearValue.text =  theWorld.currentYear.ToString();
             // go to the next step if game state has changed
             if(gameStateHasChanged)
             {
@@ -295,7 +259,7 @@ public class GameControllerScript : MonoBehaviour
      
         // get other players' contribution
         // TODO
-        foreach(Player player in activePlayerList)
+        foreach(Player player in theWorld.activePlayers)
         {
             player.CalculateContribution();
         }
@@ -309,87 +273,88 @@ public class GameControllerScript : MonoBehaviour
 
         yield return new WaitForSeconds(3);
 
-        int totalContribution = 0;
-
-        foreach(Player player in activePlayerList)
+        GridTile pestTile;
+        switch(theWorld.pestProgression.type)
         {
-            totalContribution = totalContribution + player.GetContribution();
-            Debug.Log("Player " + player.GetId() + " paid " + player.GetContribution());
-        }
-
-        double threshold = (easeOfPestControl * totalContribution) / (1 + easeOfPestControl * totalContribution);
-        double p = random.NextDouble();
-        Debug.Log("threshold = " + threshold);
-        Debug.Log("p = " + p);
-        
-        if(p < threshold)
-        {
-            latestPestControlSuccess = true;
-            SendNotification("The pest control was successful");
-            
-        }
-        else
-        {  
-            latestPestControlSuccess = false;
-
-            SendNotification("The pest control was unseccussful, the pest has progressed");
-            GridTile pestTileToAdd = theWorld.GetNextPestTile();
-            if(pestTileToAdd != null)
+            case "random":
+            if(PestHasProgressed())
             {
-                // we check if the pest reached an artificial player
-                var activePlayerCopy = new List<Player>(activePlayerList);
-                foreach(Player pl in activePlayerCopy)
-                {
-                    if(pl.GetFarmLocation().x == pestTileToAdd.coordinates.x 
-                    && pl.GetFarmLocation().y == pestTileToAdd.coordinates.y)
-                    {
-                        // it has reached the player, which is out of the game
-                        // we remove it from the list
-                        activePlayerList.Remove(pl);
-                        if(pl.IsHuman())
-                        {
-                            LoseGame();
-                        }
-                    }
-                }
+                pestTile = theWorld.GetNextPestTileRandom();
+                theWorld.SpawnPestTile(pestTile);
             }
-        }
+            break;
 
+            case "scripted": 
+            pestTile = theWorld.GetNextPestTileScripted();
+            theWorld.SpawnPestTile(pestTile);                    
+            break;
+
+            case "semiscripted":
+            // TODO
+            break;
+
+            default: 
+            Debug.LogError("Pest progression type " + theWorld.pestProgression.type + " unknown. Known types are (random, scripted, semiscripted)");
+            break;
+
+        }
+        if(!theWorld.activePlayers.Contains(theWorld.humanPlayer))
+        {
+            LoseGame();
+        }
         if(currentGameState != GameStates.GameEnded)
         {
             NextState();
         }
     }
 
-    void ConfirmPestControl() 
+    private bool PestHasProgressed()
     {
-        if(latestPestControlSuccess)
+
+        int totalContribution = 0;
+
+        foreach(Player player in theWorld.activePlayers)
         {
-            // TODO pest control success
-            Debug.Log("Pest control success");
+            totalContribution = totalContribution + player.GetContribution();
+            Debug.Log("Player " + player.id + " paid " + player.GetContribution());
+        }
+
+        double threshold = (easeOfPestControl * totalContribution) / (1 + easeOfPestControl * totalContribution);
+        double p = random.NextDouble();
+        
+        if(p < threshold)
+        {
+            SendNotification("The pest control was successful");
+            return false;
         }
         else
-        {
-            // TODO pest control failure
-            Debug.Log("Pest control failure");
+        {  
+            SendNotification("The pest control was unseccussful");
+            return true;  
         }
+
+       
+    }
+
+    void ConfirmPestControl() 
+    {
         NextState();
     }
 
     void CollectRevenue()
     {
-        foreach(Player player in activePlayerList)
+        foreach(Player player in theWorld.activePlayers)
         {
-            player.CollectRevenue(fundManager.getRevenuePerYear());
+            player.CollectRevenue();
         }
-        SendNotification("You've earned " + fundManager.getRevenuePerYear() + " GP from your farm.");
+        SendNotification("You've earned " + theWorld.humanPlayer.revenuePerYear + " GP from your farm.");
         NextState();
     }
 
     void PrepareForNextYear()
     {
-        year = year + 1;
-        if(year > maxYear)
+        theWorld.currentYear = theWorld.currentYear + 1;
+        if(theWorld.currentYear > theWorld.maxYear)
         {
             WinGame();
         }
@@ -426,7 +391,6 @@ public class GameControllerScript : MonoBehaviour
         currentGameState = GameStates.GameEnded;
         // TODO
         // do stuff here
-        Debug.Log("End of the game");
 
         // check
         ActivatePopup("GAME OVER \\ The Pest has reached your farm");
@@ -437,20 +401,18 @@ public class GameControllerScript : MonoBehaviour
         currentGameState = GameStates.GameEnded;
         // TODO
         // do stuff here
-        Debug.Log("End of the game");
 
         ActivatePopup("CONGRATULATIONS \\ You have reached the end of the game");
   
     }
 
-    public int GetNbPlayers() 
-    {
-        return nbPlayers;
-    }
-
     public Player GetHumanPlayer()
     {
-        return activePlayerList[humanPlayerId];
+        return theWorld.humanPlayer;
     }
 
+    public bool GameEnded()
+    {
+        return currentGameState == GameStates.GameEnded;
+    }
 }
