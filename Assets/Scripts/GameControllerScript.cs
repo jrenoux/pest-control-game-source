@@ -92,14 +92,24 @@ public class GameControllerScript : MonoBehaviour
         fundManager = fundSection.GetComponent<FundManager>();
 
         // init the variables we will use
-        currentGameState = GameStates.Init;
+        if(theWorld.debug)
+        {
+            currentGameState = GameStates.WaitingForPlayerInput;
+            initOverlay.SetActive(false);
+            tutorialPopup.SetActive(false);            
+        }
+        else
+        {
+            currentGameState = GameStates.Init;
+            initOverlay.SetActive(true);
+            confirmPopup.SetActive(true);
+        }
+        
 
         gameStateHasChanged = false;
 
         popupDialog.SetActive(false);
-        confirmPopup.SetActive(true);
         confirmPopupText.text = "";
-        initOverlay.SetActive(true);
 
 
 

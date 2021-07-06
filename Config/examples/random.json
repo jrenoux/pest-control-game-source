@@ -6,7 +6,6 @@
     "maxYear": 15,
     "debug": true,
 
-
     "activePlayers": [
         {
             "id": "red",
@@ -47,25 +46,6 @@
 
     "pestProgression": {
         "initialPestLocation" : {"x": -2, "y": -5},
-        "type": "scripted",
-        "pattern": [
-            {"x": -1, "y": -5},
-            {"x": -1, "y": -4},
-            {"x": -1, "y": -3},
-            {"x": -1, "y": -2},
-            {"x": 0, "y": -2},
-            {"x": 0, "y": -5},
-            {"x": -1, "y": -1}
-        ],
-        "years": [
-            2, 
-            4, 
-            7, 
-            8, 
-            9, 
-            11, 
-            14
-        ]
-
+        "type": "random"
     }
 }

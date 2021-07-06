@@ -14,6 +14,7 @@ public class World
 
     public int maxYear {get; set;}
 
+    public bool debug {get; set;} = false;
     public Player humanPlayer {get; set;}
 
     public PestProgression pestProgression {get; set;}
