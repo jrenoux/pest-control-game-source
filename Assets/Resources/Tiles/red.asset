@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: building_own_farm_E
+  m_Name: red
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 21300000, guid: ecdf32a6ee3a84840bd7e1c4d22acbe3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c8cdee112b8fe3fe694fa3287cf7b7ac, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1

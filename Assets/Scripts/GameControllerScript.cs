@@ -37,8 +37,6 @@ public class GameControllerScript : MonoBehaviour
 
     private const Player.PlayerType artificialPlayerType = Player.PlayerType.EGOISTIC;
 
-    private (int x, int y)  initialPestTile = (-2, -5);
-
     //////////////////////////////////////////////////////////////////////// private variables
     private int year = 1;
     private int humanPlayerId = 4; // id of the active player 
@@ -46,17 +44,14 @@ public class GameControllerScript : MonoBehaviour
     private (int x, int y)[] farmsLocations = {
                                         (0, -5),
                                         (0, -3),
-                                        (3, -4), 
+                                        (2, -4), 
                                         (-2, -1),
                                         (1, -1)
     };
 
     private GameStates currentGameState = GameStates.WaitingForPlayerInput;
 
-    private PestController pestController;
-
-    private Tile pestTile; // the tile used for the pest
-    private Nullable<(int x, int y)> pestTileToAdd =  null;
+    
     private System.Random random;
     private bool latestPestControlSuccess = false;
 
@@ -95,10 +90,6 @@ public class GameControllerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        string worldJson = File.ReadAllText(@"Config/world.json");
-        theWorld = JsonConvert.DeserializeObject<World>(worldJson);
-       
-        InitWorld();
 
         if(seed == null)
         {
@@ -109,8 +100,12 @@ public class GameControllerScript : MonoBehaviour
             random = new System.Random(seed.Value);
         }
         
+        string worldJson = File.ReadAllText(@"Config/world.json");
+        this.theWorld = JsonConvert.DeserializeObject<World>(worldJson);
+       
+        theWorld.Init(this.tilemap, random);
+
         
-        pestController = new PestController(random, initialPestTile);
 
         // init the other UI managers
         fundManager = fundSection.GetComponent<FundManager>();
@@ -123,15 +118,11 @@ public class GameControllerScript : MonoBehaviour
         {
             if (i != humanPlayerId)
             {
-                activePlayerList.Add(new Player(i, artificialPlayerType, farmsLocations[i], fundManager, pestController, random));
+                activePlayerList.Add(new Player(i, artificialPlayerType, farmsLocations[i], fundManager, theWorld, random));
             }
             else
             {
-                activePlayerList.Add(new Player(i, Player.PlayerType.HUMAN, farmsLocations[i], fundManager, pestController, random));
-                Tile farmTile = TilesResourcesLoader.GetOwnFarmTile();
-                int farmX = farmsLocations[i].x;
-                int farmY = farmsLocations[i].y;
-                tilemap.SetTile(new Vector3Int(farmX, farmY, 0), farmTile);
+                activePlayerList.Add(new Player(i, Player.PlayerType.HUMAN, farmsLocations[i], fundManager, theWorld, random));
             }
         }
 
@@ -145,9 +136,6 @@ public class GameControllerScript : MonoBehaviour
         // init the game display
         yearValue.text = year.ToString();
 
-        pestTile = TilesResourcesLoader.GetPestTile();
-        tilemap.SetTile(new Vector3Int(initialPestTile.x, initialPestTile.y,0), pestTile);
-
         popupDialog.SetActive(false);
         confirmPopup.SetActive(true);
         confirmPopupText.text = "";
@@ -156,27 +144,9 @@ public class GameControllerScript : MonoBehaviour
         
     }
 
-    private void InitWorld()
-    {
-        // 1. paint the tiles for the map
-
-
-        // 2. paint the farms with the right colors
-
-
-        // 3. check if pestProgression is empty of not (if empty: random, if not: scripted)
-
-
-        // 4. pain the initial pest location
-
-    }
-
     // Update is called once per frame
     void Update()
     {
-        // update pest progression
-        UpdatePestProgression();
-
         // play the state machine
         if(currentGameState == GameStates.GameEnded) 
         {
@@ -232,18 +202,6 @@ public class GameControllerScript : MonoBehaviour
             }
         }
         
-    }
-
-    void UpdatePestProgression()
-    {
-        if(pestTileToAdd != null) 
-        {
-            // get the location of the new pest tile depending on the year
-            Debug.Log("x = " + pestTileToAdd.Value.x + ", y = " + pestTileToAdd.Value.y);
-            tilemap.SetTile(new Vector3Int(pestTileToAdd.Value.x, pestTileToAdd.Value.y, 0), pestTile);
-
-            pestTileToAdd = null;
-        }
     }
 
     public void StartTutorial()
@@ -375,21 +333,23 @@ public class GameControllerScript : MonoBehaviour
             latestPestControlSuccess = false;
 
             SendNotification("The pest control was unseccussful, the pest has progressed");
-            pestTileToAdd = pestController.GetNextPestTile();
-
-            // we check if the pest reached an artificial player
-            var activePlayerCopy = new List<Player>(activePlayerList);
-            foreach(Player pl in activePlayerCopy)
+            GridTile pestTileToAdd = theWorld.GetNextPestTile();
+            if(pestTileToAdd != null)
             {
-                if(pl.GetFarmLocation().x == pestTileToAdd.Value.y 
-                && pl.GetFarmLocation().y == pestTileToAdd.Value.y)
+                // we check if the pest reached an artificial player
+                var activePlayerCopy = new List<Player>(activePlayerList);
+                foreach(Player pl in activePlayerCopy)
                 {
-                    // it has reached the player, which is out of the game
-                    // we remove it from the list
-                    activePlayerList.Remove(pl);
-                    if(pl.IsHuman())
+                    if(pl.GetFarmLocation().x == pestTileToAdd.coordinates.x 
+                    && pl.GetFarmLocation().y == pestTileToAdd.coordinates.y)
                     {
-                        LoseGame();
+                        // it has reached the player, which is out of the game
+                        // we remove it from the list
+                        activePlayerList.Remove(pl);
+                        if(pl.IsHuman())
+                        {
+                            LoseGame();
+                        }
                     }
                 }
             }

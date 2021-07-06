@@ -12,7 +12,7 @@ public class Player
 
     private int id;
 
-    private (int x, int y) farmLocation;
+    private GridTile farmLocation;
 
     private int fund = 5;
 
@@ -20,16 +20,17 @@ public class Player
 
     private FundManager fundManager;
 
-    private PestController pestManager;
+    private World theWorld;
     private GaussianRandom gaussianRandom;
 
-    public Player(int id, PlayerType t, (int , int) location, FundManager manager, PestController pestController, System.Random random)
+    public Player(int id, PlayerType t, (int x, int y) location, FundManager manager, World world, System.Random random)
     {
         this.id = id;
         type = t;
-        farmLocation = location;
+
         this.fundManager = manager;
-        this.pestManager = pestController;
+        this.theWorld = world;
+        farmLocation = theWorld.GetTileFromCoordinates(new Vector3Int(location.x, location.y, 0));
         this.gaussianRandom = new GaussianRandom(random);
 
         switch(type)
@@ -45,9 +46,9 @@ public class Player
         } 
     }
 
-    public (int x, int y) GetFarmLocation()
+    public Vector3Int GetFarmLocation()
     {
-        return farmLocation;
+        return farmLocation.coordinates;
     }
 
     public void CollectRevenue(int revenue)
@@ -123,12 +124,11 @@ public class Player
     private int CalculateDistanceToPest()
     {
         // for each pest tile, we calculate the distance and keep the shortest
-        (int x, int y)[] pestTiles = pestManager.GetPestTiles();
         int minDistance = 6;
-        
-        for(int i = 0 ; i < pestTiles.Length ; i++)
+        foreach(var pestTile in theWorld.currentPestProgression)
         {
-            int distance = hexDistance(pestTiles[i], this.farmLocation);
+            Debug.Log("Calculate distance to pest: " + pestTile + " - " + this.farmLocation + "(player id: " + id + ")");
+            int distance = hexDistance(pestTile, this.farmLocation);
             if(distance < minDistance)
             {
                 minDistance = distance;
@@ -138,21 +138,21 @@ public class Player
         return minDistance;
     }
 
-    private int hexDistance((int x, int y) hex1, (int x, int y) hex2)
+    private int hexDistance(GridTile hex1, GridTile hex2)
     {
-        if(hex1.x == hex2.x)
+        if(hex1.coordinates.x == hex2.coordinates.x)
         {
-            return Math.Abs(hex2.y - hex1.y);
+            return Math.Abs(hex2.coordinates.y - hex1.coordinates.y);
         }
-        else if (hex1.y == hex2.y)
+        else if (hex1.coordinates.y == hex2.coordinates.y)
         {
-            return Math.Abs(hex2.x - hex1.x);
+            return Math.Abs(hex2.coordinates.x - hex1.coordinates.x);
         }
         else
         {
-            int dx = Math.Abs(hex2.x - hex1.x);
-            int dy = Math.Abs(hex2.y - hex1.y);
-            if(hex1.y < hex2.y)
+            int dx = Math.Abs(hex2.coordinates.x - hex1.coordinates.x);
+            int dy = Math.Abs(hex2.coordinates.y - hex1.coordinates.y);
+            if(hex1.coordinates.y < hex2.coordinates.y)
             {
                 int distance = dx + dy - (int)Math.Ceiling(dx / 2.0);
                 //Debug.Log("Player " + id + ", D-" + hex1 + "-" + hex2 + ": " + distance);
