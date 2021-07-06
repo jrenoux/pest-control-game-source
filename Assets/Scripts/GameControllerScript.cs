@@ -279,7 +279,15 @@ public class GameControllerScript : MonoBehaviour
 
     IEnumerator PerformPestControl()
     {
-        SendNotification("Performing Pest Control");
+        int totalContribution = 0;
+
+        foreach(Player player in theWorld.activePlayers)
+        {
+            totalContribution = totalContribution + player.GetContribution();
+            Debug.Log("Player " + player.id + " paid " + player.GetContribution());
+        }
+        SendNotification("The collective gathered " + totalContribution + " coins.");
+        //SendNotification("Performing Pest Control");
 
         yield return new WaitForSeconds(3);
 
@@ -287,7 +295,7 @@ public class GameControllerScript : MonoBehaviour
         switch(theWorld.pestProgression.type)
         {
             case "random":
-            if(PestHasProgressed())
+            if(PestHasProgressed(totalContribution))
             {
                 pestTile = theWorld.GetNextPestTileRandom();
                 theWorld.SpawnPestTile(pestTile);
@@ -300,7 +308,7 @@ public class GameControllerScript : MonoBehaviour
             break;
 
             case "semiscripted":
-            if(PestHasProgressed())
+            if(PestHasProgressed(totalContribution))
             {
                 pestTile = theWorld.GetNextPestTileSemiScripted();
                 theWorld.SpawnPestTile(pestTile);
@@ -323,17 +331,8 @@ public class GameControllerScript : MonoBehaviour
         }
     }
 
-    private bool PestHasProgressed()
+    private bool PestHasProgressed(int totalContribution)
     {
-
-        int totalContribution = 0;
-
-        foreach(Player player in theWorld.activePlayers)
-        {
-            totalContribution = totalContribution + player.GetContribution();
-            Debug.Log("Player " + player.id + " paid " + player.GetContribution());
-        }
-
         double threshold = (easeOfPestControl * totalContribution) / (1 + easeOfPestControl * totalContribution);
         double p = random.NextDouble();
         Debug.Log("p: " + p + ", threshold: " + threshold);

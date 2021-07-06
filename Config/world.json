@@ -10,21 +10,21 @@
     "activePlayers": [
         {
             "id": "red",
-            "type": "prosocial",
+            "type": "egoistic",
             "farmLocation": {"x": 0, "y": -5},
             "wallet": 5, 
             "revenuePerYear": 2
         },
         {
             "id": "blue",
-            "type": "prosocial",
+            "type": "egoistic",
             "farmLocation": {"x": 0, "y": -3},
             "wallet": 5, 
             "revenuePerYear": 2
         },
         {
             "id": "green",
-            "type": "prosocial",
+            "type": "egoistic",
             "farmLocation": {"x": 2, "y": -4},
             "wallet": 5, 
             "revenuePerYear": 2
