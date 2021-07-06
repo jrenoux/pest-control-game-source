@@ -50,7 +50,29 @@ public class Player
     private int CalculateProsocialContribution()
     {
         // TODO 
-        return 1;
+        int c_max = this.wallet - revenuePerYear;
+        int d_max = 5;
+
+        int minDistanceFromPlayerToPest = d_max;
+        foreach(Player pl in theWorld.activePlayers)
+        {
+            int distance =  theWorld.CalculateDistanceToPest(pl.farmLocation);
+            if(distance < minDistanceFromPlayerToPest)
+            {
+                minDistanceFromPlayerToPest = distance;
+            }
+        }
+
+        double mean = (- c_max / d_max ) * minDistanceFromPlayerToPest + c_max;
+        double deviation = 1;
+
+        double gaussian = gaussianRandom.NextGaussian(mean, deviation);
+        //Debug.Log("Gaussian : " + gaussian);
+
+        int contribution = (int)Math.Round(gaussian);
+         
+        Debug.Log("Player " + id + " contributed " + contribution);
+        return contribution;
     }
     
     private int CalculateEgoisticContribution()
@@ -70,6 +92,7 @@ public class Player
 
         int contribution = (int)Math.Round(gaussian);
          
+        Debug.Log("Player " + id + " contributed " + contribution);
         return contribution;
     }
 
