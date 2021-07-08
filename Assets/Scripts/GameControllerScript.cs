@@ -82,7 +82,7 @@ public class GameControllerScript : MonoBehaviour
         }
 
         // init the world
-        string worldJson = File.ReadAllText(@"Config/world.json");
+        string worldJson = Resources.Load<TextAsset>(@"Config/world").text;
         this.theWorld = JsonConvert.DeserializeObject<World>(worldJson);
        
         theWorld.Init(this.tilemap);
