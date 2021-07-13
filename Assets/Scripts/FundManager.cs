@@ -9,9 +9,6 @@ public class FundManager : MonoBehaviour
     public Text fundValueText; // field used to dislay the current amount of money available for the active player
     public Text amountInput;
 
-    private int latestContribution = 0;
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -56,18 +53,9 @@ public class FundManager : MonoBehaviour
       // functions used by the buttons on the UI
     public void Pay() 
     {
-        //called when the player clicks the "Pay" button. Starts the round manager
-        latestContribution = int.Parse(amountInput.text);
 
-        // the contribution is valid, we start the round
-        // we remove the amount paid from available funds
-        gameController.GetHumanPlayer().SetContribution(latestContribution);
-
-
-        // and we tell the game manager that we are switching to the next state
         gameController.NextState();
-
-        // and we empty the input field
-        amountInput.text = "0";
+        
+        
     }
 }

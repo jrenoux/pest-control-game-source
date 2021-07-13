@@ -4,7 +4,7 @@
     "minY": -5,
     "maxY": -1, 
     "maxYear": 15,
-    "debug": true,
+    "tutorial": true,
 
     "activePlayers": [
         {

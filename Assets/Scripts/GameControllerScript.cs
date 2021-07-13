@@ -27,7 +27,6 @@ public class GameControllerScript : MonoBehaviour
     private bool gameStateHasChanged = false;
 
     /////////////////////////////////////////////////////////////////////// game configuration
-    private const double easeOfPestControl = 0.01; // how easy it is to stop the pest spreading
 
     private int? seed = null;
 
@@ -63,10 +62,15 @@ public class GameControllerScript : MonoBehaviour
     };
     private int currentTutorial = 0;
 
+    [SerializeField]
+    private GameObject chatSection;
+
+
 
 
     //////////////////////////////////////////////////////////////////////// Other managers
     FundManager fundManager;
+    ChatSectionControl chatManager;
 
     // Start is called before the first frame update
     void Start()
@@ -90,19 +94,20 @@ public class GameControllerScript : MonoBehaviour
 
         // init the other UI managers
         fundManager = fundSection.GetComponent<FundManager>();
+        chatManager = chatSection.GetComponent<ChatSectionControl>();
 
         // init the variables we will use
-        if(theWorld.debug)
-        {
-            currentGameState = GameStates.WaitingForPlayerInput;
-            initOverlay.SetActive(false);
-            tutorialPopup.SetActive(false);            
-        }
-        else
+        if(theWorld.tutorial)
         {
             currentGameState = GameStates.Init;
             initOverlay.SetActive(true);
             confirmPopup.SetActive(true);
+        }
+        else
+        {
+            currentGameState = GameStates.WaitingForPlayerInput;
+            initOverlay.SetActive(false);
+            tutorialPopup.SetActive(false); 
         }
         
 
@@ -257,6 +262,26 @@ public class GameControllerScript : MonoBehaviour
         downButton.interactable = false;
         payButton.interactable = false;
         // TODO
+        // send feedback from the coach
+        if(chatManager.hasFeedback)
+        {
+            chatManager.SendFeedback(theWorld.currentYear, theWorld.pestProgression.latestPestSpread);
+        }   
+        else
+        {
+
+        }
+
+        //called when the player clicks the "Pay" button. Starts the round manager
+        int latestContribution = int.Parse(fundManager.amountInput.text);
+        
+        // the contribution is valid, we start the round
+        // we remove the amount paid from available funds
+        GetHumanPlayer().SetContribution(latestContribution);
+
+        // and we empty the input field
+        fundManager.amountInput.text = "0";
+
         NextState();
     }
 
@@ -333,7 +358,7 @@ public class GameControllerScript : MonoBehaviour
 
     private bool PestHasProgressed(int totalContribution)
     {
-        double threshold = (easeOfPestControl * totalContribution) / (1 + easeOfPestControl * totalContribution);
+        double threshold = (theWorld.easeOfPestControl * totalContribution) / (1 + theWorld.easeOfPestControl * totalContribution);
         double p = random.NextDouble();
         Debug.Log("p: " + p + ", threshold: " + threshold);
         
@@ -379,7 +404,6 @@ public class GameControllerScript : MonoBehaviour
         }
 
     }
-
 
 
     ///////////////////////////////////////////////////////////// Other functions

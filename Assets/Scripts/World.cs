@@ -14,7 +14,9 @@ public class World
 
     public int maxYear {get; set;}
 
-    public bool debug {get; set;} = false;
+    public bool tutorial {get; set;} = true;
+
+    public double easeOfPestControl {get; set;} = 0.01;
     public Player humanPlayer {get; set;}
 
     public PestProgression pestProgression {get; set;}
@@ -142,6 +144,7 @@ public class World
 
     public void SpawnPestTile(GridTile pestTile) 
     {
+        pestProgression.latestPestSpread = pestTile;
         if(pestTile != null)
         {
             // add the tile to the pestStatus

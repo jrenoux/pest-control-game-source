@@ -4,26 +4,27 @@
     "minY": -5,
     "maxY": -1, 
     "maxYear": 15,
-    "debug": true,
+    "easeOfPestControl": 0.12,
+    "tutorial": false,
 
     "activePlayers": [
         {
             "id": "red",
-            "type": "egoistic",
+            "type": "scripted",
             "farmLocation": {"x": 0, "y": -5},
             "wallet": 5, 
             "revenuePerYear": 2
         },
         {
             "id": "blue",
-            "type": "egoistic",
+            "type": "scripted",
             "farmLocation": {"x": 0, "y": -3},
             "wallet": 5, 
             "revenuePerYear": 2
         },
         {
             "id": "green",
-            "type": "egoistic",
+            "type": "scripted",
             "farmLocation": {"x": 2, "y": -4},
             "wallet": 5, 
             "revenuePerYear": 2
@@ -37,7 +38,7 @@
         },
         {
             "id": "grey",
-            "type": "egoistic",
+            "type": "scripted",
             "farmLocation": {"x": -2, "y": -1},
             "wallet": 5, 
             "revenuePerYear": 2

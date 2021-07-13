@@ -4,27 +4,27 @@
     "minY": -5,
     "maxY": -1, 
     "maxYear": 15,
-    "debug": true,
-
+    "easeOfPestControl": 0.2,
+    "tutorial": false,
 
     "activePlayers": [
         {
             "id": "red",
-            "type": "egoistic",
+            "type": "fixed",
             "farmLocation": {"x": 0, "y": -5},
             "wallet": 5, 
             "revenuePerYear": 2
         },
         {
             "id": "blue",
-            "type": "egoistic",
+            "type": "fixed",
             "farmLocation": {"x": 0, "y": -3},
             "wallet": 5, 
             "revenuePerYear": 2
         },
         {
             "id": "green",
-            "type": "egoistic",
+            "type": "fixed",
             "farmLocation": {"x": 2, "y": -4},
             "wallet": 5, 
             "revenuePerYear": 2
@@ -38,7 +38,7 @@
         },
         {
             "id": "grey",
-            "type": "egoistic",
+            "type": "fixed",
             "farmLocation": {"x": -2, "y": -1},
             "wallet": 5, 
             "revenuePerYear": 2
@@ -47,25 +47,6 @@
 
     "pestProgression": {
         "initialPestLocation" : {"x": -2, "y": -5},
-        "type": "scripted",
-        "pattern": [
-            {"x": -1, "y": -5},
-            {"x": -1, "y": -4},
-            {"x": -1, "y": -3},
-            {"x": -1, "y": -2},
-            {"x": 0, "y": -2},
-            {"x": 0, "y": -5},
-            {"x": -1, "y": -1}
-        ],
-        "years": [
-            2, 
-            4, 
-            7, 
-            8, 
-            9, 
-            11, 
-            14
-        ]
-
+        "type": "random"
     }
 }

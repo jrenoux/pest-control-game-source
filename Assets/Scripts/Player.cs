@@ -37,12 +37,16 @@ public class Player
             SetContribution(CalculateEgoisticContribution());
             break;
 
+            case "fixed": 
+            SetContribution(this.revenuePerYear); 
+            break;
+
             case "human":
             // nothing to do, this is done when "Pay" is clicked
             break;
 
             default: 
-            Debug.LogError("Player type " + type + " unknown. Known types are (prosocial, egoistic, human)");
+            Debug.LogError("Player type " + type + " unknown. Known types are (prosocial, egoistic, fixed, human)");
             break;
         }
     }

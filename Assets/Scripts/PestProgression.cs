@@ -11,12 +11,12 @@ public class PestProgression
 
     public List<GridTile> currentPestProgression {get;}
 
-
-  
+    public GridTile latestPestSpread {get; set;}
 
     public PestProgression() 
     {
         currentPestProgression = new List<GridTile>();
+        latestPestSpread = null;
     }
 
 
