@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 
 public enum MessageTypes {
-            GAME_LOG,
+            LOG,
             COACH,
             PLAYER
 }
@@ -28,7 +28,7 @@ public class MessageTemplateControl : MonoBehaviour
         myText.text = textString;
         switch(messageType)
         {
-            case MessageTypes.GAME_LOG:
+            case MessageTypes.LOG:
             GetComponentInChildren<Image>().color = logColor;
             myText.color = Color.white;
             break;

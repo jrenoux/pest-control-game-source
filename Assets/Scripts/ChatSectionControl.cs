@@ -20,14 +20,17 @@ public class ChatSectionControl : MonoBehaviour
 
     GameControllerScript gameController;
 
+    private int latestRoundWhereFeedbackSent = -1;
+    private GridTile latestPestTileWhereFeedbackSent = null;
+
     
     void Start() 
     {
         string feedbackJson = Resources.Load<TextAsset>(@"Config/feedback").text;
         feedback = JsonConvert.DeserializeObject<Feedback>(feedbackJson);
         messageList = new List<string>();
-        participantAnswerSection.SetActive(false);
         gameController = GameObject.Find("GameController").GetComponent<GameControllerScript>();
+        participantAnswerSection.SetActive(false);
     }
     private void AddChatMessage(string messageString, MessageTypes messageType)
     {
@@ -41,6 +44,11 @@ public class ChatSectionControl : MonoBehaviour
 
     public bool SendFeedback(int roundNumber, GridTile pestTile)
     {
+        // if feedback for this round or gridTile has already been sent, we don't send it again
+        if(roundNumber == latestRoundWhereFeedbackSent || (pestTile!= null && pestTile.Equals(latestPestTileWhereFeedbackSent)))
+        {
+            return false;
+        }
         //returns true if there has been a chat message sent, false otherwise
         // see if there is a chat message to be sent.
         string utterance = feedback.GetFeedbackUtterance(roundNumber, pestTile);
@@ -49,12 +57,26 @@ public class ChatSectionControl : MonoBehaviour
         if(!utterance.Equals(""))
        {
            AddChatMessage(utterance, MessageTypes.COACH);
+           if(roundNumber != -1)
+           {
+               latestRoundWhereFeedbackSent = roundNumber;
+           }
+           if(latestPestTileWhereFeedbackSent != null)
+           {
+               latestPestTileWhereFeedbackSent = pestTile;
+           }
+           
            participantAnswerSection.SetActive(true);
            return true;
        }    
 
        return false;
 
+    }
+
+    public void SendLogMessage(string message)
+    {
+        AddChatMessage(message, MessageTypes.LOG);
     }
 
     public void ConfirmInput()

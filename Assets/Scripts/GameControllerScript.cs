@@ -117,8 +117,6 @@ public class GameControllerScript : MonoBehaviour
         popupDialog.SetActive(false);
         confirmPopupText.text = "";
 
-
-
         // init the game display
         yearValue.text = theWorld.currentYear.ToString();
         
@@ -306,7 +304,7 @@ public class GameControllerScript : MonoBehaviour
 
     IEnumerator PlayArtificialPlayersRound()
     {
-        SendNotification("Waiting for other players");
+        SendNotification("Waiting for other players", false);
         int timeToWait = random.Next(2, 5);
         yield return new WaitForSeconds(timeToWait);
         //DeactivatePopup();
@@ -331,6 +329,10 @@ public class GameControllerScript : MonoBehaviour
             Debug.Log("Player " + player.id + " paid " + player.GetContribution());
         }
         SendNotification("The collective gathered " + totalContribution + " coins.");
+        yield return new WaitForSeconds(2);
+
+        double probaSpread = Math.Round(GetSpreadingThreshold(totalContribution) * 100);
+        SendNotification("The pest has " + probaSpread + "% chances to spread");
         //SendNotification("Performing Pest Control");
 
         yield return new WaitForSeconds(3);
@@ -357,7 +359,6 @@ public class GameControllerScript : MonoBehaviour
                 pestTile = theWorld.GetNextPestTileSemiScripted();
                 theWorld.SpawnPestTile(pestTile);
             }
-            // TODO
             break;
 
             default: 
@@ -375,9 +376,15 @@ public class GameControllerScript : MonoBehaviour
         }
     }
 
-    private bool PestHasProgressed(int totalContribution)
+    private double GetSpreadingThreshold(int totalContribution)
     {
         double threshold = (theWorld.easeOfPestControl * totalContribution) / (1 + theWorld.easeOfPestControl * totalContribution);
+        return threshold;
+    }
+
+    private bool PestHasProgressed(int totalContribution)
+    {
+        double threshold = GetSpreadingThreshold(totalContribution);
         double p = random.NextDouble();
         Debug.Log("p: " + p + ", threshold: " + threshold);
         
@@ -438,10 +445,14 @@ public class GameControllerScript : MonoBehaviour
         popupDialog.SetActive(false);    
     }
 
-    private void SendNotification(string message) 
+    private void SendNotification(string message, bool toLog = true) 
     {
         confirmPopupText.text = message;
         confirmPopup.SetActive(true);
+        if(toLog)
+        {
+            chatManager.SendLogMessage(message);
+        }
     }
 
     public void LoseGame()
