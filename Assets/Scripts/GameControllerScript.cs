@@ -10,11 +10,12 @@ using UnityEngine.Tilemaps;
 public class GameControllerScript : MonoBehaviour
 {
 
-    private enum GameStates {
+    public enum GameStates {
                                 Init,
                                 Tutorial,
                                 WaitingForPlayerInput,
                                 ConfirmPlayerInput,
+                                ProcessPlayerInput,
                                 WaitingForOtherPlayers,
                                 PerformingPestControl,
                                 ConfirmPestControl,
@@ -155,6 +156,10 @@ public class GameControllerScript : MonoBehaviour
                         Debug.Log("State = Confirm player input");
                         ConfirmPlayerInput();
                         break;
+                    case GameStates.ProcessPlayerInput:
+                        Debug.Log("State = Process player input");
+                        ProcessPlayerInput();
+                        break;
                     case GameStates.WaitingForOtherPlayers:
                         Debug.Log("State = Waiting for other players input");
                         StartCoroutine(PlayArtificialPlayersRound());
@@ -196,6 +201,12 @@ public class GameControllerScript : MonoBehaviour
         int stateId = (int)currentGameState;
         stateId = (stateId + 1 ) % (Enum.GetNames(typeof(GameStates)).Length -1 );
         currentGameState = (GameStates)stateId;
+        gameStateHasChanged = true;
+    }
+
+    public void SetState(GameStates state)
+    {
+        currentGameState = state;
         gameStateHasChanged = true;
     }
 
@@ -265,14 +276,22 @@ public class GameControllerScript : MonoBehaviour
         // send feedback from the coach
         if(chatManager.hasFeedback)
         {
-            chatManager.SendFeedback(theWorld.currentYear, theWorld.pestProgression.latestPestSpread);
+            if(!chatManager.SendFeedback(theWorld.currentYear, theWorld.pestProgression.latestPestSpread))
+            {
+                // there hasn't been any message sent, so we go to the process input state
+                SetState(GameStates.ProcessPlayerInput);
+            }
         }   
         else
         {
-
+            // if the participant is in the "no feedback" group, then we simply go to the process state
+            SetState(GameStates.ProcessPlayerInput);
         }
+    }
 
-        //called when the player clicks the "Pay" button. Starts the round manager
+    void ProcessPlayerInput()
+    {
+         //called when the player clicks the "Pay" button. Starts the round manager
         int latestContribution = int.Parse(fundManager.amountInput.text);
         
         // the contribution is valid, we start the round

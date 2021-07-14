@@ -18,12 +18,16 @@ public class ChatSectionControl : MonoBehaviour
     //TODO this is only for debug. Should change it to configurable
     public bool hasFeedback = true;
 
+    GameControllerScript gameController;
+
+    
     void Start() 
     {
         string feedbackJson = Resources.Load<TextAsset>(@"Config/feedback").text;
         feedback = JsonConvert.DeserializeObject<Feedback>(feedbackJson);
         messageList = new List<string>();
         participantAnswerSection.SetActive(false);
+        gameController = GameObject.Find("GameController").GetComponent<GameControllerScript>();
     }
     private void AddChatMessage(string messageString, MessageTypes messageType)
     {
@@ -35,8 +39,9 @@ public class ChatSectionControl : MonoBehaviour
         message.transform.SetParent(messageTemplate.transform.parent, false);
     }
 
-    public void SendFeedback(int roundNumber, GridTile pestTile)
+    public bool SendFeedback(int roundNumber, GridTile pestTile)
     {
+        //returns true if there has been a chat message sent, false otherwise
         // see if there is a chat message to be sent.
         string utterance = feedback.GetFeedbackUtterance(roundNumber, pestTile);
 
@@ -45,8 +50,26 @@ public class ChatSectionControl : MonoBehaviour
        {
            AddChatMessage(utterance, MessageTypes.COACH);
            participantAnswerSection.SetActive(true);
-       } 
+           return true;
+       }    
 
+       return false;
+
+    }
+
+    public void ConfirmInput()
+    {
+        // player confirms what they wanted to do, we go to the next state
+        gameController.NextState();
+        // deactivate the control from the chat 
+        participantAnswerSection.SetActive(false);
+    }
+
+    public void CancelInput()
+    {
+        // player cancelled they current input, go back to the waiting player input state
+        gameController.SetState(GameControllerScript.GameStates.WaitingForPlayerInput);
+        participantAnswerSection.SetActive(false);
     }
 
 }
