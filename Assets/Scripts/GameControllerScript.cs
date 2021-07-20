@@ -41,9 +41,6 @@ public class GameControllerScript : MonoBehaviour
     //////////////////////////////////////////////////////////////////////// UI attributes
     public Tilemap tilemap;
     public Text yearValue;
-    public Button upButton;
-    public Button downButton;
-    public Button payButton;
     public GameObject fundSection;
     public GameObject popupDialog; // panel showed to wait for other players
     public Text popupDialogText;
@@ -103,6 +100,7 @@ public class GameControllerScript : MonoBehaviour
             currentGameState = GameStates.Init;
             initOverlay.SetActive(true);
             confirmPopup.SetActive(true);
+            tutorialPopup.SetActive(true);
         }
         else
         {
@@ -115,7 +113,7 @@ public class GameControllerScript : MonoBehaviour
         gameStateHasChanged = false;
 
         popupDialog.SetActive(false);
-        confirmPopupText.text = "";
+        confirmPopup.SetActive(false);
 
         // init the game display
         yearValue.text = theWorld.currentYear.ToString();
@@ -143,12 +141,11 @@ public class GameControllerScript : MonoBehaviour
                 {
                     case GameStates.Tutorial:
                         Debug.Log("State = Tutorial");
-                        BlockPlayerInput();
                         UpdateTutorialPanel();
                         break;
                     case GameStates.WaitingForPlayerInput:
                         Debug.Log("State = Waiting for active player input");
-                        PrepareForPlayerInput();
+                        // nothing to do here
                         break;
                     case GameStates.ConfirmPlayerInput:
                         Debug.Log("State = Confirm player input");
@@ -215,15 +212,6 @@ public class GameControllerScript : MonoBehaviour
         gameStateHasChanged = true;
     }
 
-
-    public void BlockPlayerInput()
-    {
-        // put the buttons and inactivable
-        upButton.interactable = false;
-        downButton.interactable = false;
-        payButton.interactable = false;
-    }
-
     private void UpdateTutorialPanel()
     {
         tutorialPopup.transform.position = tutorials[currentTutorial].PopupPositionDelta;
@@ -255,21 +243,8 @@ public class GameControllerScript : MonoBehaviour
         }
     }
 
-
-    public void PrepareForPlayerInput()
-    {
-        // put the buttons and all activable
-        upButton.interactable = true;
-        downButton.interactable = true;
-        payButton.interactable = true;
-    }
-
     void ConfirmPlayerInput()
     {
-        // set the buttons as non interactable
-        upButton.interactable = false;
-        downButton.interactable = false;
-        payButton.interactable = false;
         // TODO
         // send feedback from the coach
         if(chatManager.hasFeedback)
@@ -304,9 +279,11 @@ public class GameControllerScript : MonoBehaviour
 
     IEnumerator PlayArtificialPlayersRound()
     {
-        SendNotification("Waiting for other players", false);
+        SendNotification("Waiting for other players");
         int timeToWait = random.Next(2, 5);
         yield return new WaitForSeconds(timeToWait);
+        DeactivateNotification();
+        
         //DeactivatePopup();
      
         // get other players' contribution
@@ -328,14 +305,16 @@ public class GameControllerScript : MonoBehaviour
             totalContribution = totalContribution + player.GetContribution();
             Debug.Log("Player " + player.id + " paid " + player.GetContribution());
         }
-        SendNotification("The collective gathered " + totalContribution + " coins.");
-        yield return new WaitForSeconds(2);
+        
 
-        double probaSpread = Math.Round(GetSpreadingThreshold(totalContribution) * 100);
-        SendNotification("The pest has " + probaSpread + "% chances to spread");
-        //SendNotification("Performing Pest Control");
+        double threshold = GetSpreadingThreshold(totalContribution);
+        double probaSpread = (1 - threshold) * 100;
+        chatManager.SendLogMessage("The collective gathered " + totalContribution + " coins, the pest has " + Math.Round(probaSpread) + "% chances to spread");
+        SendNotification("Performing Pest Control");
 
         yield return new WaitForSeconds(3);
+
+        DeactivateNotification();
 
         GridTile pestTile;
         switch(theWorld.pestProgression.type)
@@ -350,6 +329,15 @@ public class GameControllerScript : MonoBehaviour
 
             case "scripted": 
             pestTile = theWorld.GetNextPestTileScripted();
+            if(pestTile == null)
+            {
+                theWorld.pestProgression.latestPestControlSuccess = true;
+            }
+            else
+            {
+                theWorld.pestProgression.latestPestControlSuccess = false;
+            }
+
             theWorld.SpawnPestTile(pestTile);                    
             break;
 
@@ -390,12 +378,12 @@ public class GameControllerScript : MonoBehaviour
         
         if(p < threshold)
         {
-            SendNotification("The pest control was successful");
+            theWorld.pestProgression.latestPestControlSuccess = true;
             return false;
         }
         else
         {  
-            SendNotification("The pest control was unseccussful");
+            theWorld.pestProgression.latestPestControlSuccess = false;
             return true;  
         }
 
@@ -404,6 +392,14 @@ public class GameControllerScript : MonoBehaviour
 
     void ConfirmPestControl() 
     {
+        if(theWorld.pestProgression.latestPestControlSuccess)
+        {
+            chatManager.SendLogMessage("The pest control was successful");
+        }
+        else
+        {
+            chatManager.SendLogMessage("The pest control was unsuccessful");
+        }
         NextState();
     }
 
@@ -413,7 +409,7 @@ public class GameControllerScript : MonoBehaviour
         {
             player.CollectRevenue();
         }
-        SendNotification("You've earned " + theWorld.humanPlayer.revenuePerYear + " GP from your farm.");
+        chatManager.SendLogMessage("You've earned " + theWorld.humanPlayer.revenuePerYear + " GP from your farm.");
         NextState();
     }
 
@@ -439,20 +435,16 @@ public class GameControllerScript : MonoBehaviour
         popupDialog.SetActive(true);
     }
 
-    private void DeactivatePopup()
+    private void DeactivateNotification()
     {
-        popupDialogText.text = "";
-        popupDialog.SetActive(false);    
+        confirmPopupText.text = "";
+        confirmPopup.SetActive(false);    
     }
 
-    private void SendNotification(string message, bool toLog = true) 
+    private void SendNotification(string message) 
     {
         confirmPopupText.text = message;
         confirmPopup.SetActive(true);
-        if(toLog)
-        {
-            chatManager.SendLogMessage(message);
-        }
     }
 
     public void LoseGame()
@@ -483,5 +475,10 @@ public class GameControllerScript : MonoBehaviour
     public bool GameEnded()
     {
         return currentGameState == GameStates.GameEnded;
+    }
+
+    public bool IsWaitingForPlayerInput()
+    {
+        return currentGameState == GameStates.WaitingForPlayerInput;
     }
 }

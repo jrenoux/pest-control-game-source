@@ -4,8 +4,9 @@
     "minY": -5,
     "maxY": -1, 
     "maxYear": 15,
+    "tutorial": true,
     "easeOfPestControl": 0.2,
-    "tutorial": false,
+
 
     "activePlayers": [
         {
@@ -45,6 +46,7 @@
         }
     ],
 
+   
     "pestProgression": {
         "initialPestLocation" : {"x": -2, "y": -5},
         "type": "random"

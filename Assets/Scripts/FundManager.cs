@@ -8,6 +8,9 @@ public class FundManager : MonoBehaviour
     GameControllerScript gameController;
     public Text fundValueText; // field used to dislay the current amount of money available for the active player
     public Text amountInput;
+    public Button upButton;
+    public Button downButton;
+    public Button payButton;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +26,19 @@ public class FundManager : MonoBehaviour
             if(gameController.GetHumanPlayer() != null)
             {
                 fundValueText.text = gameController.GetHumanPlayer().wallet.ToString();
+            }
+
+            if(gameController.IsWaitingForPlayerInput())
+            {
+                upButton.interactable = true;
+                downButton.interactable = true;
+                payButton.interactable = true;
+            }
+            else
+            {
+                upButton.interactable = false;
+                downButton.interactable = false;
+                payButton.interactable = false;
             }
         }
     }

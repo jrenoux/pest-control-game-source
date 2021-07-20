@@ -12,6 +12,7 @@ public class PestProgression
     public List<GridTile> currentPestProgression {get;}
 
     public GridTile latestPestSpread {get; set;}
+    public bool latestPestControlSuccess {get; set;}
 
     public PestProgression() 
     {

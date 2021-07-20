@@ -1,15 +1,7 @@
 {
     "feedbackItems": [
         {
-            "round": 1,
-            "utterance": "The more the farmers contribute to the collective, the lesser the probability of the pest spreading"
-        },
-        {
-            "pest": {"x": -0, "y": -5},
-            "utterance": "When the pest arrives to a farm, it destroys it and the player looses the game"
-        },
-        {
-            "pest": {"x": -1, "y": -4},
+            "pest": {"x": -1, "y": -5},
             "utterance": "As farmers lose their crops there are less farmers to contribute to the collective. This increases the probability of pest spreading."
         },
         {

@@ -44,6 +44,10 @@ public class ChatSectionControl : MonoBehaviour
 
     public bool SendFeedback(int roundNumber, GridTile pestTile)
     {
+        Debug.Log("latestRoundNumber = " + latestRoundWhereFeedbackSent);
+        Debug.Log("roundNumber = " + roundNumber);
+        Debug.Log("latestPestTile = " + latestPestTileWhereFeedbackSent);
+        Debug.Log("pestTile = " + pestTile);
         // if feedback for this round or gridTile has already been sent, we don't send it again
         if(roundNumber == latestRoundWhereFeedbackSent || (pestTile!= null && pestTile.Equals(latestPestTileWhereFeedbackSent)))
         {
@@ -61,7 +65,7 @@ public class ChatSectionControl : MonoBehaviour
            {
                latestRoundWhereFeedbackSent = roundNumber;
            }
-           if(latestPestTileWhereFeedbackSent != null)
+           if(pestTile != null)
            {
                latestPestTileWhereFeedbackSent = pestTile;
            }

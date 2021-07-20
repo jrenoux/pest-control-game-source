@@ -38,7 +38,7 @@ public class Player
             break;
 
             case "fixed": 
-            SetContribution(this.revenuePerYear); 
+            SetContribution(this.revenuePerYear - 1); 
             break;
 
             case "human":
