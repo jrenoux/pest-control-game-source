@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
-
-
 
 public class World 
 {
@@ -22,17 +19,13 @@ public class World
     public PestProgression pestProgression {get; set;}
 
 
-    private HashSet<GridTile> tileList;
+    public HashSet<GridTile> tileList {get;}
 
     private System.Random random;
-
-    private Tilemap tilemap;
 
     public List<Player> activePlayers {get; set;}
 
     public int currentYear {get; set;} 
-
-    Tile pestTileObject;
 
     private int pestSpreadingIndex;
 
@@ -41,12 +34,11 @@ public class World
         tileList = new HashSet<GridTile>();
         random = RandomSingleton.GetInstance();
         humanPlayer = null;
-        pestTileObject =  TilesResourcesLoader.GetPestTile();
         currentYear = 1;
         pestSpreadingIndex = 0;
     }
 
-    public void Init(Tilemap tm)
+    public void Init()
     {
         // make some routine check
         if(!ValidateConfig())
@@ -54,16 +46,12 @@ public class World
             return;
         }
 
-        this.tilemap = tm;
         //1. Create the farms in the tile list
         foreach(Player player in activePlayers)
         {
-            Tile playerTileObject = TilesResourcesLoader.GetPlayerTile(player.id);
             // creates the tile
-            GridTile playerTile = new GridTile(GridTile.GridTileType.FARM, player.farmLocation);
+            GridTile playerTile = new GridTile(GridTile.GridTileType.FARM, player.farmLocation, player.id);
             tileList.Add(playerTile);
-            // paint it
-            this.tilemap.SetTile(playerTile.coordinates, playerTileObject);
         
         }
 
@@ -72,12 +60,8 @@ public class World
         // add it in the list
         tileList.Add(pestTile);
         pestProgression.currentPestProgression.Add(pestTile);
-        
-        // paint it
-        this.tilemap.SetTile(pestTile.coordinates, pestTileObject);
 
         // 3. Create the rest as grass tiles
-        Tile grassTileObject = TilesResourcesLoader.GetGrassTile();
         for(int x = minX ; x <= maxX ; x++)
         {
             for(int y = minY ; y <= maxY ; y++)
@@ -86,7 +70,6 @@ public class World
                 if(!tileList.Contains(grassTile))
                 {
                     tileList.Add(grassTile);
-                    tilemap.SetTile(grassTile.coordinates, grassTileObject);
                 }
             }
         }
@@ -152,9 +135,6 @@ public class World
 
             // change the pest type in the tile list
             pestTile.type = GridTile.GridTileType.PEST;
-    
-            // draw it
-            this.tilemap.SetTile(pestTile.coordinates, pestTileObject);
 
             // we check if the pest reached a player
             bool found = false;

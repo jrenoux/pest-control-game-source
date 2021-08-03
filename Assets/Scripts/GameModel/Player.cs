@@ -2,6 +2,8 @@ using System;
 using UnityEngine;
 public class Player 
 {
+    // get/set are needed here because of the json instantiation
+    // TODO to check if really needed
     public string type {get; set;}
 
     public string id {get; set;}

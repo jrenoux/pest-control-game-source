@@ -1,11 +1,11 @@
 {
     "feedbackItems": [
         {
-            "pest": {"x": -1, "y": -5},
+            "pest": {"x": -1, "y": -4},
             "utterance": "As farmers lose their crops there are less farmers to contribute to the collective. This increases the probability of pest spreading."
         },
         {
-            "pest": {"x": -2, "y": -4},
+            "pest": {"x": -1, "y": -2},
             "utterance": "The pest can spread each year if no pest control is done."
         },
         {

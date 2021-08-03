@@ -8,10 +8,14 @@ public class GridTile
     }
     public Vector3Int coordinates {get;}
     public GridTileType type {get; set;}
-    public GridTile(GridTileType tileType, Location location)
+
+    public string farmName {get;}
+
+    public GridTile(GridTileType tileType, Location location, string name = "")
     {
         this.type = tileType;
         this.coordinates  = new Vector3Int(location.x, location.y, 0);
+        this.farmName = name;
     }
 
     // override object.Equals

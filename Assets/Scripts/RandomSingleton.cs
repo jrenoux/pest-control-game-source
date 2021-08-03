@@ -9,20 +9,18 @@ public class RandomSingleton
         
     }
 
-    public static Random GetInstance()
+    public static Random GetInstance(int? seed = null)
     {
         if(random == null)
         {
-            random = new Random();
-        }
-        return random;
-    }
-
-    public static Random GetInstance(int seed)
-    {
-        if(random == null)
-        {
-            random = new Random(seed);
+            if(seed == null)
+            {
+                random = new Random();
+            }
+            else 
+            {
+                random = new Random(seed.Value);
+            }
         }
         return random;
     }
