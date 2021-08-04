@@ -4,6 +4,7 @@ using System;
 
 public enum GameStates 
 {
+    WaitingToStart,
     WaitingForPlayerInput,
     ConfirmPlayerInput,
     ProcessPlayerInput,
@@ -23,6 +24,7 @@ public class PestGameManager : MonoBehaviour
     private GameStates currentGameState = GameStates.WaitingForPlayerInput;
 
     private System.Random random; 
+    private bool isTestGame;
 
     public void Awake()
     {
@@ -36,9 +38,12 @@ public class PestGameManager : MonoBehaviour
             gameStateHasChanged = false;
             switch (currentGameState)
             {
+                case GameStates.WaitingToStart: 
+                    Debug.Log("State = Waiting for protocol manager to start the game");
+                    break;
                 case GameStates.WaitingForPlayerInput:
                     Debug.Log("State = Waiting for active player input");
-                    // nothing to do here
+                    WaitingForPlayerInput();
                     break;
                 case GameStates.ConfirmPlayerInput:
                     Debug.Log("State = Confirm player input");
@@ -78,13 +83,41 @@ public class PestGameManager : MonoBehaviour
     {
         currentGameState = newState;
         gameStateHasChanged = true;
+
+    }
+
+    public void StartGame(bool isTestGame) 
+    {
+        Application.Instance.menuController.Reset();
+        Application.Instance.chatManager.Reset();
+        this.isTestGame = isTestGame;
+        // fake other players' connection
+        if(!this.isTestGame)
+        {
+            StartCoroutine(WaitForOtherPlayersToConnect());
+        }
+        else
+        {
+            SetState(GameStates.WaitingForPlayerInput);
+        }
+        
+    }
+
+    private void WaitingForPlayerInput()
+    {
+        Application.Instance.menuController.ActivateMenu();
     }
 
     private void ConfirmPlayerInput()
     {
         Debug.Log("PestGameManager.ConfirmPlayerInput");
-        // we send feedback through the chat manager.
-        bool feedbackSent = Application.Instance.chatManager.SendFeedback();
+        Application.Instance.menuController.DeactivateMenu();
+        // we send feedback through the chat manager only if this is the study game.
+        bool feedbackSent = false;
+        if(!this.isTestGame)
+        {
+            feedbackSent = Application.Instance.chatManager.SendFeedback();
+        }
         // if no feedback has been sent, we directly go to the next state
         if(!feedbackSent)
         {
@@ -98,22 +131,25 @@ public class PestGameManager : MonoBehaviour
         Application app = Application.Instance;
         int contribution = app.menuController.ProcessContribution();
         app.theWorld.humanPlayer.SetContribution(contribution);
-
-        app.menuController.DeactivateMenu();
+        
         SetState(GameStates.WaitingForOtherPlayers);
     }
 
     IEnumerator PlayArtificialPlayersRound()
     {
         Application app = Application.Instance;
-        // Faking the other players
-        app.menuController.ActivatePopup("Waiting for other players");
+        if(!isTestGame)
+        {
+            // Faking the other players
+            app.menuController.ActivatePopup("Waiting for other players");
         
-        int timeToWait = random.Next(2, 5);
-        yield return new WaitForSeconds(timeToWait);
+            int timeToWait = random.Next(2, 5);
+        
+        
+            yield return new WaitForSeconds(timeToWait);
+            app.menuController.DeactivatePopup();
 
-        app.menuController.DeactivatePopup();
-
+        }
 
         // calculate the other players' contribution
         foreach(Player player in app.theWorld.activePlayers)
@@ -223,21 +259,33 @@ public class PestGameManager : MonoBehaviour
     private void PrepareForNextYear()
     {
         World theWorld = Application.Instance.theWorld;
-        theWorld.currentYear = theWorld.currentYear + 1;
-        if(theWorld.currentYear > theWorld.maxYear)
+        if(theWorld.currentYear == theWorld.maxYear)
         {
             WinGame();
         }
+
         if(currentGameState != GameStates.GameEnded)
         {
+            theWorld.currentYear = theWorld.currentYear + 1;
             SetState(GameStates.WaitingForPlayerInput);
-            Application.Instance.menuController.ActivateMenu();
-            Application.Instance.menuController.NextYear();
         }
-
     }
 
     ///////////////////////////////////////////////////////////////////// Private functions used by the State Machine
+    IEnumerator WaitForOtherPlayersToConnect()
+    {
+        Debug.Log("Waiting for other players to connect");
+        // display connection window
+        Application.Instance.menuController.ActivateConnectionPopup();
+
+        yield return new WaitForSeconds(10);
+
+        Application.Instance.menuController.DeactivateConnectionPopup();
+
+        SetState(GameStates.WaitingForPlayerInput);
+    }
+
+
     private bool PestHasProgressed(int totalContribution)
     {
         double threshold = GetSpreadingThreshold(totalContribution);
@@ -266,14 +314,13 @@ public class PestGameManager : MonoBehaviour
     private void WinGame()
     {
         currentGameState = GameStates.GameEnded;
-        Application.Instance.menuController.ActivatePopup("CONGRATULATIONS \n You have reached the end of the game");
-  
+        Application.Instance.menuController.ActivateEndGamePopup("CONGRATULATIONS \n You have reached the end of the game");
     }
 
     private void LoseGame()
     {
         currentGameState = GameStates.GameEnded;
-        Application.Instance.menuController.ActivatePopup("GAME OVER \nThe pest has reached your farm");
+        Application.Instance.menuController.ActivateEndGamePopup("GAME OVER \nThe pest has reached your farm");
     }
 
 
@@ -293,5 +340,10 @@ public class PestGameManager : MonoBehaviour
     public void ActionCancelled()
     {
         SetState(GameStates.WaitingForPlayerInput);
+    }
+
+    public void EndGameClicked()
+    {
+        Application.Instance.protocolManager.GameFinished();
     }
 }

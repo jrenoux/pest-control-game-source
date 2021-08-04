@@ -21,21 +21,22 @@ public sealed class Application
     public MenuController menuController {get;}
     public GameBoardController gameBoardController {get;}
     public TutorialController tutorialController {get;}
-    public StartGameController startGmaenController {get;}
+    public StartGameController startGameController {get;}
 
     ///////////////////////////////////////// Model objects
-    public World theWorld {get;} = null;
+    public World theWorld {get; set;} = null;
+
+    private World testWorld = null;
+    private World studyWorld = null;
+
+
+    ///////////////////////////////////////// Other objects
+    public string prolificID {get; set;}
+    public bool debug {get;} = true;
 
     //////////////////////////////////////////////Contructior
     Application()
     {
-
-        // init the world
-        string worldJson = Resources.Load<TextAsset>(@"Config/world").text;
-        this.theWorld = JsonConvert.DeserializeObject<World>(worldJson);
-       
-        theWorld.Init();
-
         chatManager = GameObject.Find("Managers").GetComponent<ChatManager>();
         gameManager = GameObject.Find("Managers").GetComponent<PestGameManager>();
         tutorialManager = GameObject.Find("Managers").GetComponent<TutorialManager>();
@@ -46,7 +47,8 @@ public sealed class Application
         menuController = GameObject.Find("MenuSection").GetComponent<MenuController>();
         tutorialController = GameObject.Find("TutorialSection").GetComponent<TutorialController>();
         gameBoardController = GameObject.Find("GameBoardSection").GetComponent<GameBoardController>();
-        startGmaenController = GameObject.Find("StartGameSection").GetComponent<StartGameController>();
+        startGameController = GameObject.Find("StartGameSection").GetComponent<StartGameController>();
+       
     }
 
     /////////////////////////////////////////////Singleton method
@@ -63,5 +65,29 @@ public sealed class Application
                 return instance;
             }
         }
+    }
+
+    public void SetupTestGame()
+    {
+        // init the test world
+        string testWorldJson = Resources.Load<TextAsset>(@"Config/test-world").text;
+        this.testWorld = JsonConvert.DeserializeObject<World>(testWorldJson);
+       
+        testWorld.Init();
+
+        theWorld = testWorld;
+    }
+
+    public void SetupStudyGame()
+    {
+        // init the study world
+        // init the world
+        string studyWorldJson = Resources.Load<TextAsset>(@"Config/study-world").text;
+        this.studyWorld = JsonConvert.DeserializeObject<World>(studyWorldJson);
+       
+        studyWorld.Init();
+
+        theWorld = studyWorld;
+        gameBoardController.GameBoardChanged();
     }
 }

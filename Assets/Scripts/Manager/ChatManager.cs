@@ -67,4 +67,11 @@ public class ChatManager : MonoBehaviour
         Application.Instance.chatController.DisplayChatMessage(messageString, messageType);
     }
 
+    public void Reset()
+    {
+        Debug.Log("Resetting the chat");
+        messageList.Clear();
+        Application.Instance.chatController.EmptyMessageList();
+    }
+
 }

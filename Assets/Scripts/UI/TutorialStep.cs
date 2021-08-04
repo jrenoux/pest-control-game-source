@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-class TutorialStep
+public class TutorialStep
 {
     public Vector3 PopupPositionDelta;
     public string Title;
     public string Message;
     public string ButtonText;
-    public Vector3 ArrowPositionDelta;
-    public Quaternion ArrowRotationDelta;
+    public Vector3? ArrowPositionDelta;
+    public Quaternion? ArrowRotationDelta;
 
 
     // DeltaX and DeltaY are in relation to the left down corner and are in pixels
@@ -25,5 +25,14 @@ class TutorialStep
         ButtonText = buttonText;
         ArrowPositionDelta = new Vector3(arrowDeltaX, arrowDeltaY);
         ArrowRotationDelta = Quaternion.Euler(0, 0, arrowRotation);
+    }
+    public TutorialStep(int popupDeltaX, int popupDeltaY, string title,  string buttonText, string message)
+    {
+        PopupPositionDelta = new Vector3(popupDeltaX, popupDeltaY);
+        Title = title;
+        Message = message;
+        ButtonText = buttonText;
+        ArrowPositionDelta = null;
+        ArrowRotationDelta = null;
     }
 }

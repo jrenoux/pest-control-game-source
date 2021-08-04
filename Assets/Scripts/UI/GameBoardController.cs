@@ -12,7 +12,7 @@ public class GameBoardController : MonoBehaviour
 
     private Application application;
 
-    private bool gameBoardChanged = false;
+    private bool gameBoardChanged = true;
 
     public void Start()
     {
@@ -22,15 +22,12 @@ public class GameBoardController : MonoBehaviour
 
         // get the reference to application. 
         application = Application.Instance;
-        // At this moment, the world is loaded and ready (normally)
-        // so we can draw it
-        DrawMap();
     }
 
     public void Update()
     {
-        // we only redraw if something has changes
-        if(gameBoardChanged)
+        // we only redraw if something has changes (and the world is initialized)
+        if(gameBoardChanged & Application.Instance.theWorld != null)
         {
             Debug.Log("Updating the map");
             DrawMap();

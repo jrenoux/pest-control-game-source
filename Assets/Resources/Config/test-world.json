@@ -1,0 +1,54 @@
+{
+    "minX": -2, 
+    "maxX": 2,
+    "minY": -5,
+    "maxY": -1, 
+    "maxYear": 5,
+    "tutorial": true,
+    "easeOfPestControl": 0.2,
+
+
+    "activePlayers": [
+        {
+            "id": "red",
+            "type": "fixed",
+            "farmLocation": {"x": 0, "y": -5},
+            "wallet": 5, 
+            "revenuePerYear": 2
+        },
+        {
+            "id": "blue",
+            "type": "fixed",
+            "farmLocation": {"x": 0, "y": -3},
+            "wallet": 5, 
+            "revenuePerYear": 2
+        },
+        {
+            "id": "green",
+            "type": "fixed",
+            "farmLocation": {"x": 2, "y": -4},
+            "wallet": 5, 
+            "revenuePerYear": 2
+        },
+        {
+            "id": "yellow",
+            "type": "human",
+            "farmLocation": {"x": 1, "y": -1},
+            "wallet": 5, 
+            "revenuePerYear": 2
+        },
+        {
+            "id": "grey",
+            "type": "fixed",
+            "farmLocation": {"x": -2, "y": -1},
+            "wallet": 5, 
+            "revenuePerYear": 2
+        }
+    ],
+
+   
+    "pestProgression": {
+        "initialPestLocation" : {"x": -2, "y": -5},
+        "type": "random"
+    }
+}

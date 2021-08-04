@@ -27,22 +27,37 @@ public class MenuController : MonoBehaviour
     [SerializeField]
     private Button payButton;
 
+    [SerializeField]
+    private GameObject endGamePopup;
+
+    [SerializeField]
+    private Text endGamePopupText;
+
+
+    [SerializeField]
+    private GameObject connectionPopup;
+
+    [SerializeField]
+    private Text nbConnectedPlayers;
+
+    [SerializeField]
+    private GameObject codePopup;
 
     public bool endGame {get; set;}
 
     void Start()
     {
-        popupDialog.SetActive(false);
+        Reset();
     }
 
     void Update()
     {
-        walletText.text = Application.Instance.theWorld.humanPlayer.wallet.ToString();
-    }
-
-    public void NextYear()
-    {
-        year.text = Application.Instance.theWorld.currentYear.ToString();
+        if(Application.Instance.theWorld != null)
+        {
+            year.text = Application.Instance.theWorld.currentYear.ToString();
+            walletText.text = Application.Instance.theWorld.humanPlayer.wallet.ToString();
+        }
+        
     }
 
     public void ActivateMenu()
@@ -79,6 +94,41 @@ public class MenuController : MonoBehaviour
         popupDialog.SetActive(false);
     }
 
+    public void ActivateEndGamePopup(string text)
+    {
+        endGamePopupText.text = text;
+        endGamePopup.SetActive(true);
+    }
+
+    public void DeactivateEndGamePopup()
+    {
+        endGamePopup.SetActive(false);
+    }
+
+    public void ActivateConnectionPopup()
+    {
+        connectionPopup.SetActive(true);
+    }
+
+    public void DeactivateConnectionPopup()
+    {
+        connectionPopup.SetActive(false);
+    }
+
+    public void Reset()
+    {
+        // resets the UI
+        popupDialog.SetActive(false);
+        endGamePopup.SetActive(false);
+        connectionPopup.SetActive(false);
+        codePopup.SetActive(false);
+        year.text = "0";
+        contributionText.text = "0";
+
+        ActivateMenu();
+
+    }
+
     // methods called when clicking on the buttons
     public void IncreaseAmount()
     {
@@ -96,6 +146,17 @@ public class MenuController : MonoBehaviour
     {
         Debug.Log("MenuController.Pay");
         Application.Instance.gameManager.Paid();
+    }
+
+    public void EndGameOkClicked()
+    {
+        DeactivateEndGamePopup();
+        Application.Instance.gameManager.EndGameClicked();
+    }
+
+    public void ActivateCodePopup()
+    {
+        codePopup.SetActive(true);
     }
 
 }

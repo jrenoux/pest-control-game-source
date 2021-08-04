@@ -42,6 +42,5 @@ public class MessageTemplateController : MonoBehaviour
         }
         
     }
-
     
 }
