@@ -25,5 +25,10 @@ public static class TilesResourcesLoader
         }
         return farmTile;
     }
+
+    public static Tile GetHighlightTile()
+    {
+        return Resources.Load("Tiles/highlight") as Tile;
+    }
 }
 

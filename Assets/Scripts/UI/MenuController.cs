@@ -43,6 +43,9 @@ public class MenuController : MonoBehaviour
     [SerializeField]
     private GameObject codePopup;
 
+    [SerializeField]
+    private Image playerColorToken;
+
     public bool endGame {get; set;}
 
     void Start()
@@ -56,6 +59,8 @@ public class MenuController : MonoBehaviour
         {
             year.text = Application.Instance.theWorld.currentYear.ToString();
             walletText.text = Application.Instance.theWorld.humanPlayer.wallet.ToString();
+            string playerColor = Application.Instance.theWorld.humanPlayer.id;
+            playerColorToken.sprite = Resources.Load<Sprite>("Sprites/circle_" + playerColor);
         }
         
     }

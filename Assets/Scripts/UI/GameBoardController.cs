@@ -7,6 +7,8 @@ public class GameBoardController : MonoBehaviour
 
     [SerializeField]
     private Tilemap tilemap;
+    [SerializeField]
+    private Tilemap highlightTilemap;
     private Tile pestTileObject;
     private Tile grassTileObject;
 
@@ -49,6 +51,13 @@ public class GameBoardController : MonoBehaviour
 
                 case GridTile.GridTileType.FARM:
                 tileObject = TilesResourcesLoader.GetPlayerTile(tile.farmName);
+
+                // TODO put the human farm highlighted
+                if(new Location(tile.coordinates).Equals(Application.Instance.theWorld.humanPlayer.farmLocation))
+                {
+                    Tile highlightObject = TilesResourcesLoader.GetHighlightTile();
+                    this.highlightTilemap.SetTile(tile.coordinates, highlightObject);
+                }
                 break;
 
                 case GridTile.GridTileType.GRASS:
