@@ -252,7 +252,7 @@ public class PestGameManager : MonoBehaviour
         {
             player.CollectRevenue();
         }
-        Application.Instance.chatManager.SendLogMessage("You've earned " + Application.Instance.theWorld.humanPlayer.revenuePerYear + " GP from your farm.");
+        Application.Instance.chatManager.SendLogMessage("You've earned " + Application.Instance.theWorld.humanPlayer.revenuePerYear + " coins from your farm.");
         SetState(GameStates.PrepareForNextYear);
     } 
 
@@ -276,6 +276,7 @@ public class PestGameManager : MonoBehaviour
     {
         Debug.Log("Waiting for other players to connect");
         // display connection window
+        Application.Instance.menuController.DeactivateMenu();
         Application.Instance.menuController.ActivateConnectionPopup();
 
         yield return new WaitForSeconds(10);

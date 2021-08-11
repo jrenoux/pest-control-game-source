@@ -32,14 +32,14 @@
         },
         {
             "id": "yellow",
-            "type": "human",
+            "type": "fixed",
             "farmLocation": {"x": 1, "y": -1},
             "wallet": 5, 
             "revenuePerYear": 2
         },
         {
             "id": "grey",
-            "type": "fixed",
+            "type": "human",
             "farmLocation": {"x": -2, "y": -1},
             "wallet": 5, 
             "revenuePerYear": 2
