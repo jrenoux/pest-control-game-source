@@ -1095,7 +1095,7 @@ GameObject:
   - component: {fileID: 211407092}
   - component: {fileID: 211407091}
   m_Layer: 5
-  m_Name: PayBackground
+  m_Name: Contribution
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1119,10 +1119,10 @@ RectTransform:
   m_Father: {fileID: 1062568615}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -24, y: -10.932}
-  m_SizeDelta: {x: -435.6054, y: -20.202}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: -52, y: 36.899}
+  m_SizeDelta: {x: 118.39459, y: 73.798004}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &211407091
 MonoBehaviour:
@@ -1289,6 +1289,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tutorialPopup: {fileID: 463195293}
   arrowImage: {fileID: 1027611029}
+  tilemap: {fileID: 2119510892}
+  camera: {fileID: 1651056569}
+  canvas: {fileID: 2009141217}
 --- !u!1 &246233209
 GameObject:
   m_ObjectHideFlags: 0
@@ -1673,7 +1676,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &463195294
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3027,7 +3030,7 @@ GameObject:
   - component: {fileID: 1045236155}
   - component: {fileID: 1045236154}
   m_Layer: 5
-  m_Name: PayValue
+  m_Name: ContributionValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3103,7 +3106,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1062568615}
-  - component: {fileID: 1062568616}
   m_Layer: 5
   m_Name: FundSection
   m_TagString: Untagged
@@ -3132,18 +3134,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 553.8853, y: 94.2852}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1062568616
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1062568614}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0ecf8d660a8cfb828a1993cd9b3f4d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1092921168
 GameObject:
   m_ObjectHideFlags: 0
@@ -3650,10 +3640,10 @@ RectTransform:
   m_Father: {fileID: 2009141218}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 302.06934, y: 0.0021362305}
-  m_SizeDelta: {x: -604.1387, y: 0.0042}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -177.93066, y: 0}
+  m_SizeDelta: {x: 355.86133, y: 540.0042}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1318811545
 MonoBehaviour:
@@ -4503,7 +4493,7 @@ GameObject:
   - component: {fileID: 1521346485}
   - component: {fileID: 1521346484}
   m_Layer: 5
-  m_Name: FundBackground
+  m_Name: Wallet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5083,7 +5073,7 @@ GameObject:
   - component: {fileID: 1729087410}
   - component: {fileID: 1729087409}
   m_Layer: 5
-  m_Name: FundValue
+  m_Name: WalletValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5187,9 +5177,9 @@ RectTransform:
   m_Father: {fileID: 2009141218}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -177.93, y: 0.0037308}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 302.07, y: 0.000007655472}
   m_SizeDelta: {x: 604.14, y: 539.74}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1797206534
@@ -5208,6 +5198,7 @@ MonoBehaviour:
   popupDialog: {fileID: 1362618004}
   popupDialogText: {fileID: 1422542902}
   walletText: {fileID: 1729087409}
+  wallet: {fileID: 1521346482}
   contributionText: {fileID: 1045236154}
   upButton: {fileID: 503268477}
   downButton: {fileID: 1533923056}
@@ -5218,6 +5209,7 @@ MonoBehaviour:
   nbConnectedPlayers: {fileID: 1127872668}
   codePopup: {fileID: 1344262806}
   playerColorToken: {fileID: 26679360}
+  camera: {fileID: 1651056569}
 --- !u!1 &1867117280
 GameObject:
   m_ObjectHideFlags: 0
@@ -5958,6 +5950,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c366353ae8cddc08b80d92d741d1db2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  wallet: {fileID: 1521346482}
+  contribution: {fileID: 211407089}
+  year: {fileID: 2007936011}
+  chat: {fileID: 1318811543}
 --- !u!114 &2038431234
 MonoBehaviour:
   m_ObjectHideFlags: 0

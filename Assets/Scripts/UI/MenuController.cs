@@ -16,6 +16,9 @@ public class MenuController : MonoBehaviour
     private Text walletText;
 
     [SerializeField]
+    private GameObject wallet;
+
+    [SerializeField]
     private Text contributionText;
 
     [SerializeField]
@@ -45,6 +48,9 @@ public class MenuController : MonoBehaviour
 
     [SerializeField]
     private Image playerColorToken;
+
+    [SerializeField] 
+    private Camera camera;
 
     public bool endGame {get; set;}
 
@@ -162,6 +168,22 @@ public class MenuController : MonoBehaviour
     public void ActivateCodePopup()
     {
         codePopup.SetActive(true);
+    }
+
+    public GameObject GetWallet()
+    {
+        return wallet;
+    }
+
+    public Vector3 GetWalletPosition()
+    {
+        Debug.Log(wallet.GetComponent<RectTransform>().position);
+        return GUIUtility.GUIToScreenPoint(wallet.GetComponent<RectTransform>().position);
+    }
+
+    public Rect GetWalletRect()
+    {
+        return wallet.GetComponent<RectTransform>().rect;
     }
 
 }

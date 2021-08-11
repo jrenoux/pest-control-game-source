@@ -52,8 +52,6 @@ public class ProtocolManager : MonoBehaviour
         // starts the protocol, make sure things are in place
         // display the overlay
         Application.Instance.startGameController.DisplayInitOverlay();
-        // deactivate the tutorial
-        Application.Instance.tutorialManager.DeactivateTutorial();
     }
 
     ////////////////////////////////////////////////////State Machine Functions

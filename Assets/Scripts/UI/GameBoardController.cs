@@ -31,7 +31,6 @@ public class GameBoardController : MonoBehaviour
         // we only redraw if something has changes (and the world is initialized)
         if(gameBoardChanged & Application.Instance.theWorld != null)
         {
-            Debug.Log("Updating the map");
             DrawMap();
             gameBoardChanged = false;
         }
@@ -41,7 +40,6 @@ public class GameBoardController : MonoBehaviour
     {
         foreach(GridTile tile in application.theWorld.tileList)
         {
-            Debug.Log(tile);
             Tile tileObject = null;
             switch(tile.type)
             {
@@ -70,7 +68,6 @@ public class GameBoardController : MonoBehaviour
 
     public void GameBoardChanged()
     {
-        Debug.Log("GameBoardcontroller.GameBoardChanged");
         this.gameBoardChanged = true;
     }
 
