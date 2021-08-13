@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 public class Feedback
-{
+{   
+    
+    public string condition {get; set;}
     public List<FeedbackItem> feedbackItems {get; set;}
     public string GetFeedbackUtterance(int roundNumber, GridTile pestTile)
     {

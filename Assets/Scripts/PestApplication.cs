@@ -82,7 +82,7 @@ public sealed class PestApplication
 
         theWorld = testWorld;
         
-        sessionId = logManager.InitNewGameLog(prolificID, "test", theWorld);
+        sessionId = logManager.InitNewGameLog(prolificID, "test", chatManager.feedback.condition, theWorld);
 
         // Force map draw
         gameBoardController.GameBoardChanged();
@@ -100,7 +100,7 @@ public sealed class PestApplication
 
         theWorld = studyWorld;
 
-        sessionId = logManager.InitNewGameLog(prolificID, "study", theWorld);
+        sessionId = logManager.InitNewGameLog(prolificID, "study", chatManager.feedback.condition, theWorld);
 
         // force map redraw
         gameBoardController.GameBoardChanged();

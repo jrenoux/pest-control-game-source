@@ -21,6 +21,12 @@ public class ChatManager : MonoBehaviour
 
     public (bool, string) SendFeedback()
     {
+        // only send feedback if feedback condition is on
+        if(feedback.condition.Equals("control"))
+        {
+            return (false, "");
+        }
+
         int roundNumber = PestApplication.Instance.theWorld.currentYear;
         GridTile newestPestTile = PestApplication.Instance.theWorld.pestProgression.latestPestSpread;
         Debug.Log("latestRoundNumber = " + latestRoundFeedbackSent);

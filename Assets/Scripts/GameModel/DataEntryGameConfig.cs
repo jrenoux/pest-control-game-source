@@ -14,11 +14,14 @@ public class DataEntryGameConfig
     private string sessionId;
     [JsonProperty]
     private string gameType;
+    [JsonProperty]
+    private string condition;
 
-    public DataEntryGameConfig(string prolificId, string sessionId, string gameType, World theWorld)
+    public DataEntryGameConfig(string prolificId, string sessionId, string condition, string gameType, World theWorld)
     {
         this.prolificId = prolificId;
         this.sessionId = sessionId;
+        this.condition = condition;
         this.theWorld = theWorld;
         this.gameType = gameType;
     }

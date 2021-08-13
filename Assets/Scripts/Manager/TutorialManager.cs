@@ -138,10 +138,10 @@ public class TutorialManager : MonoBehaviour
     private void TutorialContext()
     {
         string title = "Tutorial 1/9";
-        string message = "In this game, each player controls one farm on the board." +
-        "Your goal as a player is to reach the end of the game while collecting as much coins as possible." +
-        "But beware: a pest is spreading through the land and endangering the farms." + 
-        "Let's go through the main components of the game";
+        string message = "In this game, each player controls one farm on the board. " +
+        "Your goal as a player is to reach the end of the game while collecting as much coins as possible. " +
+        "But beware: a pest is spreading through the land and endangering the farms. \n \n" + 
+        "Let's go through the main components of the game. ";
 
         string buttonText = "Next";
 
@@ -236,8 +236,17 @@ public class TutorialManager : MonoBehaviour
         // show the chat window and adapt the text to the condition
         Debug.Log("Tutorial Chat");
         string title = "Tutorial 8/9";
-        string message = "This box will contain information about the game progression. Keep an eye on it!";
         string buttonText = "Next";
+        string message = "";
+        if(!PestApplication.Instance.chatManager.feedback.condition.Equals("control"))
+        {
+            message = "This box will contain information about the game progression. Occasionally, an artificial agent will give you feedback about your actions, so keep an eye out!";
+        }
+        else
+        {
+            message = "This box will contain information about the game progression. Keep an eye on it!";    
+        }
+
 
         tutorialController.DisplayTutorialPanel(title, message, buttonText, chat);
     }
@@ -247,11 +256,24 @@ public class TutorialManager : MonoBehaviour
         // window without arrow explaning the test game
         Debug.Log("Tutorial Test Game");
         string title = "Tutorial 9/9";
-        string message = "Now you will play a test game against artificial players, so that you can familiarize yourself with the game. " + 
-        "Later you will be paired with human players to play the real game. " + 
-        "During this test game, the artificial players will always contributed the same amount of coins. "; 
-
         string buttonText = "Start Test Game";
+        string message = "";
+
+        if(!PestApplication.Instance.chatManager.feedback.condition.Equals("control"))
+        {
+            message = "Now you will play a test game against artificial players, so that you can familiarize yourself with the game. " + 
+            "During this test game, the artificial players will always contribute the same amount of coins. \n\n" + 
+            "Later you will be paired with human players to play the real game. \nYou will not receive feedback during the test game, only during the real game.  " ;
+        }
+        else
+        {
+            message = "Now you will play a test game against artificial players, so that you can familiarize yourself with the game. " + 
+            "During this test game, the artificial players will always contribute the same amount of coins. \n\n" + 
+            "Later you will be paired with human players to play the real game.  " ;
+        }
+        
+
+        
 
         tutorialController.DisplayTutorialPanel(title, message, buttonText);
     }
