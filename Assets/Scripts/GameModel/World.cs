@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json;
 
 public class World 
 {
@@ -14,20 +15,20 @@ public class World
     public bool tutorial {get; set;} = true;
 
     public double easeOfPestControl {get; set;} = 0.01;
-    public Player humanPlayer {get; set;}
 
     public PestProgression pestProgression {get; set;}
 
-
-    public HashSet<GridTile> tileList {get;}
-
-    private System.Random random;
-
     public List<Player> activePlayers {get; set;}
 
+    [JsonIgnore]
     public int currentYear {get; set;} 
-
+    [JsonIgnore]
+    public Player humanPlayer {get; set;}
+    [JsonIgnore]
+    public HashSet<GridTile> tileList {get;}
+    private System.Random random;
     private int pestSpreadingIndex;
+
 
     
     public World() {
@@ -84,7 +85,6 @@ public class World
             {
                 humanPlayer = player;
             }
-            player.theWorld = this;
         }
         if(humanPlayer == null)
         {
@@ -182,7 +182,7 @@ public class World
     {
         if(pestSpreadingIndex >= pestProgression.years.Count)
         {
-            Debug.LogError("The pest spreading index is higher than available scripted tiles");
+            // we finished what was scripted
             return null;
         }
         if(pestProgression.years[pestSpreadingIndex] == currentYear)

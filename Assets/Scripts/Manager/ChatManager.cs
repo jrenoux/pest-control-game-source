@@ -19,10 +19,10 @@ public class ChatManager : MonoBehaviour
         messageList = new List<string>();
     }
 
-    public bool SendFeedback()
+    public (bool, string) SendFeedback()
     {
-        int roundNumber = Application.Instance.theWorld.currentYear;
-        GridTile newestPestTile = Application.Instance.theWorld.pestProgression.latestPestSpread;
+        int roundNumber = PestApplication.Instance.theWorld.currentYear;
+        GridTile newestPestTile = PestApplication.Instance.theWorld.pestProgression.latestPestSpread;
         Debug.Log("latestRoundNumber = " + latestRoundFeedbackSent);
         Debug.Log("roundNumber = " + roundNumber);
         Debug.Log("latestPestTile = " + latestPestTileFeedbackSent);
@@ -30,7 +30,7 @@ public class ChatManager : MonoBehaviour
         // if feedback for this round or gridTile has already been sent, we don't send it again
         if(roundNumber == latestRoundFeedbackSent || (newestPestTile!= null && newestPestTile.Equals(latestPestTileFeedbackSent)))
         {
-            return false;
+            return (false, "");
         }
         //returns true if there has been a chat message sent, false otherwise
         // see if there is a chat message to be sent.
@@ -49,11 +49,11 @@ public class ChatManager : MonoBehaviour
                latestPestTileFeedbackSent = newestPestTile;
            }
            
-           Application.Instance.chatController.ActivateAnswerSection();
-           return true;
+           PestApplication.Instance.chatController.ActivateAnswerSection();
+           return (true, utterance);
        }    
 
-       return false;
+       return (false, "");
     }
 
     public void SendLogMessage(string message)
@@ -64,14 +64,14 @@ public class ChatManager : MonoBehaviour
     private void AddChatMessage(string messageString, MessageTypes messageType)
     {
         messageList.Add(messageString);
-        Application.Instance.chatController.DisplayChatMessage(messageString, messageType);
+        PestApplication.Instance.chatController.DisplayChatMessage(messageString, messageType);
     }
 
     public void Reset()
     {
         Debug.Log("Resetting the chat");
         messageList.Clear();
-        Application.Instance.chatController.EmptyMessageList();
+        PestApplication.Instance.chatController.EmptyMessageList();
     }
 
 }

@@ -26,6 +26,8 @@ public class PestGameManager : MonoBehaviour
     private System.Random random; 
     private bool isTestGame;
 
+    private DataEntryRound roundLog = null;
+
     public void Awake()
     {
         random =  RandomSingleton.GetInstance(seed);
@@ -88,8 +90,7 @@ public class PestGameManager : MonoBehaviour
 
     public void StartGame(bool isTestGame) 
     {
-        Application.Instance.menuController.Reset();
-        Application.Instance.chatManager.Reset();
+        PestApplication.Instance.chatManager.Reset();
         this.isTestGame = isTestGame;
         // fake other players' connection
         if(!this.isTestGame)
@@ -105,18 +106,41 @@ public class PestGameManager : MonoBehaviour
 
     private void WaitingForPlayerInput()
     {
-        Application.Instance.menuController.ActivateMenu();
+        PestApplication.Instance.menuController.ActivateMenu();
+        // create a new round only if it's a new round (the feedback can bring the player back here)
+        if(roundLog == null)
+        {
+            if(isTestGame)
+            {
+                roundLog = new DataEntryRound(PestApplication.Instance.prolificID, 
+                                            PestApplication.Instance.sessionId,
+                                            PestApplication.Instance.theWorld.currentYear, 
+                                            PestApplication.Instance.theWorld.tileList);
+            }
+            else
+            {
+                roundLog = new DataEntryRound(PestApplication.Instance.prolificID, 
+                                            PestApplication.Instance.sessionId,
+                                            PestApplication.Instance.theWorld.currentYear, 
+                                            PestApplication.Instance.theWorld.tileList);
+            }
+            
+        }
+        
     }
 
     private void ConfirmPlayerInput()
     {
         Debug.Log("PestGameManager.ConfirmPlayerInput");
-        Application.Instance.menuController.DeactivateMenu();
+        // log the amount
+        roundLog.SetContribution(PestApplication.Instance.menuController.GetCurrentContribution());
+        PestApplication.Instance.menuController.DeactivateMenu();
         // we send feedback through the chat manager only if this is the study game.
         bool feedbackSent = false;
+        string utterance = "";
         if(!this.isTestGame)
         {
-            feedbackSent = Application.Instance.chatManager.SendFeedback();
+            (feedbackSent, utterance) = PestApplication.Instance.chatManager.SendFeedback();
         }
         // if no feedback has been sent, we directly go to the next state
         if(!feedbackSent)
@@ -124,11 +148,17 @@ public class PestGameManager : MonoBehaviour
             SetState(GameStates.ProcessPlayerInput);
         }
         // otherwise, we will go to the next state when the user clicks confirm 
+        // we just need to log the utterance
+        else
+        {
+            roundLog.SetCoachUtterance(utterance);
+        }
+        
     }
 
     private void ProcessPlayerInput()
     {
-        Application app = Application.Instance;
+        PestApplication app = PestApplication.Instance;
         int contribution = app.menuController.ProcessContribution();
         app.theWorld.humanPlayer.SetContribution(contribution);
         
@@ -137,7 +167,7 @@ public class PestGameManager : MonoBehaviour
 
     IEnumerator PlayArtificialPlayersRound()
     {
-        Application app = Application.Instance;
+        PestApplication app = PestApplication.Instance;
         if(!isTestGame)
         {
             // Faking the other players
@@ -154,8 +184,10 @@ public class PestGameManager : MonoBehaviour
         // calculate the other players' contribution
         foreach(Player player in app.theWorld.activePlayers)
         {
-            player.CalculateContribution();
+            int c = player.CalculateContribution();
+            this.roundLog.AddArtificialPlayersContribution(player.id, c);
         }
+
 
         // go to the PerformPestControl state
         SetState(GameStates.PerformingPestControl);
@@ -163,7 +195,7 @@ public class PestGameManager : MonoBehaviour
 
     IEnumerator PerformPestControl()
     {
-        Application app = Application.Instance;
+        PestApplication app = PestApplication.Instance;
         World theWorld = app.theWorld;
         int totalContribution = 0;
         foreach(Player player in theWorld.activePlayers)
@@ -218,7 +250,7 @@ public class PestGameManager : MonoBehaviour
             break;
         }
         // update the game board status
-        Application.Instance.gameBoardController.GameBoardChanged();
+        PestApplication.Instance.gameBoardController.GameBoardChanged();
 
         // Check if the player lost the game
         if(!theWorld.activePlayers.Contains(theWorld.humanPlayer))
@@ -235,30 +267,30 @@ public class PestGameManager : MonoBehaviour
 
     private void ConfirmPestControl()
     {
-        if(Application.Instance.theWorld.pestProgression.latestPestControlSuccess)
+        if(PestApplication.Instance.theWorld.pestProgression.latestPestControlSuccess)
         {
-            Application.Instance.chatManager.SendLogMessage("The Pest Control was successful");
+            PestApplication.Instance.chatManager.SendLogMessage("The Pest Control was successful");
         }
         else
         {
-            Application.Instance.chatManager.SendLogMessage("The Pest Control was unsuccessful");
+            PestApplication.Instance.chatManager.SendLogMessage("The Pest Control was unsuccessful");
         }
         SetState(GameStates.CollectRevenue);
     }
 
     private void CollectRevenue()
     {
-        foreach(Player player in Application.Instance.theWorld.activePlayers)
+        foreach(Player player in PestApplication.Instance.theWorld.activePlayers)
         {
             player.CollectRevenue();
         }
-        Application.Instance.chatManager.SendLogMessage("You've earned " + Application.Instance.theWorld.humanPlayer.revenuePerYear + " coins from your farm.");
+        PestApplication.Instance.chatManager.SendLogMessage("You've earned " + PestApplication.Instance.theWorld.humanPlayer.revenuePerYear + " coins from your farm.");
         SetState(GameStates.PrepareForNextYear);
     } 
 
     private void PrepareForNextYear()
     {
-        World theWorld = Application.Instance.theWorld;
+        World theWorld = PestApplication.Instance.theWorld;
         if(theWorld.currentYear == theWorld.maxYear)
         {
             WinGame();
@@ -269,6 +301,9 @@ public class PestGameManager : MonoBehaviour
             theWorld.currentYear = theWorld.currentYear + 1;
             SetState(GameStates.WaitingForPlayerInput);
         }
+        // save the log and reset it
+        PestApplication.Instance.logManager.SaveRound(roundLog);
+        roundLog = null;
     }
 
     ///////////////////////////////////////////////////////////////////// Private functions used by the State Machine
@@ -276,12 +311,12 @@ public class PestGameManager : MonoBehaviour
     {
         Debug.Log("Waiting for other players to connect");
         // display connection window
-        Application.Instance.menuController.DeactivateMenu();
-        Application.Instance.menuController.ActivateConnectionPopup();
+        PestApplication.Instance.menuController.DeactivateMenu();
+        PestApplication.Instance.menuController.ActivateConnectionPopup();
 
         yield return new WaitForSeconds(10);
 
-        Application.Instance.menuController.DeactivateConnectionPopup();
+        PestApplication.Instance.menuController.DeactivateConnectionPopup();
 
         SetState(GameStates.WaitingForPlayerInput);
     }
@@ -295,19 +330,19 @@ public class PestGameManager : MonoBehaviour
         
         if(p < threshold)
         {
-            Application.Instance.theWorld.pestProgression.latestPestControlSuccess = true;
+            PestApplication.Instance.theWorld.pestProgression.latestPestControlSuccess = true;
             return false;
         }
         else
         {  
-            Application.Instance.theWorld.pestProgression.latestPestControlSuccess = false;
+            PestApplication.Instance.theWorld.pestProgression.latestPestControlSuccess = false;
             return true;  
         }   
     }
 
     private double GetSpreadingThreshold(int totalContribution)
     {
-        World theWorld = Application.Instance.theWorld;
+        World theWorld = PestApplication.Instance.theWorld;
         double threshold = (theWorld.easeOfPestControl * totalContribution) / (1 + theWorld.easeOfPestControl * totalContribution);
         return threshold;
     }
@@ -315,13 +350,13 @@ public class PestGameManager : MonoBehaviour
     private void WinGame()
     {
         currentGameState = GameStates.GameEnded;
-        Application.Instance.menuController.ActivateEndGamePopup("CONGRATULATIONS \n You have reached the end of the game");
+        PestApplication.Instance.menuController.ActivateEndGamePopup("CONGRATULATIONS \n You have reached the end of the game");
     }
 
     private void LoseGame()
     {
         currentGameState = GameStates.GameEnded;
-        Application.Instance.menuController.ActivateEndGamePopup("GAME OVER \nThe pest has reached your farm");
+        PestApplication.Instance.menuController.ActivateEndGamePopup("GAME OVER \nThe pest has reached your farm");
     }
 
 
@@ -345,6 +380,6 @@ public class PestGameManager : MonoBehaviour
 
     public void EndGameClicked()
     {
-        Application.Instance.protocolManager.GameFinished();
+        PestApplication.Instance.protocolManager.GameFinished();
     }
 }

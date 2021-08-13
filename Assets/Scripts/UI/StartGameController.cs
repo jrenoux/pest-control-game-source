@@ -58,7 +58,7 @@ public class StartGameController : MonoBehaviour
         
 
         // inform the protocol manager
-        Application.Instance.protocolManager.StartTutorialClicked(prolificID);
+        PestApplication.Instance.protocolManager.StartTutorialClicked(prolificID);
 
     }
 }

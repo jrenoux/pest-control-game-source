@@ -13,6 +13,8 @@ public class ProtocolManager : MonoBehaviour
     private ProtocolStates currentState = ProtocolStates.Start;
     private bool hasStateChanged = false;
 
+    private string sessionId;
+
     public void Update()
     {
         if(hasStateChanged)
@@ -51,40 +53,40 @@ public class ProtocolManager : MonoBehaviour
     {
         // starts the protocol, make sure things are in place
         // display the overlay
-        Application.Instance.startGameController.DisplayInitOverlay();
+        PestApplication.Instance.startGameController.DisplayInitOverlay();
     }
 
     ////////////////////////////////////////////////////State Machine Functions
     public void StartTestTutorial() 
     {
         // setting up the game
-        Application.Instance.SetupTestGame();
+        PestApplication.Instance.SetupTestGame();
         // starting the tutorial
-        Application.Instance.tutorialManager.StartTestTutorial();
+        PestApplication.Instance.tutorialManager.StartTestTutorial();
     }
      
     public void StartTestGame()
     {
         Debug.Log("Start Test Game");
-        Application.Instance.gameManager.StartGame(true);
+        PestApplication.Instance.gameManager.StartGame(true);
     }
 
     public void StartStudyTutorial() 
     {
-        Application.Instance.SetupStudyGame();
-        Application.Instance.tutorialManager.StartStudyTutorial();
+        PestApplication.Instance.SetupStudyGame();
+        PestApplication.Instance.tutorialManager.StartStudyTutorial();
     }
 
     public void StartStudyGame()
     {
         Debug.Log("Start Study Game");
-        Application.Instance.gameManager.StartGame(false);
+        PestApplication.Instance.gameManager.StartGame(false);
     }
 
     public void StartQuestionnaire() 
     {
         Debug.Log("Start Questionnaires");
-        Application.Instance.menuController.ActivateCodePopup();
+        PestApplication.Instance.menuController.ActivateCodePopup();
     }
 
     private void SetState(ProtocolStates state)
@@ -97,7 +99,7 @@ public class ProtocolManager : MonoBehaviour
     public void StartTutorialClicked(string prolificID) 
     {
         // store the prolificID
-        Application.Instance.prolificID = prolificID;
+        PestApplication.Instance.prolificID = prolificID;
         SetState(ProtocolStates.TestTutorial);
     }
 
@@ -117,8 +119,8 @@ public class ProtocolManager : MonoBehaviour
 
     public void GameFinished()
     {
-        // todo
         Debug.Log("Game Finished");
+        
         if(currentState == ProtocolStates.TestGame)
         {
             // test game finished

@@ -37,7 +37,7 @@ public class TutorialManager : MonoBehaviour
 
     public void Start()
     {
-        tutorialController = Application.Instance.tutorialController;
+        tutorialController = PestApplication.Instance.tutorialController;
         tutorialController.DeactivateTutorialPopup();
         
     }
@@ -94,7 +94,7 @@ public class TutorialManager : MonoBehaviour
 
                 case TutorialState.End:
                 Debug.Log("Tutorial End");
-                Application.Instance.protocolManager.TutorialFinished();
+                PestApplication.Instance.protocolManager.TutorialFinished();
                 tutorialController.DeactivateTutorialPopup();
                 break;
             }
@@ -124,10 +124,14 @@ public class TutorialManager : MonoBehaviour
         currentState = (TutorialState)0;
         tutorialStepNumber = 1;
         hasStateChanged = true;
+        // deactivate the menu
+        PestApplication.Instance.menuController.DeactivateMenu();
     }
 
     public void StartStudyTutorial()
     {
+        // deactivate the menu
+        PestApplication.Instance.menuController.DeactivateMenu();
         NextTutorial();
     }
 
@@ -149,7 +153,7 @@ public class TutorialManager : MonoBehaviour
     private void TutorialFarm()
     {
         // show the tutorial window connected to the player farmer tile 
-        Location farmLocation = Application.Instance.theWorld.humanPlayer.farmLocation;
+        Location farmLocation = PestApplication.Instance.theWorld.humanPlayer.farmLocation;
 
         string title = "Tutorial 2/9";
         string message = "This is your farm. It is circled in black for you to see it better. " +
@@ -167,7 +171,7 @@ public class TutorialManager : MonoBehaviour
     {
         // show the tutorial window connected to the pest farm
         Debug.Log("Tutorial Pest");
-        Location pestLocation = Application.Instance.theWorld.pestProgression.initialPestLocation;
+        Location pestLocation = PestApplication.Instance.theWorld.pestProgression.initialPestLocation;
 
         string title = "Tutorial 3/9";
         string message = "This is the pest. " + 
@@ -182,7 +186,7 @@ public class TutorialManager : MonoBehaviour
     {
         // show the tutorial window on the pest tile again
         Debug.Log("Tutorial Collective");
-        Location pestLocation = Application.Instance.theWorld.pestProgression.initialPestLocation;
+        Location pestLocation = PestApplication.Instance.theWorld.pestProgression.initialPestLocation;
 
         string title = "Tutorial 4/9";
         string message = "To reduce the risk of the pest spreading, farmers can contribute coins to a collective. " + 
@@ -221,7 +225,7 @@ public class TutorialManager : MonoBehaviour
         // show the year and adapt the text to the game configuration
         Debug.Log("Tutorial Year");
         string title = "Tutorial 7/9";
-        string message = "This is the year counter. To complete the game, you must reach year " + Application.Instance.theWorld.maxYear + ". ";
+        string message = "This is the year counter. To complete the game, you must reach year " + PestApplication.Instance.theWorld.maxYear + ". ";
         string buttonText = "Next";
         
         tutorialController.DisplayTutorialPanel(title, message, buttonText, year);
@@ -255,9 +259,9 @@ public class TutorialManager : MonoBehaviour
     private void TutorialWaitingEndTestGame()
     {
         // deactivate the window
-        Application.Instance.tutorialController.DeactivateTutorialPopup();
+        PestApplication.Instance.tutorialController.DeactivateTutorialPopup();
         // warns the protocol manager that the first part of the tutorial is finished
-        Application.Instance.protocolManager.TutorialFinished();
+        PestApplication.Instance.protocolManager.TutorialFinished();
         Debug.Log("Tutorial Waiting End Test Game");
     }
 
@@ -266,7 +270,7 @@ public class TutorialManager : MonoBehaviour
         // window without arrow explaining the real game
         Debug.Log("Tutorial Study Game");
         string title = "Ready to play!";
-        string message = "You will now we connected to " + (Application.Instance.theWorld.activePlayers.Count - 1) + " othe players to play the study game. " + 
+        string message = "You will now we connected to " + (PestApplication.Instance.theWorld.activePlayers.Count - 1) + " othe players to play the study game. " + 
         "Rembemer to check which color is your farm on the top left. Good luck!";
         string buttonText = "Start Game";
 
@@ -275,7 +279,7 @@ public class TutorialManager : MonoBehaviour
 
 
     // public TutorialStep[] testTutorials = {
-    //                                     new TutorialStep(new GridTile(GridTile.GridTileType.FARM, Application.Instance.theWorld.humanPlayer.farmLocation), "Tutorial 1 / 7", "Next", "This is your farm, you can also see its color on the top menu. It gives you 2GP per year as long as it's safe from the pest. If the pest reaches you, you lose the game."), 
+    //                                     new TutorialStep(new GridTile(GridTile.GridTileType.FARM, PestApplication.Instance.theWorld.humanPlayer.farmLocation), "Tutorial 1 / 7", "Next", "This is your farm, you can also see its color on the top menu. It gives you 2GP per year as long as it's safe from the pest. If the pest reaches you, you lose the game."), 
     //                                     new TutorialStep(640, 180, "Tutorial 2 / 7", "Next", 360, 170, 270, "This is the pest. If farmers don't do anything, it will spread each turn to one neighboring tile. To prevent the spreading, a collective of all the farmers have been formed."),
     //                                     new TutorialStep(400, 420, "Tutorial 3 / 7", "Next", 440, 160, 0, "Each farmer can contribute GP to the collective, and the more GP the collective gathers, the more efficient it will be to prevent the spread."),
     //                                     new TutorialStep(330, 420, "Tutorial 4 / 7", "Next", 300, 160, 0, "This is were you choose how much you want to contribute to the collective this year."),

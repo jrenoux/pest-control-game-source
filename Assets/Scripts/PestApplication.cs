@@ -1,12 +1,13 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.IO;
 
 using Newtonsoft.Json;
 
-public sealed class Application
+public sealed class PestApplication
 {
     //////////////////////////////////////////////Singleton attributes
-    private static Application instance = null;
+    private static PestApplication instance = null;
     private static readonly object padlock = new object();
 
     //////////////////////////////////////////////Game attributes
@@ -34,8 +35,12 @@ public sealed class Application
     public string prolificID {get; set;}
     public bool debug {get;} = true;
 
+    public  DataLogManager logManager {get;}
+    public string sessionId {get; set;}
+
+
     //////////////////////////////////////////////Contructior
-    Application()
+    PestApplication()
     {
         chatManager = GameObject.Find("Managers").GetComponent<ChatManager>();
         gameManager = GameObject.Find("Managers").GetComponent<PestGameManager>();
@@ -48,11 +53,11 @@ public sealed class Application
         tutorialController = GameObject.Find("TutorialSection").GetComponent<TutorialController>();
         gameBoardController = GameObject.Find("GameBoardSection").GetComponent<GameBoardController>();
         startGameController = GameObject.Find("StartGameSection").GetComponent<StartGameController>();
-       
+        logManager = new DataLogManager();
     }
 
     /////////////////////////////////////////////Singleton method
-    public static Application Instance
+    public static PestApplication Instance
     {
         get
         {
@@ -60,7 +65,7 @@ public sealed class Application
             {
                 if (instance == null)
                 {
-                    instance = new Application();
+                    instance = new PestApplication();
                 }
                 return instance;
             }
@@ -76,6 +81,12 @@ public sealed class Application
         testWorld.Init();
 
         theWorld = testWorld;
+        
+        sessionId = logManager.InitNewGameLog(prolificID, "test", theWorld);
+
+        // Force map draw
+        gameBoardController.GameBoardChanged();
+
     }
 
     public void SetupStudyGame()
@@ -88,6 +99,11 @@ public sealed class Application
         studyWorld.Init();
 
         theWorld = studyWorld;
+
+        sessionId = logManager.InitNewGameLog(prolificID, "study", theWorld);
+
+        // force map redraw
         gameBoardController.GameBoardChanged();
+
     }
 }

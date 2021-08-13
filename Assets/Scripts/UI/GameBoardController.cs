@@ -12,7 +12,7 @@ public class GameBoardController : MonoBehaviour
     private Tile pestTileObject;
     private Tile grassTileObject;
 
-    private Application application;
+    private PestApplication application;
 
     private bool gameBoardChanged = true;
 
@@ -23,13 +23,13 @@ public class GameBoardController : MonoBehaviour
         grassTileObject = TilesResourcesLoader.GetGrassTile();
 
         // get the reference to application. 
-        application = Application.Instance;
+        application = PestApplication.Instance;
     }
 
     public void Update()
     {
         // we only redraw if something has changes (and the world is initialized)
-        if(gameBoardChanged & Application.Instance.theWorld != null)
+        if(gameBoardChanged & PestApplication.Instance.theWorld != null)
         {
             DrawMap();
             gameBoardChanged = false;
@@ -51,10 +51,14 @@ public class GameBoardController : MonoBehaviour
                 tileObject = TilesResourcesLoader.GetPlayerTile(tile.farmName);
 
                 // TODO put the human farm highlighted
-                if(new Location(tile.coordinates).Equals(Application.Instance.theWorld.humanPlayer.farmLocation))
+                if(new Location(tile.coordinates).Equals(PestApplication.Instance.theWorld.humanPlayer.farmLocation))
                 {
                     Tile highlightObject = TilesResourcesLoader.GetHighlightTile();
                     this.highlightTilemap.SetTile(tile.coordinates, highlightObject);
+                }
+                else
+                {
+                    this.highlightTilemap.SetTile(tile.coordinates, null);
                 }
                 break;
 

@@ -61,11 +61,11 @@ public class MenuController : MonoBehaviour
 
     void Update()
     {
-        if(Application.Instance.theWorld != null)
+        if(PestApplication.Instance.theWorld != null)
         {
-            year.text = Application.Instance.theWorld.currentYear.ToString();
-            walletText.text = Application.Instance.theWorld.humanPlayer.wallet.ToString();
-            string playerColor = Application.Instance.theWorld.humanPlayer.id;
+            year.text = PestApplication.Instance.theWorld.currentYear.ToString();
+            walletText.text = PestApplication.Instance.theWorld.humanPlayer.wallet.ToString();
+            string playerColor = PestApplication.Instance.theWorld.humanPlayer.id;
             playerColorToken.sprite = Resources.Load<Sprite>("Sprites/circle_" + playerColor);
         }
         
@@ -92,6 +92,11 @@ public class MenuController : MonoBehaviour
         walletText.text = newWallet.ToString();
         contributionText.text = "0";
         return contribution;
+    }
+
+    public int GetCurrentContribution()
+    {
+        return int.Parse(contributionText.text);   
     }
 
     public void ActivatePopup(string text)
@@ -156,13 +161,13 @@ public class MenuController : MonoBehaviour
     public void Pay()
     {
         Debug.Log("MenuController.Pay");
-        Application.Instance.gameManager.Paid();
+        PestApplication.Instance.gameManager.Paid();
     }
 
     public void EndGameOkClicked()
     {
         DeactivateEndGamePopup();
-        Application.Instance.gameManager.EndGameClicked();
+        PestApplication.Instance.gameManager.EndGameClicked();
     }
 
     public void ActivateCodePopup()

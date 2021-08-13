@@ -1291,7 +1291,6 @@ MonoBehaviour:
   arrowImage: {fileID: 1027611029}
   tilemap: {fileID: 2119510892}
   camera: {fileID: 1651056569}
-  canvas: {fileID: 2009141217}
 --- !u!1 &246233209
 GameObject:
   m_ObjectHideFlags: 0

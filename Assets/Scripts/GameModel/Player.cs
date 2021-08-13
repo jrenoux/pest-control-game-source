@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Newtonsoft.Json;
 public class Player 
 {
     // get/set are needed here because of the json instantiation
@@ -9,17 +10,15 @@ public class Player
     public string id {get; set;}
 
     public Location farmLocation {get; set;}
+    public int revenuePerYear {get; set;}
+
+    public int wallet {get;set;}
+
+    
 
     private int contribution {get; set;}
 
     private GaussianRandom gaussianRandom = new GaussianRandom(RandomSingleton.GetInstance());
-
-    public int wallet {get;set;}
-
-    public World theWorld {get; set;}
-
-    public int revenuePerYear {get; set;}
-
 
     public void CollectRevenue()
     {
@@ -27,20 +26,24 @@ public class Player
     }
 
 
-    public void CalculateContribution()
+    public int CalculateContribution()
     {
+        int contribution = 0;
         switch(type)
         {
             case "prosocial":
-            SetContribution(CalculateProsocialContribution());
+            contribution = CalculateProsocialContribution();
+            SetContribution(contribution);
             break;
 
             case "egoistic":
-            SetContribution(CalculateEgoisticContribution());
+            contribution = CalculateEgoisticContribution();
+            SetContribution(contribution);
             break;
 
             case "fixed": 
-            SetContribution(this.revenuePerYear - 1); 
+            contribution = this.revenuePerYear - 1;
+            SetContribution(contribution); 
             break;
 
             case "human":
@@ -51,6 +54,7 @@ public class Player
             Debug.LogError("Player type " + type + " unknown. Known types are (prosocial, egoistic, fixed, human)");
             break;
         }
+        return contribution;
     }
     
     private int CalculateProsocialContribution()
@@ -60,9 +64,9 @@ public class Player
         int d_max = 5;
 
         int minDistanceFromPlayerToPest = d_max;
-        foreach(Player pl in theWorld.activePlayers)
+        foreach(Player pl in PestApplication.Instance.theWorld.activePlayers)
         {
-            int distance =  theWorld.CalculateDistanceToPest(pl.farmLocation);
+            int distance =  PestApplication.Instance.theWorld.CalculateDistanceToPest(pl.farmLocation);
             if(distance < minDistanceFromPlayerToPest)
             {
                 minDistanceFromPlayerToPest = distance;
@@ -87,7 +91,7 @@ public class Player
         int d_max = 5;
 
         // calculate distance to pest
-        int distance = theWorld.CalculateDistanceToPest(farmLocation);
+        int distance = PestApplication.Instance.theWorld.CalculateDistanceToPest(farmLocation);
         //Debug.Log("Player " + id + ": Pest is " + distance + " tiles away");
 
         double mean = (- c_max / d_max ) * distance + c_max;

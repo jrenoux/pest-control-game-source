@@ -1,4 +1,5 @@
 using UnityEngine;
+
 public class GridTile
 {
     public enum GridTileType {
@@ -11,10 +12,21 @@ public class GridTile
 
     public string farmName {get;}
 
+    private GridTile()
+    {
+    }
+
     public GridTile(GridTileType tileType, Location location, string name = "")
     {
         this.type = tileType;
         this.coordinates  = new Vector3Int(location.x, location.y, 0);
+        this.farmName = name;
+    }
+
+    private GridTile(GridTileType tileType, Vector3Int coordinate, string name = "")
+    {
+        this.type = tileType;
+        this.coordinates  = coordinate;
         this.farmName = name;
     }
 
@@ -34,6 +46,7 @@ public class GridTile
         }
         
         var other = obj as GridTile;
+        
         if(this.coordinates == other.coordinates)
         {
             return true;
@@ -49,7 +62,12 @@ public class GridTile
 
     public override string ToString()
     {
-        return "(" + type + ")(" + coordinates + ")";
+        return "(" + type + ")" + coordinates;
     } 
+
+    public GridTile Clone()
+    {
+        return new GridTile(this.type, this.coordinates, this.farmName);
+    }
     
 }

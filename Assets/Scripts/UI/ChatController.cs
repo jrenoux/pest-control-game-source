@@ -42,13 +42,13 @@ public class ChatController : MonoBehaviour
 
     public void ConfirmInput()
     {
-        Application.Instance.gameManager.ActionConfirmed();
+        PestApplication.Instance.gameManager.ActionConfirmed();
         participantAnswerSection.SetActive(false);
     }
 
     public void CancelInput()
     {
-        Application.Instance.gameManager.ActionCancelled();
+        PestApplication.Instance.gameManager.ActionCancelled();
         participantAnswerSection.SetActive(false);
     }
 

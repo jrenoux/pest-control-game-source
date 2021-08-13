@@ -31,7 +31,7 @@ public class TutorialController : MonoBehaviour
 
     public void NextButtonClicked()
     {
-        Application.Instance.tutorialManager.NextTutorial();
+        PestApplication.Instance.tutorialManager.NextTutorial();
     }
 
     public void DisplayTutorialPanel(string title, string message, string buttonText,
