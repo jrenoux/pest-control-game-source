@@ -5,6 +5,7 @@ using System;
 public enum GameStates 
 {
     WaitingToStart,
+    WaitingForPlayersToConnect,
     WaitingForPlayerInput,
     ConfirmPlayerInput,
     ProcessPlayerInput,
@@ -28,9 +29,12 @@ public class PestGameManager : MonoBehaviour
 
     private DataEntryRound roundLog = null;
 
+    private bool allPlayerConnected = false;
+
     public void Awake()
     {
         random =  RandomSingleton.GetInstance(seed);
+
     }
 
     public void Update()
@@ -42,6 +46,10 @@ public class PestGameManager : MonoBehaviour
             {
                 case GameStates.WaitingToStart: 
                     Debug.Log("State = Waiting for protocol manager to start the game");
+                    break;
+                case GameStates.WaitingForPlayersToConnect:
+                    Debug.Log("Waiting for players to connect");
+                    WaitForOtherPlayersToConnect();
                     break;
                 case GameStates.WaitingForPlayerInput:
                     Debug.Log("State = Waiting for active player input");
@@ -92,16 +100,24 @@ public class PestGameManager : MonoBehaviour
     {
         PestApplication.Instance.chatManager.Reset();
         this.isTestGame = isTestGame;
+        allPlayerConnected = false;
         // fake other players' connection
         if(!this.isTestGame)
         {
-            StartCoroutine(WaitForOtherPlayersToConnect());
+            SetState(GameStates.WaitingForPlayersToConnect);
         }
         else
         {
             SetState(GameStates.WaitingForPlayerInput);
         }
         
+    }
+
+    private void WaitForOtherPlayersToConnect()
+    {
+        // display connection window and deactivate the menu
+        PestApplication.Instance.menuController.DeactivateMenu();
+        PestApplication.Instance.menuController.ActivateConnectionPopup();
     }
 
     private void WaitingForPlayerInput()
@@ -307,19 +323,7 @@ public class PestGameManager : MonoBehaviour
     }
 
     ///////////////////////////////////////////////////////////////////// Private functions used by the State Machine
-    IEnumerator WaitForOtherPlayersToConnect()
-    {
-        Debug.Log("Waiting for other players to connect");
-        // display connection window
-        PestApplication.Instance.menuController.DeactivateMenu();
-        PestApplication.Instance.menuController.ActivateConnectionPopup();
-
-        yield return new WaitForSeconds(10);
-
-        PestApplication.Instance.menuController.DeactivateConnectionPopup();
-
-        SetState(GameStates.WaitingForPlayerInput);
-    }
+    
 
 
     private bool PestHasProgressed(int totalContribution)
@@ -381,5 +385,12 @@ public class PestGameManager : MonoBehaviour
     public void EndGameClicked()
     {
         PestApplication.Instance.protocolManager.GameFinished();
+    }
+
+    public void AllPlayerConnected()
+    {
+        PestApplication.Instance.menuController.DeactivateConnectionPopup();
+
+        SetState(GameStates.WaitingForPlayerInput);
     }
 }
