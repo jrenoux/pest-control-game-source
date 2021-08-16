@@ -950,7 +950,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1118885490}
   m_HandleRect: {fileID: 1118885489}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -6104,6 +6104,7 @@ GameObject:
   - component: {fileID: 2038431235}
   - component: {fileID: 2038431234}
   - component: {fileID: 2038431233}
+  - component: {fileID: 2038431238}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -6177,6 +6178,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2038431238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2038431232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 327929354d27e970aa87461049b6bf0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2118283341
 GameObject:
   m_ObjectHideFlags: 0

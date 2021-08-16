@@ -22,28 +22,29 @@ public class ProtocolManager : MonoBehaviour
             switch(currentState)
             {
                 case ProtocolStates.Start:
-                // nothing to do
-                break;
+                    // nothing to do
+                    break;
 
                 case ProtocolStates.TestTutorial:
-                StartTestTutorial();
-                break;
+                    hasStateChanged = false;
+                    StartTestTutorial();
+                    break;
 
                 case ProtocolStates.TestGame:
-                StartTestGame();
-                break;
+                    StartTestGame();
+                    break;
 
                 case ProtocolStates.StudyTutorial:
-                StartStudyTutorial();
-                break;
+                    StartStudyTutorial();
+                    break;
 
                 case ProtocolStates.StudyGame:
-                StartStudyGame();
-                break;
+                    StartStudyGame();
+                    break;
 
                 case ProtocolStates.Questionnaire:
-                StartQuestionnaire();
-                break;
+                    StartQuestionnaire();
+                    break;
             }
             hasStateChanged = false;
         }

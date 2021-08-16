@@ -53,7 +53,7 @@ public sealed class PestApplication
         tutorialController = GameObject.Find("TutorialSection").GetComponent<TutorialController>();
         gameBoardController = GameObject.Find("GameBoardSection").GetComponent<GameBoardController>();
         startGameController = GameObject.Find("StartGameSection").GetComponent<StartGameController>();
-        logManager = new DataLogManager();
+        logManager = GameObject.Find("Managers").GetComponent<DataLogManager>();
     }
 
     /////////////////////////////////////////////Singleton method

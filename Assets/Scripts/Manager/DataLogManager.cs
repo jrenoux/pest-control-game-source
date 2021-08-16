@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Newtonsoft.Json;
+using UnityEngine.Networking;
+using System.Text;
 
 public class DataLogManager : MonoBehaviour
 {
@@ -14,15 +16,15 @@ public class DataLogManager : MonoBehaviour
         currentSessionId = System.Guid.NewGuid();
         // serialize and stores the game config info
         DataEntryGameConfig gameConfig = new DataEntryGameConfig(prolificId, currentSessionId.ToString(), condition, gameType, theWorld);
-        // TODO store in DB
 
-        /******************************************************/
-        // TODO
-        // MONGODB CONNECTION TO ADD HERE 
-        /******************************************************/
+        // store in DB
+        string entityJson = JsonConvert.SerializeObject(gameConfig);
+        StartCoroutine(Upload(entityJson, result => {
+            Debug.Log("MongoDB New Game Upload: " + result);
+        }));
 
-        // for now we just print it
-        Debug.Log(JsonConvert.SerializeObject(gameConfig));
+        // for debug we print it
+        Debug.Log(entityJson);
 
         // returns the session ID
         return currentSessionId.ToString();
@@ -31,15 +33,39 @@ public class DataLogManager : MonoBehaviour
 
     public void SaveRound(DataEntryRound round)
     {
-        // TODO stores the round in the DB
-        
-        /******************************************************/
-        // TODO
-        // MONGODB CONNECTION TO ADD HERE 
-        /******************************************************/
+        // stores the round in the DB
+        string entityJson = JsonConvert.SerializeObject(round);
+        StartCoroutine(Upload(entityJson, result => {
+            Debug.Log("MongoDB Save Round Upload: " + result);
+        }));
+        Debug.Log(entityJson);
+    }
 
-        
-        // for now we just print it
-        Debug.Log(JsonConvert.SerializeObject(round));
+    IEnumerator Upload(string content, System.Action<bool> callback = null)
+    {
+        using (UnityWebRequest request = new UnityWebRequest("https://eu-central-1.aws.webhooks.mongodb-realm.com/api/client/v2.0/app/pestcontrolgame-dnxqz/service/UnityRequests/incoming_webhook/webhook0", "POST"))
+        {
+            request.SetRequestHeader("Content-Type", "application/json");
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(content);
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.Log(request.error);
+                if (callback != null)
+                {
+                    callback.Invoke(false);
+                }
+            }
+            else
+            {
+                if (callback != null)
+                {
+                    callback.Invoke(request.downloadHandler.text != "{}");
+                }
+            }
+        }
     }
 }
