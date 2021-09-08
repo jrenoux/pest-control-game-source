@@ -691,7 +691,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7d6f3c95d30cc47298134f4531bb1ce4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 99e1206e5a0c145678c83088034d28c9, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1383,6 +1383,7 @@ MonoBehaviour:
   arrowImage: {fileID: 1027611029}
   tilemap: {fileID: 2119510892}
   camera: {fileID: 1651056569}
+  gameCover: {fileID: 27681802}
 --- !u!1 &246233209
 GameObject:
   m_ObjectHideFlags: 0
@@ -6497,6 +6498,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wallet: {fileID: 1521346482}
+  playerIcon: {fileID: 26679358}
   contribution: {fileID: 211407089}
   year: {fileID: 2007936011}
   chat: {fileID: 1318811543}
