@@ -11,7 +11,7 @@
     "activePlayers": [
         {
             "id": "red",
-            "type": "fixed",
+            "type": "prosocial",
             "farmLocation": {"x": 0, "y": -5},
             "wallet": 5, 
             "revenuePerYear": 2

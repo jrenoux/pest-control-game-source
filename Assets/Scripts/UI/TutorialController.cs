@@ -5,6 +5,8 @@ using UnityEngine.Tilemaps;
 public class TutorialController : MonoBehaviour 
 {
     [SerializeField]
+    private GameObject tutorialIntroduction;
+    [SerializeField]
     private GameObject tutorialPopup;
     
     [SerializeField]
@@ -16,12 +18,19 @@ public class TutorialController : MonoBehaviour
 
     public void Start() 
     {
+        tutorialIntroduction.SetActive(false);
         tutorialPopup.SetActive(false);
+
     }
 
     public void Update()
     {
     
+    }
+
+    public void DeactivateTutorialIntroduction()
+    {
+        tutorialIntroduction.SetActive(false);
     }
 
     public void DeactivateTutorialPopup()
@@ -33,6 +42,14 @@ public class TutorialController : MonoBehaviour
     {
         PestApplication.Instance.tutorialManager.NextTutorial();
     }
+
+
+    public void DisplayTutorialIntroduction()
+    {
+        tutorialIntroduction.SetActive(true);
+    }
+
+
 
     public void DisplayTutorialPanel(string title, string message, string buttonText,
                                      Vector3 windowPosition, 
@@ -219,6 +236,12 @@ public class TutorialController : MonoBehaviour
 
 
         DisplayTutorialPanelAtPoint(title, message, buttonText, tileCoordinates, arrowAngle );
+    }
+
+    public void DisplayIntroduction()
+    {
+        arrowImage.gameObject.SetActive(false);
+        tutorialIntroduction.SetActive(true);
     }
 
     public void DisplayTutorialPanel(string title, string message, string buttonText)
