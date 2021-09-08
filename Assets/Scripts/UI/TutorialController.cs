@@ -15,6 +15,8 @@ public class TutorialController : MonoBehaviour
     private Tilemap tilemap;
     [SerializeField]
     private Camera camera;
+    [SerializeField]
+    private GameObject gameCover;
 
     public void Start() 
     {
@@ -31,6 +33,7 @@ public class TutorialController : MonoBehaviour
     public void DeactivateTutorialIntroduction()
     {
         tutorialIntroduction.SetActive(false);
+        gameCover.SetActive(false);
     }
 
     public void DeactivateTutorialPopup()

@@ -198,7 +198,7 @@ public class TutorialManager : MonoBehaviour
         string title = "Tutorial 3/9";
         string message = "<b>This is your farm</b>. It is circled in black for you to see it better. " +
         "You can also see your player color in the circle at the top hand-left side of the window. \n \n" +
-        "As long as the pest doesn't get you, your farm gives you two coins per year. ";
+        "As long as the pest doesn't get you, your farm gives you <b>two coins per year.</b> ";
 
         string buttonText = "Next";
 
