@@ -10,6 +10,7 @@ public enum GameStates
     ConfirmPlayerInput,
     ProcessPlayerInput,
     WaitingForOtherPlayers,
+    InitiatePestControl,
     PerformingPestControl,
     ConfirmPestControl,
     CollectRevenue,
@@ -66,6 +67,11 @@ public class PestGameManager : MonoBehaviour
                 case GameStates.WaitingForOtherPlayers:
                     Debug.Log("State = Waiting for other players input");
                     StartCoroutine(PlayArtificialPlayersRound());
+                    break;
+                case GameStates.InitiatePestControl:
+                    InitiatePestControl();
+                    //StartCoroutine(PerformPestControl());
+                    Debug.Log("State = Initiate pest control");
                     break;
                 case GameStates.PerformingPestControl:
                     StartCoroutine(PerformPestControl());
@@ -206,15 +212,15 @@ public class PestGameManager : MonoBehaviour
 
 
         // go to the PerformPestControl state
-        SetState(GameStates.PerformingPestControl);
+        SetState(GameStates.InitiatePestControl);
     }
 
-    IEnumerator PerformPestControl()
+    private void InitiatePestControl()
     {
         PestApplication app = PestApplication.Instance;
         World theWorld = app.theWorld;
         int totalContribution = 0;
-        foreach(Player player in theWorld.activePlayers)
+        foreach (Player player in theWorld.activePlayers)
         {
             totalContribution = totalContribution + player.GetContribution();
             Debug.Log("Player " + player.id + " paid " + player.GetContribution());
@@ -223,13 +229,31 @@ public class PestGameManager : MonoBehaviour
         double threshold = GetSpreadingThreshold(totalContribution);
         double probaSpread = (1 - threshold) * 100;
 
-        app.chatManager.SendLogMessage("The collective gathered " + totalContribution + " coins, the pest has " + Math.Round(probaSpread) + "% chances to spread");
-        app.menuController.ActivatePopup("Performing Pest Control");
-        yield return new WaitForSeconds(3);
-        app.menuController.DeactivatePopup();
+        app.menuController.ActivatePestControlPopUp(probaSpread, totalContribution);
 
+
+
+        /* app.chatManager.SendLogMessage("The collective gathered " + totalContribution + " coins, the pest has " + Math.Round(probaSpread) + "% chances to spread");
+         app.menuController.ActivatePopup("Performing Pest Control");
+         yield return new WaitForSeconds(3);
+         app.menuController.DeactivatePopup();*/
+    }
+
+    IEnumerator PerformPestControl()
+    {
+        PestApplication app = PestApplication.Instance;
+        World theWorld = app.theWorld;
         GridTile pestTile;
-        switch(theWorld.pestProgression.type)
+        int totalContribution = 0;
+        foreach (Player player in theWorld.activePlayers)
+        {
+            totalContribution = totalContribution + player.GetContribution();
+            Debug.Log("Player " + player.id + " paid " + player.GetContribution());
+        }
+
+        yield return new WaitForSeconds(1);
+
+        switch (theWorld.pestProgression.type)
         {
             case "random":
             if(PestHasProgressed(totalContribution))
@@ -283,25 +307,31 @@ public class PestGameManager : MonoBehaviour
 
     private void ConfirmPestControl()
     {
-        if(PestApplication.Instance.theWorld.pestProgression.latestPestControlSuccess)
+        PestApplication app = PestApplication.Instance;
+
+        if (PestApplication.Instance.theWorld.pestProgression.latestPestControlSuccess)
         {
-            PestApplication.Instance.chatManager.SendLogMessage("The Pest Control was successful");
+            app.menuController.ChangePestControlResult("pest", "The Pest Control was successful!");
+            //PestApplication.Instance.chatManager.SendLogMessage("The Pest Control was successful");
         }
         else
         {
-            PestApplication.Instance.chatManager.SendLogMessage("The Pest Control was unsuccessful");
+            app.menuController.ChangePestControlResult("pest","The Pest Control was unsuccessful.");
+            //PestApplication.Instance.chatManager.SendLogMessage("The Pest Control was unsuccessful");
         }
         SetState(GameStates.CollectRevenue);
     }
 
     private void CollectRevenue()
     {
-        foreach(Player player in PestApplication.Instance.theWorld.activePlayers)
+
+        foreach (Player player in PestApplication.Instance.theWorld.activePlayers)
         {
             player.CollectRevenue();
         }
-        PestApplication.Instance.chatManager.SendLogMessage("You've earned " + PestApplication.Instance.theWorld.humanPlayer.revenuePerYear + " coins from your farm.");
-        SetState(GameStates.PrepareForNextYear);
+        PestApplication.Instance.menuController.ChangePestControlResult("earnings", "You've earned " + PestApplication.Instance.theWorld.humanPlayer.revenuePerYear + " coins from your farm.");
+        //PestApplication.Instance.chatManager.SendLogMessage("You've earned " + PestApplication.Instance.theWorld.humanPlayer.revenuePerYear + " coins from your farm.");
+        PestApplication.Instance.menuController.ActivatePestControlResult();
     } 
 
     private void PrepareForNextYear()
@@ -393,4 +423,16 @@ public class PestGameManager : MonoBehaviour
 
         SetState(GameStates.WaitingForPlayerInput);
     }
+
+    public void StartPestControl()
+    {
+        SetState(GameStates.PerformingPestControl);
+    }
+
+    public void StartNewYear()
+    {
+        SetState(GameStates.PrepareForNextYear);
+    }
+        
+
 }
