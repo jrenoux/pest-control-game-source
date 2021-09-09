@@ -531,8 +531,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0000076293945, y: 35}
-  m_SizeDelta: {x: 380.4115, y: 38.3793}
+  m_AnchoredPosition: {x: -0.000005722, y: 37.2}
+  m_SizeDelta: {x: 424.3624, y: 32.2262}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &36033088
 MonoBehaviour:
@@ -567,7 +567,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: CONGRATULATIONS
+  m_Text: You reached the end of the game!
 --- !u!222 &36033089
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -962,7 +962,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &183316739
 RectTransform:
   m_ObjectHideFlags: 0

@@ -224,19 +224,20 @@ public class MenuController : MonoBehaviour
         switch (probSpread)
         {
             case double n when n >= 80.0:
-                riskImage.sprite = Resources.Load("Sprites/bad.png") as Sprite;
+                
+                riskImage.sprite = Resources.Load<Sprite>("Sprites/bad");
                 break;
             case double n when n >= 60.0:
-                riskImage.sprite = Resources.Load("Sprites/poor.png") as Sprite;
+                riskImage.sprite = Resources.Load<Sprite>("Sprites/poor");
                 break;
             case double n when n >= 50.0:
-                riskImage.sprite = Resources.Load("Sprites/fair.png") as Sprite;
+                riskImage.sprite = Resources.Load<Sprite>("Sprites/fair");
                 break;
             case double n when n < 50.0:
-                riskImage.sprite = Resources.Load("Sprites/good.png") as Sprite;
+                riskImage.sprite = Resources.Load<Sprite>("Sprites/good");
                 break;
             case double n when n <= 10.0:
-                riskImage.sprite = Resources.Load("Sprites/excelent.png") as Sprite;
+                riskImage.sprite = Resources.Load<Sprite>("Sprites/excelent");
                 break;
         }
 
