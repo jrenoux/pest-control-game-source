@@ -69,12 +69,13 @@ public class PestGameManager : MonoBehaviour
                     StartCoroutine(PlayArtificialPlayersRound());
                     break;
                 case GameStates.InitiatePestControl:
-                    InitiatePestControl();
+                    
                     //StartCoroutine(PerformPestControl());
                     Debug.Log("State = Initiate pest control");
+                    StartCoroutine(InitiatePestControl());
                     break;
                 case GameStates.PerformingPestControl:
-                    StartCoroutine(PerformPestControl());
+                    PerformPestControl();
                     Debug.Log("State = Performing pest control");
                     break;
                 case GameStates.ConfirmPestControl:
@@ -82,7 +83,7 @@ public class PestGameManager : MonoBehaviour
                     Debug.Log("State = Confirm pest control status");
                     break;
                 case GameStates.CollectRevenue:
-                    CollectRevenue();
+                    StartCoroutine(CollectRevenue());
                     Debug.Log("State = Collect revenue");
                     break;
                 case GameStates.PrepareForNextYear:
@@ -215,7 +216,7 @@ public class PestGameManager : MonoBehaviour
         SetState(GameStates.InitiatePestControl);
     }
 
-    private void InitiatePestControl()
+    IEnumerator InitiatePestControl()
     {
         PestApplication app = PestApplication.Instance;
         World theWorld = app.theWorld;
@@ -229,18 +230,23 @@ public class PestGameManager : MonoBehaviour
         double threshold = GetSpreadingThreshold(totalContribution);
         double probaSpread = (1 - threshold) * 100;
 
-        app.menuController.ActivatePestControlPopUp(probaSpread, totalContribution);
-
-
+        app.menuController.ActivatePestControlPopUp();
+        
+        //app.chatController.ActivateSummary(totalContribution, probaSpread);
 
         /* app.chatManager.SendLogMessage("The collective gathered " + totalContribution + " coins, the pest has " + Math.Round(probaSpread) + "% chances to spread");
-         app.menuController.ActivatePopup("Performing Pest Control");
-         yield return new WaitForSeconds(3);
-         app.menuController.DeactivatePopup();*/
+         app.menuController.ActivatePopup("Performing Pest Control");*/
+        yield return new WaitForSeconds(2);
+        app.menuController.DeactivatePestControlPopUp();
+
+        SetState(GameStates.PerformingPestControl);
+
     }
 
-    IEnumerator PerformPestControl()
+    private void PerformPestControl()
     {
+        
+
         PestApplication app = PestApplication.Instance;
         World theWorld = app.theWorld;
         GridTile pestTile;
@@ -250,8 +256,6 @@ public class PestGameManager : MonoBehaviour
             totalContribution = totalContribution + player.GetContribution();
             Debug.Log("Player " + player.id + " paid " + player.GetContribution());
         }
-
-        yield return new WaitForSeconds(1);
 
         switch (theWorld.pestProgression.type)
         {
@@ -311,27 +315,40 @@ public class PestGameManager : MonoBehaviour
 
         if (PestApplication.Instance.theWorld.pestProgression.latestPestControlSuccess)
         {
-            app.menuController.ChangePestControlResult("pest", "The Pest Control was successful!");
+            app.menuController.ChangePestControlResult("pest", "The Pest Control was <color=#48a7c7>successful</color>!");
             //PestApplication.Instance.chatManager.SendLogMessage("The Pest Control was successful");
         }
         else
         {
-            app.menuController.ChangePestControlResult("pest","The Pest Control was unsuccessful.");
+            app.menuController.ChangePestControlResult("pest","The Pest Control was <color=red>unsuccessful</color>.");
             //PestApplication.Instance.chatManager.SendLogMessage("The Pest Control was unsuccessful");
         }
         SetState(GameStates.CollectRevenue);
     }
 
-    private void CollectRevenue()
+    IEnumerator CollectRevenue()
     {
+
+        int totalContribution = 0;
+        
 
         foreach (Player player in PestApplication.Instance.theWorld.activePlayers)
         {
+            totalContribution = totalContribution + player.GetContribution();
+            Debug.Log("Player " + player.id + " paid " + player.GetContribution());
             player.CollectRevenue();
         }
         PestApplication.Instance.menuController.ChangePestControlResult("earnings", "You've earned " + PestApplication.Instance.theWorld.humanPlayer.revenuePerYear + " coins from your farm.");
         //PestApplication.Instance.chatManager.SendLogMessage("You've earned " + PestApplication.Instance.theWorld.humanPlayer.revenuePerYear + " coins from your farm.");
+
+        double threshold = GetSpreadingThreshold(totalContribution);
+        double probaSpread = (1 - threshold) * 100;
+
+        PestApplication.Instance.chatController.ActivateSummary(totalContribution, probaSpread, PestApplication.Instance.theWorld.currentYear);
+
         PestApplication.Instance.menuController.ActivatePestControlResult();
+        yield return new WaitForSeconds(3);
+        PestApplication.Instance.menuController.DeactivatePestControlResultPopUp();
     } 
 
     private void PrepareForNextYear()
@@ -385,12 +402,14 @@ public class PestGameManager : MonoBehaviour
     {
         currentGameState = GameStates.GameEnded;
         PestApplication.Instance.menuController.ActivateEndGamePopup("CONGRATULATIONS \n You have reached the end of the game");
+        PestApplication.Instance.chatController.DeactivateSummary();
     }
 
     private void LoseGame()
     {
         currentGameState = GameStates.GameEnded;
         PestApplication.Instance.menuController.ActivateEndGamePopup("GAME OVER \nThe pest has reached your farm");
+        PestApplication.Instance.chatController.DeactivateSummary();
     }
 
 

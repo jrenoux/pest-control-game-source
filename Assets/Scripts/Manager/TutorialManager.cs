@@ -108,6 +108,7 @@ public class TutorialManager : MonoBehaviour
                 Debug.Log("Tutorial End");
                 PestApplication.Instance.protocolManager.TutorialFinished();
                 tutorialController.DeactivateTutorialPopup();
+                tutorialController.HideFinalArrow();
                 break;
             }
             hasStateChanged = false;
@@ -289,8 +290,8 @@ public class TutorialManager : MonoBehaviour
         string message = "";
         if(!PestApplication.Instance.chatManager.feedback.condition.Equals("control"))
         {
-            message = "This box will contain information about the game progression." +
-                "Throughout the game an artificial agent will give you information and feedback, so keep an eye on it!";
+            message = "This box will contain information about how many coins were collected during that year and the corresponding probability of pest spreading.";
+                
         }
         else
         {
@@ -349,6 +350,7 @@ public class TutorialManager : MonoBehaviour
         string buttonText = "Start Game";
 
         tutorialController.DisplayTutorialPanel(title, message, buttonText);
+        tutorialController.DisplayFinalArrow();
     }
 
 

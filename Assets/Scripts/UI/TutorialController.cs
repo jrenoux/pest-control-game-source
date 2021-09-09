@@ -17,6 +17,8 @@ public class TutorialController : MonoBehaviour
     private Camera camera;
     [SerializeField]
     private GameObject gameCover;
+    [SerializeField]
+    private GameObject finalArrow;
 
     public void Start() 
     {
@@ -52,6 +54,15 @@ public class TutorialController : MonoBehaviour
         tutorialIntroduction.SetActive(true);
     }
 
+    public void DisplayFinalArrow()
+    {
+        finalArrow.SetActive(true);
+    }
+
+    public void HideFinalArrow()
+    {
+        finalArrow.SetActive(false);
+    }
 
 
     public void DisplayTutorialPanel(string title, string message, string buttonText,

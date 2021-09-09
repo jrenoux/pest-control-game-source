@@ -146,6 +146,7 @@ public class MenuController : MonoBehaviour
     public void ActivateConnectionPopup()
     {
         connectionPopup.SetActive(true);
+        Debug.Log("here");
     }
 
     public void DeactivateConnectionPopup()
@@ -216,30 +217,9 @@ public class MenuController : MonoBehaviour
 
     /** Pest Control Pop-Up **/
 
-    public void ActivatePestControlPopUp(double probSpread, int contribution)
+    public void ActivatePestControlPopUp()
     {
         popupPestControl.SetActive(true);
-        totalContribution.text = contribution.ToString();
-        probabilitySpreading.text = probSpread.ToString();
-        switch (probSpread)
-        {
-            case double n when n >= 80.0:
-                
-                riskImage.sprite = Resources.Load<Sprite>("Sprites/bad");
-                break;
-            case double n when n >= 60.0:
-                riskImage.sprite = Resources.Load<Sprite>("Sprites/poor");
-                break;
-            case double n when n >= 50.0:
-                riskImage.sprite = Resources.Load<Sprite>("Sprites/fair");
-                break;
-            case double n when n < 50.0:
-                riskImage.sprite = Resources.Load<Sprite>("Sprites/good");
-                break;
-            case double n when n <= 10.0:
-                riskImage.sprite = Resources.Load<Sprite>("Sprites/excelent");
-                break;
-        }
 
     }
 
