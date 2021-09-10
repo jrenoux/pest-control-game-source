@@ -10,6 +10,9 @@ public class ChatController : MonoBehaviour
     private GameObject participantAnswerSection;
 
     [SerializeField]
+    private GameObject agentPanel;
+
+    [SerializeField]
     private GameObject summaryPanel;
 
     [SerializeField]
@@ -59,22 +62,54 @@ public class ChatController : MonoBehaviour
     {
         PestApplication.Instance.gameManager.ActionConfirmed();
         participantAnswerSection.SetActive(false);
+        DectivateAgentPanel();
     }
 
     public void CancelInput()
     {
         PestApplication.Instance.gameManager.ActionCancelled();
         participantAnswerSection.SetActive(false);
+        DectivateAgentPanel();
     }
 
     public void ActivateAnswerSection()
     {
+        PestApplication.Instance.menuController.SetTalkingRobot();
         participantAnswerSection.SetActive(true);
+    }
+
+    public void ActivateAgentPanel()
+    {
+        PestApplication.Instance.menuController.DeactivateMenu();
+        agentPanel.SetActive(true);
+    }
+
+    public void DectivateAgentPanel()
+    {
+        PestApplication.Instance.menuController.ActivateMenu();
+        agentPanel.SetActive(false);
+        PestApplication.Instance.menuController.SetNeutralRobot();
+
+    }
+
+    public void ToggleAgentPanel()
+    {
+        if (!participantAnswerSection.activeSelf)
+        {
+            if (agentPanel.activeSelf)
+            {
+                DectivateAgentPanel();
+            }
+            else
+            {
+                ActivateAgentPanel();
+            }
+        }
     }
 
 
     /*** SUMMARY ***/
-    
+
 
     public void ActivateSummary(int ncoins, double pspreading, int year)
     { 

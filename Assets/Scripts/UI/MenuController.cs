@@ -32,6 +32,9 @@ public class MenuController : MonoBehaviour
     private Button payButton;
 
     [SerializeField]
+    private Button robotButton;
+
+    [SerializeField]
     private GameObject endGamePopup;
 
     [SerializeField]
@@ -76,9 +79,13 @@ public class MenuController : MonoBehaviour
 
     public bool endGame {get; set;}
 
+    private Sprite ROBOT_NEUTRAL, ROBOT_TALKING;
+
     void Start()
     {
         Reset();
+        ROBOT_NEUTRAL = Resources.Load<Sprite>("Sprites/robot_neutral");
+        ROBOT_TALKING = Resources.Load<Sprite>("Sprites/robot_talking");
     }
 
     void Update()
@@ -98,6 +105,7 @@ public class MenuController : MonoBehaviour
         upButton.interactable = true;
         downButton.interactable = true;
         payButton.interactable = true;
+        //robotButton.interactable = true;
     }
 
     public void DeactivateMenu()
@@ -105,6 +113,7 @@ public class MenuController : MonoBehaviour
         upButton.interactable = false;
         downButton.interactable = false;
         payButton.interactable = false;
+        //robotButton.interactable = false;
     }
 
     public int ProcessContribution()
@@ -253,5 +262,15 @@ public class MenuController : MonoBehaviour
     {
         popupPestSuccess.SetActive(false);
         PestApplication.Instance.gameManager.StartNewYear();
+    }
+
+    public void SetTalkingRobot()
+    {
+        robotButton.transform.GetComponent<Image>().sprite = ROBOT_TALKING;
+    }
+
+    public void SetNeutralRobot()
+    {
+        robotButton.transform.GetComponent<Image>().sprite = ROBOT_NEUTRAL;
     }
 }
