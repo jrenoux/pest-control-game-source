@@ -1463,7 +1463,7 @@ MonoBehaviour:
   tilemap: {fileID: 2119510892}
   camera: {fileID: 1651056569}
   gameCover: {fileID: 27681802}
-  finalArrow: {fileID: 0}
+  finalArrow: {fileID: 1027611027}
 --- !u!1 &246233209
 GameObject:
   m_ObjectHideFlags: 0
