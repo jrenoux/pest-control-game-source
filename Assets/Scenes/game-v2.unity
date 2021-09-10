@@ -1463,6 +1463,7 @@ MonoBehaviour:
   tilemap: {fileID: 2119510892}
   camera: {fileID: 1651056569}
   gameCover: {fileID: 27681802}
+  finalArrow: {fileID: 0}
 --- !u!1 &246233209
 GameObject:
   m_ObjectHideFlags: 0
@@ -4784,8 +4785,10 @@ MonoBehaviour:
   messageTemplate: {fileID: 842248115}
   participantAnswerSection: {fileID: 517863714}
   summaryPanel: {fileID: 914182959}
-  coinsCollected: {fileID: 318671063}
+  coinsCollected: {fileID: 1720764344}
   probabilitySpreading: {fileID: 827481722}
+  previousYear: {fileID: 568026431}
+  riskImage: {fileID: 1509774670}
 --- !u!1 &1344262806
 GameObject:
   m_ObjectHideFlags: 0

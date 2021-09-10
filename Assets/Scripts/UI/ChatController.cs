@@ -79,7 +79,7 @@ public class ChatController : MonoBehaviour
     public void ActivateSummary(int ncoins, double pspreading, int year)
     { 
         coinsCollected.text = ncoins.ToString();
-        probabilitySpreading.text = pspreading.ToString();
+        probabilitySpreading.text = ((int)pspreading).ToString();
         previousYear.text = year.ToString();
         summaryPanel.SetActive(true);
 
