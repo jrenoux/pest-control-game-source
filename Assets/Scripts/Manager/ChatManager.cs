@@ -55,6 +55,7 @@ public class ChatManager : MonoBehaviour
                latestPestTileFeedbackSent = newestPestTile;
            }
            
+           PestApplication.Instance.chatController.ActivateAgentPanel();
            PestApplication.Instance.chatController.ActivateAnswerSection();
            return (true, utterance);
        }    

@@ -15,6 +15,7 @@ public enum GameStates
     ConfirmPestControl,
     CollectRevenue,
     PrepareForNextYear,
+    CheckingAgentPanel,
     GameEnded
 };
 
