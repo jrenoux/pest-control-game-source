@@ -27,6 +27,9 @@ public class ChatController : MonoBehaviour
     [SerializeField]
     private Image riskImage;
 
+    [SerializeField]
+    private Text successMessage;
+
     private List<GameObject> messageList;
 
     public void Start()
@@ -136,6 +139,15 @@ public class ChatController : MonoBehaviour
             case double n when n <= 10.0:
                 riskImage.sprite = Resources.Load<Sprite>("Sprites/excelent");
                 break;
+        }
+
+        if (PestApplication.Instance.theWorld.pestProgression.latestPestControlSuccess)
+        {
+             successMessage.text = "The Pest Control was <color=#48a7c7>successful</color>!";
+        }
+        else
+        {
+            successMessage.text= "The Pest Control was <color=red>unsuccessful</color>.";
         }
     }
 

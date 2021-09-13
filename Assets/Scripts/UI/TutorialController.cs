@@ -19,6 +19,8 @@ public class TutorialController : MonoBehaviour
     private GameObject gameCover;
     [SerializeField]
     private GameObject finalArrow;
+    [SerializeField]
+    private GameObject finalArrowDown;
 
     public void Start() 
     {
@@ -62,6 +64,16 @@ public class TutorialController : MonoBehaviour
     public void HideFinalArrow()
     {
         finalArrow.SetActive(false);
+    }
+
+    public void DisplayFinalArrowDown()
+    {
+        finalArrowDown.SetActive(true);
+    }
+
+    public void HideFinalArrowDown()
+    {
+        finalArrowDown.SetActive(false);
     }
 
 
