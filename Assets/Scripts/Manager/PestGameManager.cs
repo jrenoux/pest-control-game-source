@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 public enum GameStates 
 {
@@ -32,6 +33,7 @@ public class PestGameManager : MonoBehaviour
     private DataEntryRound roundLog = null;
 
     private bool allPlayerConnected = false;
+    public List<int> collective;
 
     public void Awake()
     {
@@ -118,7 +120,12 @@ public class PestGameManager : MonoBehaviour
         {
             SetState(GameStates.WaitingForPlayerInput);
         }
-        
+        World theWorld = PestApplication.Instance.theWorld;
+        collective = new List<int>();
+        foreach (Player player in theWorld.activePlayers)
+        {
+            player.contributionsHistory = new List<int>();
+        }
     }
 
     private void WaitForOtherPlayersToConnect()
@@ -228,6 +235,7 @@ public class PestGameManager : MonoBehaviour
             Debug.Log("Player " + player.id + " paid " + player.GetContribution());
         }
 
+        collective.Add(totalContribution);
         double threshold = GetSpreadingThreshold(totalContribution);
         double probaSpread = (1 - threshold) * 100;
 

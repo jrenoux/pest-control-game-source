@@ -7,13 +7,10 @@ public class Feedback
     public List<FeedbackItem> feedbackItems {get; set;}
     public string GetFeedbackUtterance(int roundNumber, GridTile pestTile)
     {
-        Debug.Log(roundNumber);
-        Debug.Log(pestTile);
         // TODO 
         List<string> possibleFeedbacks = new List<string>();
         foreach(FeedbackItem item in feedbackItems)
         {
-            Debug.Log(item);
             if(item.round == roundNumber 
             || 
             (item.pest != null 
@@ -30,7 +27,30 @@ public class Feedback
         }
 
         int randIndex = RandomSingleton.GetInstance().Next(0, possibleFeedbacks.Count);
-        return possibleFeedbacks[randIndex];
+        string chosenFeedback = possibleFeedbacks[randIndex];
+        if (chosenFeedback.Contains("{collectiveAVG}"))
+        {
+            double collectiveAVG = 0;
+            foreach (int value in PestApplication.Instance.gameManager.collective)
+            {
+                collectiveAVG += value;
+            }
+            collectiveAVG /= PestApplication.Instance.gameManager.collective.Count;
+            chosenFeedback = chosenFeedback.Replace("{collectiveAVG}", ((int) collectiveAVG).ToString());
+        }
+        if (chosenFeedback.Contains("{farmerContributionAVG}"))
+        {
+            double collectiveAVG = 0;
+            foreach (int value in PestApplication.Instance.gameManager.collective)
+            {
+                collectiveAVG += value;
+            }
+            collectiveAVG /= PestApplication.Instance.gameManager.collective.Count;
+            //TODO this assumes no farm will be caught during the game
+            double farmerContributionAVG = collectiveAVG / PestApplication.Instance.theWorld.activePlayers.Count;
+            chosenFeedback = chosenFeedback.Replace("{farmerContributionAVG}", ((int)farmerContributionAVG).ToString());
+        }
+        return chosenFeedback;
     }
 }
 
