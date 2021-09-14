@@ -95,7 +95,7 @@ public class ChatController : MonoBehaviour
 
     public void ToggleAgentPanel()
     {
-        if (!participantAnswerSection.activeSelf)
+        if (!participantAnswerSection.activeSelf && messageList.Count > 0)
         {
             if (agentPanel.activeSelf)
             {
