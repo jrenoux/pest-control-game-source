@@ -10,8 +10,68 @@
             "utterance": "The pest can spread each year if no pest control is done."
         },
         {
+            "pest": {"x": -1, "y": -2},
+            "utterance": "Another possible message at round 5."
+        },
+        {
             "round": 1,
             "utterance": "If each farmer contributes 1GP per year, the risk of pest spreading will reduce."
+        },
+        {
+            "round": 1,
+            "utterance": "LOL2"
+        },
+        {
+            "round": 1,
+            "utterance": "LOL3"
+        },
+        {
+            "round": 1,
+            "utterance": "LOL4"
+        },
+        {
+            "round": 1,
+            "utterance": "LOL5"
+        },
+        {
+            "round": 2,
+            "utterance": "LOL6"
+        },
+        {
+            "round": 2,
+            "utterance": "LOL7"
+        },
+        {
+            "round": 2,
+            "utterance": "LOL8"
+        },
+        {
+            "round": 2,
+            "utterance": "LOL9"
+        },
+        {
+            "round": 2,
+            "utterance": "LOL10"
+        },
+        {
+            "round": 3,
+            "utterance": "LOL11"
+        },
+        {
+            "round": 3,
+            "utterance": "LOL11"
+        },
+        {
+            "round": 3,
+            "utterance": "LOL13"
+        },
+        {
+            "round": 3,
+            "utterance": "LOL14"
+        },
+        {
+            "round": 3,
+            "utterance": "LOL15"
         }
     ]
 }

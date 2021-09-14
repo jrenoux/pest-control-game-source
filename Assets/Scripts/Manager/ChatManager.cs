@@ -43,8 +43,8 @@ public class ChatManager : MonoBehaviour
         string utterance = feedback.GetFeedbackUtterance(roundNumber, newestPestTile);
 
         // if there is, send it
-        if(!utterance.Equals(""))
-       {
+        if(utterance != "")
+        {
            AddChatMessage(utterance, MessageTypes.COACH);
            if(roundNumber != -1)
            {
@@ -58,7 +58,7 @@ public class ChatManager : MonoBehaviour
            PestApplication.Instance.chatController.ActivateAgentPanel();
            PestApplication.Instance.chatController.ActivateAnswerSection();
            return (true, utterance);
-       }    
+        }    
 
        return (false, "");
     }

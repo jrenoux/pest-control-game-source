@@ -10,7 +10,7 @@ public class Feedback
         Debug.Log(roundNumber);
         Debug.Log(pestTile);
         // TODO 
-        bool found = false;
+        List<string> possibleFeedbacks = new List<string>();
         foreach(FeedbackItem item in feedbackItems)
         {
             Debug.Log(item);
@@ -20,19 +20,17 @@ public class Feedback
             && pestTile != null
             && item.pest.Equals(new Location(pestTile.coordinates))))
             {
-                return item.utterance;
+                possibleFeedbacks.Add(item.utterance);
             } 
         }
-        if(!found)
+
+        if (possibleFeedbacks.Count == 0)
         {
             return "";
         }
-        else
-        {
-            // shold not arrive here
-            throw new System.Exception("Should not have reached this point");
-            return "";
-        }
+
+        int randIndex = RandomSingleton.GetInstance().Next(0, possibleFeedbacks.Count);
+        return possibleFeedbacks[randIndex];
     }
 }
 
