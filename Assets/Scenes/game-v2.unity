@@ -1444,8 +1444,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 96.40705, y: -59}
-  m_SizeDelta: {x: 186.8141, y: 22}
+  m_AnchoredPosition: {x: 120, y: -81.5}
+  m_SizeDelta: {x: 220, y: 21.719456}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &246233211
 MonoBehaviour:
@@ -2822,7 +2822,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &842248116
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2840,8 +2840,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 88.67103, y: -59.000008}
-  m_SizeDelta: {x: 192.8141, y: 118}
+  m_AnchoredPosition: {x: 110.3708, y: -59.000008}
+  m_SizeDelta: {x: 240, y: 118}
   m_Pivot: {x: 0.45987833, y: 0.49999994}
 --- !u!114 &842248117
 MonoBehaviour:
@@ -2870,10 +2870,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 3
-    m_Right: 3
-    m_Top: 3
-    m_Bottom: 3
+    m_Left: 10
+    m_Right: 10
+    m_Top: 55
+    m_Bottom: 10
   m_ChildAlignment: 4
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
@@ -5269,7 +5269,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: -8.418396, y: -281.64014}
-  m_SizeDelta: {x: 192.8141, y: 118}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1502750103
 MonoBehaviour:
