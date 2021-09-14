@@ -2280,7 +2280,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 24
-    m_FontStyle: 0
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 2
     m_MaxSize: 40
@@ -2290,7 +2290,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: <b>1</b>
+  m_Text: 1
 --- !u!222 &568026432
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7889,6 +7889,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41231c1e2c682def085b8ff1992c0e63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collective: 
 --- !u!114 &2038431236
 MonoBehaviour:
   m_ObjectHideFlags: 0
