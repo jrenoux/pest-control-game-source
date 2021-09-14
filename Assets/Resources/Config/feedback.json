@@ -2,76 +2,36 @@
     "condition": "feedback",
     "feedbackItems": [
         {
-            "pest": {"x": -1, "y": -4},
-            "utterance": "As farmers lose their crops there are less farmers to contribute to the collective. This increases the probability of pest spreading."
-        },
-        {
-            "pest": {"x": -1, "y": -2},
-            "utterance": "The pest can spread each year if no pest control is done."
-        },
-        {
-            "pest": {"x": -1, "y": -2},
-            "utterance": "Another possible message at round 5."
-        },
-        {
             "round": 1,
-            "utterance": "If each farmer contributes 1GP per year, the risk of pest spreading will reduce."
+            "utterance": "Did you know that when the pest arries to a farm, it gets destroyed and that farmer loses the game?"
         },
         {
-            "round": 1,
-            "utterance": "LOL2"
+            "round": 5,
+            "utterance": "Keep in mind that the more farmers contribute to the collective, the lesser the probability of pest spreading."
         },
         {
-            "round": 1,
-            "utterance": "LOL3"
+            "round": 5,
+            "utterance": "Keep in mind that the less farmers contribute to the collective, the more money they save on their wallets. This increases the probability of pest spreading."
         },
         {
-            "round": 1,
-            "utterance": "LOL4"
-        },
-        {
-            "round": 1,
-            "utterance": "LOL5"
-        },
-        {
-            "round": 2,
-            "utterance": "LOL6"
-        },
-        {
-            "round": 2,
-            "utterance": "LOL7"
-        },
-        {
-            "round": 2,
-            "utterance": "LOL8"
-        },
-        {
-            "round": 2,
-            "utterance": "LOL9"
-        },
-        {
-            "round": 2,
-            "utterance": "LOL10"
+            "round": 11,
+            "utterance": "Remember that as farmers lose their crops there are less farmers to contribute to the collective. This increases the probability of pest spreading."
         },
         {
             "round": 3,
-            "utterance": "LOL11"
+            "utterance": "Remember that if each farmer contributes 2GP per year, the risk of pest spreading will reduce to 33%."
         },
         {
-            "round": 3,
-            "utterance": "LOL11"
+            "round": 7,
+            "utterance": "Have you noticed the collective has gather on average {collectiveAVG}GP per year?"
         },
         {
-            "round": 3,
-            "utterance": "LOL13"
+            "round": 7,
+            "utterance": "Have you noticed that each farmer has contributed {farmerContributionAVG}GP per year?"
         },
         {
-            "round": 3,
-            "utterance": "LOL14"
-        },
-        {
-            "round": 3,
-            "utterance": "LOL15"
+            "round": 9,
+            "utterance": "Don't forget that if that the less you contribute to the collective, the higher the risk of pest spreading."
         }
     ]
 }
