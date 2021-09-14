@@ -83,13 +83,11 @@ public class ChatController : MonoBehaviour
 
     public void ActivateAgentPanel()
     {
-        PestApplication.Instance.menuController.DeactivateMenu();
         agentPanel.SetActive(true);
     }
 
     public void DectivateAgentPanel()
     {
-        PestApplication.Instance.menuController.ActivateMenu();
         agentPanel.SetActive(false);
         PestApplication.Instance.menuController.SetNeutralRobot();
 
@@ -102,10 +100,12 @@ public class ChatController : MonoBehaviour
             if (agentPanel.activeSelf)
             {
                 DectivateAgentPanel();
+                PestApplication.Instance.menuController.ActivateMenu();
             }
             else
             {
                 ActivateAgentPanel();
+                PestApplication.Instance.menuController.DeactivateMenu();
             }
         }
     }
