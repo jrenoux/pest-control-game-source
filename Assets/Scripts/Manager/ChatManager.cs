@@ -87,8 +87,12 @@ public class ChatManager : MonoBehaviour
         PestApplication.Instance.chatController.EmptyMessageList();
     }
 
-    
-    private List<string> GetFeedbackUtterances()
+    //TODO select by condition
+    // The goal is to have 6 feedback lines per condition
+    // The function below is working for the condition PA + PS
+    // PA - Problem Awareness (2 options per item)
+    // PS - Player Strategies (2 options per item)
+    private List<string> GetFeedbackUtterances() 
     {
         var fList = new List<string>();
 
