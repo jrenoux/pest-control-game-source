@@ -3,35 +3,35 @@
     "feedbackItems": [
         {
             "round": 1,
-            "utterance": "Did you know that when the pest arrives to a farm, it gets destroyed and that farmer loses the game?"
+            "utterance": "When the pest arrives to a farm, it gets destroyed and that farmer loses the game."
         },
         {
             "round": 5,
-            "utterance": "Keep in mind that the more farmers contribute to the collective, the lesser the probability of pest spreading."
+            "utterance": "The more farmers contribute to the collective, the lesser the probability of pest spreading."
         },
         {
             "round": 5,
-            "utterance": "Keep in mind that the less farmers contribute to the collective, the more money they save on their wallets. This increases the probability of pest spreading."
+            "utterance": "The less farmers contribute to the collective, the more money they save on their wallets. This increases the probability of pest spreading."
         },
         {
             "round": 11,
-            "utterance": "Remember that as farmers lose their crops there are less farmers to contribute to the collective. This increases the probability of pest spreading."
+            "utterance": "Note that as farmers lose their crops there are less farmers to contribute to the collective. This increases the probability of pest spreading."
         },
         {
             "round": 3,
-            "utterance": "Remember that if each farmer contributes 2GP per year, the risk of pest spreading will reduce to 33%."
+            "utterance": "Note that if each farmer contributes 2GP per year, the risk of pest spreading will reduce to 33%."
         },
         {
             "round": 7,
-            "utterance": "Have you noticed the collective has gather on average {collectiveAVG}GP per year?"
+            "utterance": "The collective has gather on average {collectiveAVG}GP per year."
         },
         {
             "round": 7,
-            "utterance": "Have you noticed that each farmer has contributed {farmerContributionAVG}GP per year?"
+            "utterance": "Each farmer has contributed {farmerContributionAVG}GP per year."
         },
         {
             "round": 9,
-            "utterance": "Don't forget that if that the less you contribute to the collective, the higher the risk of pest spreading."
+            "utterance": "The less you contribute to the collective, the higher the risk of pest spreading."
         }
     ]
 }

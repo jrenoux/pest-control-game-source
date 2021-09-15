@@ -15,6 +15,7 @@ public enum GameStates
     PerformingPestControl,
     ConfirmPestControl,
     CollectRevenue,
+    SendFeedback,
     PrepareForNextYear,
     GameEnded
 };
@@ -87,6 +88,10 @@ public class PestGameManager : MonoBehaviour
                 case GameStates.CollectRevenue:
                     StartCoroutine(CollectRevenue());
                     Debug.Log("State = Collect revenue");
+                    break;
+                case GameStates.SendFeedback:
+                    SendFeedback();
+                    Debug.Log("State = Send Feedback if any");
                     break;
                 case GameStates.PrepareForNextYear:
                     PrepareForNextYear();
@@ -166,23 +171,24 @@ public class PestGameManager : MonoBehaviour
         roundLog.SetContribution(PestApplication.Instance.menuController.GetCurrentContribution());
         PestApplication.Instance.menuController.DeactivateMenu();
         // we send feedback through the chat manager only if this is the study game.
-        bool feedbackSent = false;
-        string utterance = "";
-        if(!this.isTestGame)
-        {
-            (feedbackSent, utterance) = PestApplication.Instance.chatManager.SendFeedback();
-        }
+        //bool feedbackSent = false;
+        //string utterance = "";
+        //if(!this.isTestGame)
+        //{
+        //    (feedbackSent, utterance) = PestApplication.Instance.chatManager.SendFeedback();
+        //}
         // if no feedback has been sent, we directly go to the next state
-        if(!feedbackSent)
-        {
+        //if(!feedbackSent)
+        //{
             SetState(GameStates.ProcessPlayerInput);
-        }
+        //}
         // otherwise, we will go to the next state when the user clicks confirm 
         // we just need to log the utterance
-        else
-        {
-            roundLog.SetCoachUtterance(utterance);
-        }
+
+        //else
+        //{
+        //    roundLog.SetCoachUtterance(utterance);
+        //}
         
     }
 
@@ -357,7 +363,34 @@ public class PestGameManager : MonoBehaviour
         PestApplication.Instance.menuController.ActivatePestControlResult();
         yield return new WaitForSeconds(3);
         PestApplication.Instance.menuController.DeactivatePestControlResultPopUp();
-    } 
+
+        
+
+    }
+
+
+    private void SendFeedback()
+    {
+
+        // SEND Feedback Here - After Round finished
+        // we send feedback through the chat manager only if this is the study game.
+        bool feedbackSent = false;
+        string utterance = "";
+
+        if (!this.isTestGame)
+        {
+            (feedbackSent, utterance) = PestApplication.Instance.chatManager.SendFeedback();
+        }
+        if (feedbackSent)
+        {
+            roundLog.SetCoachUtterance(utterance);
+        }
+        else
+        {
+            PestApplication.Instance.gameManager.StartNewYear();
+        }
+
+    }
 
     private void PrepareForNextYear()
     {
@@ -367,7 +400,8 @@ public class PestGameManager : MonoBehaviour
             WinGame();
         }
 
-        if(currentGameState != GameStates.GameEnded)
+
+        if (currentGameState != GameStates.GameEnded)
         {
             theWorld.currentYear = theWorld.currentYear + 1;
             SetState(GameStates.WaitingForPlayerInput);
@@ -375,6 +409,12 @@ public class PestGameManager : MonoBehaviour
         // save the log and reset it
         PestApplication.Instance.logManager.SaveRound(roundLog);
         roundLog = null;
+
+
+        
+
+
+
     }
 
     ///////////////////////////////////////////////////////////////////// Private functions used by the State Machine
@@ -454,6 +494,11 @@ public class PestGameManager : MonoBehaviour
     public void StartPestControl()
     {
         SetState(GameStates.PerformingPestControl);
+    }
+
+    public void ShowFeedback()
+    {
+        SetState(GameStates.SendFeedback);
     }
 
     public void StartNewYear()

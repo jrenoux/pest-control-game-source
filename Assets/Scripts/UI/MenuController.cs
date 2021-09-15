@@ -261,7 +261,7 @@ public class MenuController : MonoBehaviour
     public void DeactivatePestControlResultPopUp()
     {
         popupPestSuccess.SetActive(false);
-        PestApplication.Instance.gameManager.StartNewYear();
+        PestApplication.Instance.gameManager.ShowFeedback();
     }
 
     public void SetTalkingRobot()

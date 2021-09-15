@@ -63,9 +63,11 @@ public class ChatController : MonoBehaviour
 
     public void ConfirmInput()
     {
-        PestApplication.Instance.gameManager.ActionConfirmed();
-        participantAnswerSection.SetActive(false);
+        //PestApplication.Instance.gameManager.ActionConfirmed();
+        //participantAnswerSection.SetActive(false);
+        PestApplication.Instance.menuController.ActivateMenu();
         DectivateAgentPanel();
+
     }
 
     public void CancelInput()
@@ -83,14 +85,16 @@ public class ChatController : MonoBehaviour
 
     public void ActivateAgentPanel()
     {
+        PestApplication.Instance.menuController.DeactivateMenu();
         agentPanel.SetActive(true);
     }
 
     public void DectivateAgentPanel()
     {
-        agentPanel.SetActive(false);
+        PestApplication.Instance.menuController.ActivateMenu();
         PestApplication.Instance.menuController.SetNeutralRobot();
-
+        agentPanel.SetActive(false);
+        PestApplication.Instance.gameManager.StartNewYear();
     }
 
     public void ToggleAgentPanel()
@@ -100,12 +104,10 @@ public class ChatController : MonoBehaviour
             if (agentPanel.activeSelf)
             {
                 DectivateAgentPanel();
-                PestApplication.Instance.menuController.ActivateMenu();
             }
             else
             {
                 ActivateAgentPanel();
-                PestApplication.Instance.menuController.DeactivateMenu();
             }
         }
     }
