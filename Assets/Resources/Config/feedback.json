@@ -1,37 +1,45 @@
 {
     "condition": "feedback",
     "feedbackItems": [
-        {
+         {
             "round": 1,
-            "utterance": "When the pest arrives to a farm, it gets destroyed and that farmer loses the game."
+            "type": "PA",
+            "utterance": [
+            "If the pest does not get to a player, all the money in their wallets will be converted into a bonus in the end.",
+            "When a player reaches the final year away from the pest, the coins in their wallet are converted into a bonus."
+            ]
         },
         {
             "round": 5,
-            "utterance": "The more farmers contribute to the collective, the lesser the probability of pest spreading."
+            "type": "PA",
+            "utterance": ["The more farmers contribute to the collective, the lesser the probability of pest spreading.",
+            "The number of coins collected each year impacts the probability of pest spreading."
+            ]
         },
-        {
-            "round": 5,
-            "utterance": "The less farmers contribute to the collective, the more money they save on their wallets. This increases the probability of pest spreading."
-        },
-        {
+         {
             "round": 11,
-            "utterance": "Note that as farmers lose their crops there are less farmers to contribute to the collective. This increases the probability of pest spreading."
+            "type": "PA",
+            "utterance": ["When the pest arrives to a farm, it gets destroyed and that farmer loses the game. This implies that remaining farmers need to contribute more to the collective to prevent pest spreading.",
+            "A farmer loses the game when the pest gets to their tile. Having less farmers in the game means that the individual contributions to the collective have to be higher to maintain the risk of pest spreading."
+            ]
         },
         {
             "round": 3,
-            "utterance": "Note that if each farmer contributes 2GP per year, the risk of pest spreading will reduce to 33%."
+            "type": "PS",
+            "utterance": ["Note that if each farmer contributes 2 coins per year, the risk of pest spreading will reduce to 33%.",
+            "No contribution to the collective will increase the probability of pest spreading."]
         },
         {
             "round": 7,
-            "utterance": "The collective has gather on average {collectiveAVG}GP per year."
-        },
-        {
-            "round": 7,
-            "utterance": "Each farmer has contributed {farmerContributionAVG}GP per year."
+            "type": "PS",
+            "utterance": ["The collective has gathered {collectiveAVG} coins, on average, per year.",
+            "Each farmer has contributed {farmerContributionAVG} coins, on average, per year."]
         },
         {
             "round": 9,
-            "utterance": "The less you contribute to the collective, the higher the risk of pest spreading."
+            "type": "PS",
+            "utterance": ["Your contribution directly affects the risk of pest spreading and at the same time your final bonus.",
+            "How much you contribute each year affects both your bonus and the probability of pest spreading"]
         }
     ]
 }
