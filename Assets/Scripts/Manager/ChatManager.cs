@@ -23,7 +23,7 @@ public class ChatManager : MonoBehaviour
 
     public (bool, string) SendFeedback()
     {
-        var rounds_feedback = new List<int>() { 1, 3, 5, 7, 9, 11 };
+        var rounds_feedback = new List<int>() { 1, 3, 5, 7, 9, 11 }; // List of round numbers after which feedback is triggered.
         // only send feedback if feedback condition is on
         if (feedback.condition.Equals("control"))
         {

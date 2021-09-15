@@ -12,9 +12,11 @@ public class Feedback
         allUtterances.RemoveAt(index);
     }
 
+
+    // This funtion selects a random feedback line from a pre-loaded list and removes that line from the list.
     public string GetFeedbackUtterance(List<string> utterances)
     {
-        var rounds_feedback = new List<int>() { 1, 3, 5, 7, 9, 11 };
+        var rounds_feedback = new List<int>() { 1, 3, 5, 7, 9, 11 }; // List of rounds after which feedback is triggered. Not sure if this should go to a config file.
         var currentyear = PestApplication.Instance.theWorld.currentYear;
         
         if (rounds_feedback.IndexOf(currentyear) != -1)
