@@ -24,13 +24,40 @@ public class Feedback
             int fpos = Random.Range(0, utterances.Count);
             var utt = utterances[fpos];
             RemoveUtteranceFromList(fpos, utterances);
-            return utt;
+            return ReplaceNumericVariables(utt);
         }
         else
         {
             return "";
         }
 
+    }
+
+    public string ReplaceNumericVariables(string utterance)
+    {
+        if (utterance.Contains("{collectiveAVG}"))
+        {
+            double collectiveAVG = 0;
+            foreach (int value in PestApplication.Instance.gameManager.collective)
+            {
+                collectiveAVG += value;
+            }
+            collectiveAVG /= PestApplication.Instance.gameManager.collective.Count;
+            utterance = utterance.Replace("{collectiveAVG}", ((int)collectiveAVG).ToString());
+        }
+        if (utterance.Contains("{farmerContributionAVG}"))
+        {
+            double collectiveAVG = 0;
+            foreach (int value in PestApplication.Instance.gameManager.collective)
+            {
+                collectiveAVG += value;
+            }
+            collectiveAVG /= PestApplication.Instance.gameManager.collective.Count;
+            //TODO this assumes no farm will be caught during the game
+            double farmerContributionAVG = collectiveAVG / PestApplication.Instance.theWorld.activePlayers.Count;
+            utterance = utterance.Replace("{farmerContributionAVG}", ((int)farmerContributionAVG).ToString());
+        }
+        return utterance;
     }
 
 
@@ -57,29 +84,7 @@ public class Feedback
 
         int randIndex = RandomSingleton.GetInstance().Next(0, possibleFeedbacks.Count);
         string chosenFeedback = possibleFeedbacks[randIndex];
-        if (chosenFeedback.Contains("{collectiveAVG}"))
-        {
-            double collectiveAVG = 0;
-            foreach (int value in PestApplication.Instance.gameManager.collective)
-            {
-                collectiveAVG += value;
-            }
-            collectiveAVG /= PestApplication.Instance.gameManager.collective.Count;
-            chosenFeedback = chosenFeedback.Replace("{collectiveAVG}", ((int) collectiveAVG).ToString());
-        }
-        if (chosenFeedback.Contains("{farmerContributionAVG}"))
-        {
-            double collectiveAVG = 0;
-            foreach (int value in PestApplication.Instance.gameManager.collective)
-            {
-                collectiveAVG += value;
-            }
-            collectiveAVG /= PestApplication.Instance.gameManager.collective.Count;
-            //TODO this assumes no farm will be caught during the game
-            double farmerContributionAVG = collectiveAVG / PestApplication.Instance.theWorld.activePlayers.Count;
-            chosenFeedback = chosenFeedback.Replace("{farmerContributionAVG}", ((int)farmerContributionAVG).ToString());
-        }
-        return chosenFeedback;
+        return ReplaceNumericVariables(chosenFeedback);
     }
 }
 
