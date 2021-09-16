@@ -5,7 +5,7 @@
     "maxY": -1, 
     "maxYear": 15,
     "tutorial": true,
-    "easeOfPestControl": 0.2,
+    "easeOfPestControl": 0.8,
 
 
     "activePlayers": [
@@ -13,8 +13,8 @@
             "id": "red",
             "type": "scripted",
             "farmLocation": {"x": 0, "y": -5},
-            "wallet": 5, 
-            "revenuePerYear": 2,
+            "wallet": 10, 
+            "revenuePerYear": 5,
             "actions": [3, 2, 1, 4, 5,
                         2, 2, 2, 2, 2,
                         2, 2, 2, 2, 2]
@@ -23,8 +23,8 @@
             "id": "blue",
             "type": "scripted",
             "farmLocation": {"x": 0, "y": -3},
-            "wallet": 5, 
-            "revenuePerYear": 2,
+            "wallet": 10, 
+            "revenuePerYear": 5,
             "actions": [3, 2, 1, 4, 5,
                 2, 2, 2, 2, 2,
                 2, 2, 2, 2, 2]
@@ -33,8 +33,8 @@
             "id": "green",
             "type": "scripted",
             "farmLocation": {"x": 2, "y": -4},
-            "wallet": 5, 
-            "revenuePerYear": 2,
+            "wallet": 10, 
+            "revenuePerYear": 5,
             "actions": [3, 2, 1, 4, 5,
                 2, 2, 2, 2, 2,
                 2, 2, 2, 2, 2]
@@ -43,15 +43,15 @@
             "id": "yellow",
             "type": "human",
             "farmLocation": {"x": 1, "y": -1},
-            "wallet": 5, 
-            "revenuePerYear": 2
+            "wallet": 10, 
+            "revenuePerYear": 5
         },
         {
             "id": "grey",
             "type": "scripted",
             "farmLocation": {"x": -2, "y": -1},
-            "wallet": 5, 
-            "revenuePerYear": 2,
+            "wallet": 10, 
+            "revenuePerYear": 5,
             "actions": [3, 2, 1, 4, 5,
                 2, 2, 2, 2, 2,
                 2, 2, 2, 2, 2]

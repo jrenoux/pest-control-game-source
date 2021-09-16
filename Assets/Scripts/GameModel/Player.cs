@@ -59,7 +59,7 @@ public class Player
             break;
 
             case "fixed": 
-            contribution = this.revenuePerYear - 1;
+            contribution = this.revenuePerYear /2;
             SetContribution(contribution); 
             break;
 
