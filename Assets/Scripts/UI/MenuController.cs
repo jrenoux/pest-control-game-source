@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+
 public class MenuController : MonoBehaviour
 {
     [SerializeField]
@@ -31,6 +32,9 @@ public class MenuController : MonoBehaviour
     private Button payButton;
 
     [SerializeField]
+    private Button robotButton;
+
+    [SerializeField]
     private GameObject endGamePopup;
 
     [SerializeField]
@@ -52,11 +56,36 @@ public class MenuController : MonoBehaviour
     [SerializeField] 
     private Camera camera;
 
+    [SerializeField]
+    private GameObject popupPestControl;
+
+    [SerializeField]
+    private Text totalContribution;
+
+    [SerializeField]
+    private Text probabilitySpreading;
+
+    [SerializeField]
+    private Image riskImage;
+
+    [SerializeField]
+    private GameObject popupPestSuccess;
+
+    [SerializeField]
+    private Text successText;
+
+    [SerializeField]
+    private Text earningsText;
+
     public bool endGame {get; set;}
+
+    private Sprite ROBOT_NEUTRAL, ROBOT_TALKING;
 
     void Start()
     {
         Reset();
+        ROBOT_NEUTRAL = Resources.Load<Sprite>("Sprites/robot_neutral");
+        ROBOT_TALKING = Resources.Load<Sprite>("Sprites/robot_talking");
     }
 
     void Update()
@@ -76,6 +105,7 @@ public class MenuController : MonoBehaviour
         upButton.interactable = true;
         downButton.interactable = true;
         payButton.interactable = true;
+        //robotButton.interactable = true;
     }
 
     public void DeactivateMenu()
@@ -83,6 +113,7 @@ public class MenuController : MonoBehaviour
         upButton.interactable = false;
         downButton.interactable = false;
         payButton.interactable = false;
+        //robotButton.interactable = false;
     }
 
     public int ProcessContribution()
@@ -124,6 +155,7 @@ public class MenuController : MonoBehaviour
     public void ActivateConnectionPopup()
     {
         connectionPopup.SetActive(true);
+        Debug.Log("here");
     }
 
     public void DeactivateConnectionPopup()
@@ -191,4 +223,54 @@ public class MenuController : MonoBehaviour
         return wallet.GetComponent<RectTransform>().rect;
     }
 
+
+    /** Pest Control Pop-Up **/
+
+    public void ActivatePestControlPopUp()
+    {
+        popupPestControl.SetActive(true);
+
+    }
+
+    public void DeactivatePestControlPopUp()
+    {
+        popupPestControl.SetActive(false);
+        PestApplication.Instance.gameManager.StartPestControl();
+    }
+
+    public void ChangePestControlResult(string messageType, string messageText)
+    {
+       
+        switch (messageType)
+        {
+            case "pest":
+                successText.text = messageText;
+                break;
+            case "earnings":
+                earningsText.text = messageText;
+                break;
+        }
+
+    }
+
+    public void ActivatePestControlResult()
+    {
+        popupPestSuccess.SetActive(true);
+    }
+
+    public void DeactivatePestControlResultPopUp()
+    {
+        popupPestSuccess.SetActive(false);
+        PestApplication.Instance.gameManager.ShowFeedback();
+    }
+
+    public void SetTalkingRobot()
+    {
+        robotButton.transform.GetComponent<Image>().sprite = ROBOT_TALKING;
+    }
+
+    public void SetNeutralRobot()
+    {
+        robotButton.transform.GetComponent<Image>().sprite = ROBOT_NEUTRAL;
+    }
 }

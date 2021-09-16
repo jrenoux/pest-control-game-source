@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+
 public class Player 
 {
     // get/set are needed here because of the json instantiation
@@ -14,8 +16,7 @@ public class Player
 
     public int wallet {get;set;}
 
-    
-
+    public List<int> contributionsHistory;
     private int contribution {get; set;}
 
     private GaussianRandom gaussianRandom = new GaussianRandom(RandomSingleton.GetInstance());
@@ -109,7 +110,8 @@ public class Player
     public void SetContribution(int contribution)
     {
         this.contribution = contribution;
-        this.wallet = this.wallet - contribution;        
+        this.wallet = this.wallet - contribution;
+        this.contributionsHistory.Add(contribution);
     }
 
     public int GetContribution()

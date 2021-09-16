@@ -5,6 +5,8 @@ using UnityEngine.Tilemaps;
 public class TutorialController : MonoBehaviour 
 {
     [SerializeField]
+    private GameObject tutorialIntroduction;
+    [SerializeField]
     private GameObject tutorialPopup;
     
     [SerializeField]
@@ -13,15 +15,29 @@ public class TutorialController : MonoBehaviour
     private Tilemap tilemap;
     [SerializeField]
     private Camera camera;
+    [SerializeField]
+    private GameObject gameCover;
+    [SerializeField]
+    private GameObject finalArrow;
+    [SerializeField]
+    private GameObject finalArrowDown;
 
     public void Start() 
     {
+        tutorialIntroduction.SetActive(false);
         tutorialPopup.SetActive(false);
+
     }
 
     public void Update()
     {
     
+    }
+
+    public void DeactivateTutorialIntroduction()
+    {
+        tutorialIntroduction.SetActive(false);
+        gameCover.SetActive(false);
     }
 
     public void DeactivateTutorialPopup()
@@ -33,6 +49,33 @@ public class TutorialController : MonoBehaviour
     {
         PestApplication.Instance.tutorialManager.NextTutorial();
     }
+
+
+    public void DisplayTutorialIntroduction()
+    {
+        tutorialIntroduction.SetActive(true);
+    }
+
+    public void DisplayFinalArrow()
+    {
+        finalArrow.SetActive(true);
+    }
+
+    public void HideFinalArrow()
+    {
+        finalArrow.SetActive(false);
+    }
+
+    public void DisplayFinalArrowDown()
+    {
+        finalArrowDown.SetActive(true);
+    }
+
+    public void HideFinalArrowDown()
+    {
+        finalArrowDown.SetActive(false);
+    }
+
 
     public void DisplayTutorialPanel(string title, string message, string buttonText,
                                      Vector3 windowPosition, 
@@ -219,6 +262,12 @@ public class TutorialController : MonoBehaviour
 
 
         DisplayTutorialPanelAtPoint(title, message, buttonText, tileCoordinates, arrowAngle );
+    }
+
+    public void DisplayIntroduction()
+    {
+        arrowImage.gameObject.SetActive(false);
+        tutorialIntroduction.SetActive(true);
     }
 
     public void DisplayTutorialPanel(string title, string message, string buttonText)

@@ -9,6 +9,27 @@ public class ChatController : MonoBehaviour
     [SerializeField]
     private GameObject participantAnswerSection;
 
+    [SerializeField]
+    private GameObject agentPanel;
+
+    [SerializeField]
+    private GameObject summaryPanel;
+
+    [SerializeField]
+    private Text coinsCollected;
+
+    [SerializeField]
+    private Text probabilitySpreading;
+
+    [SerializeField]
+    private Text previousYear;
+
+    [SerializeField]
+    private Image riskImage;
+
+    [SerializeField]
+    private Text successMessage;
+
     private List<GameObject> messageList;
 
     public void Start()
@@ -42,19 +63,100 @@ public class ChatController : MonoBehaviour
 
     public void ConfirmInput()
     {
-        PestApplication.Instance.gameManager.ActionConfirmed();
-        participantAnswerSection.SetActive(false);
+        //PestApplication.Instance.gameManager.ActionConfirmed();
+        //participantAnswerSection.SetActive(false);
+        PestApplication.Instance.menuController.ActivateMenu();
+        DectivateAgentPanel();
+
     }
 
     public void CancelInput()
     {
         PestApplication.Instance.gameManager.ActionCancelled();
         participantAnswerSection.SetActive(false);
+        DectivateAgentPanel();
     }
 
     public void ActivateAnswerSection()
     {
+        PestApplication.Instance.menuController.SetTalkingRobot();
         participantAnswerSection.SetActive(true);
     }
+
+    public void ActivateAgentPanel()
+    {
+        PestApplication.Instance.menuController.DeactivateMenu();
+        agentPanel.SetActive(true);
+    }
+
+    public void DectivateAgentPanel()
+    {
+        PestApplication.Instance.menuController.ActivateMenu();
+        PestApplication.Instance.menuController.SetNeutralRobot();
+        agentPanel.SetActive(false);
+        PestApplication.Instance.gameManager.StartNewYear();
+    }
+
+    public void ToggleAgentPanel()
+    {
+        if (!participantAnswerSection.activeSelf && messageList.Count > 0)
+        {
+            if (agentPanel.activeSelf)
+            {
+                DectivateAgentPanel();
+            }
+            else
+            {
+                ActivateAgentPanel();
+            }
+        }
+    }
+
+
+    /*** SUMMARY ***/
+
+
+    public void ActivateSummary(int ncoins, double pspreading, int year)
+    { 
+        coinsCollected.text = ncoins.ToString();
+        probabilitySpreading.text = ((int)pspreading).ToString();
+        previousYear.text = year.ToString();
+        summaryPanel.SetActive(true);
+
+        switch (pspreading)
+        {
+            case double n when n >= 80.0:
+
+                riskImage.sprite = Resources.Load<Sprite>("Sprites/bad");
+                break;
+            case double n when n >= 60.0:
+                riskImage.sprite = Resources.Load<Sprite>("Sprites/poor");
+                break;
+            case double n when n >= 50.0:
+                riskImage.sprite = Resources.Load<Sprite>("Sprites/fair");
+                break;
+            case double n when n < 50.0:
+                riskImage.sprite = Resources.Load<Sprite>("Sprites/good");
+                break;
+            case double n when n <= 10.0:
+                riskImage.sprite = Resources.Load<Sprite>("Sprites/excelent");
+                break;
+        }
+
+        if (PestApplication.Instance.theWorld.pestProgression.latestPestControlSuccess)
+        {
+             successMessage.text = "The Pest Control was <color=#48a7c7>successful</color>!";
+        }
+        else
+        {
+            successMessage.text= "The Pest Control was <color=red>unsuccessful</color>.";
+        }
+    }
+
+    public void DeactivateSummary()
+    {
+        summaryPanel.SetActive(false);
+    }
+
 
 }

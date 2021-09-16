@@ -2,17 +2,21 @@ using UnityEngine;
 using UnityEngine.UI;
 public enum TutorialState
 {
+    Introduction,
     Context,
-    Farm, 
-    Pest, 
-    Collective, 
-    Wallet, 
-    Contribution, 
     Year,
+    Farm,
+    PlayerIcon,
+    Wallet,
+    Pest, 
+    Collective,
+    Contribution,
     Chat,
+    Agent,
     TestGame, 
     WaitingEndTestGame,
-    StudyGame, 
+    StudyGame,
+    StudyGamePart2,
     End
 }
 public class TutorialManager : MonoBehaviour
@@ -22,11 +26,15 @@ public class TutorialManager : MonoBehaviour
     [SerializeField]
     private GameObject wallet;
     [SerializeField]
+    private GameObject playerIcon;
+    [SerializeField]
     private GameObject contribution;
     [SerializeField]
     private GameObject year;
     [SerializeField]
     private GameObject chat;
+    [SerializeField]
+    private GameObject agent;
 
 
     private bool hasStateChanged = false;
@@ -48,12 +56,20 @@ public class TutorialManager : MonoBehaviour
         {
             switch(currentState)
             {
+                case TutorialState.Introduction:
+                TutorialIntroduction();
+                break;
+
                 case TutorialState.Context:
                 TutorialContext();
                 break;
 
                 case TutorialState.Farm:
                 TutorialFarm();
+                break;
+
+                case TutorialState.PlayerIcon:
+                TutorialPlayerIcon();
                 break;
 
                 case TutorialState.Pest:
@@ -80,6 +96,10 @@ public class TutorialManager : MonoBehaviour
                 TutorialChat();
                 break;
 
+                case TutorialState.Agent:
+                TutorialAgent();
+                break;
+
                 case TutorialState.TestGame:
                 TutorialTestGame();
                 break;
@@ -92,10 +112,15 @@ public class TutorialManager : MonoBehaviour
                 TutorialStudyGame();
                 break;
 
+                case TutorialState.StudyGamePart2:
+                TutorialStudyGamePart2();
+                break;
+
                 case TutorialState.End:
                 Debug.Log("Tutorial End");
                 PestApplication.Instance.protocolManager.TutorialFinished();
                 tutorialController.DeactivateTutorialPopup();
+                tutorialController.HideFinalArrowDown();
                 break;
             }
             hasStateChanged = false;
@@ -107,7 +132,14 @@ public class TutorialManager : MonoBehaviour
     {
         if(currentState != TutorialState.End)
         {
-            currentState = (TutorialState)tutorialStepNumber; // we do it before increment becase the step actually starts at 1.     
+
+            if (currentState == 0)
+            {
+                tutorialController.DeactivateTutorialIntroduction();
+            }
+
+            currentState = (TutorialState)tutorialStepNumber; // we do it before increment becase the step actually
+                                                              // starts at 1
             tutorialStepNumber++;   
             hasStateChanged = true;
         }
@@ -135,12 +167,21 @@ public class TutorialManager : MonoBehaviour
         NextTutorial();
     }
 
+
+    private void TutorialIntroduction()
+    {
+        tutorialController.DisplayIntroduction();
+        Debug.Log("Tutorial Introduction");
+    }
+
+
     private void TutorialContext()
     {
-        string title = "Tutorial 1/9";
-        string message = "In this game, each player controls one farm on the board. " +
-        "Your goal as a player is to reach the end of the game while collecting as much coins as possible. " +
-        "But beware: a pest is spreading through the land and endangering the farms. \n \n" + 
+        string title = "<color=#52433D>Tutorial 1/11</color>";
+        string message = "In this game each player controls a farm corresponding to one paddy in the board. " +
+        "Each year your farm will give you profit and your goal is to maximize that profit by the end of the game."+
+        "Yet, pest is spreading from abandoned paddies and endangering all the farms. \n \n" +
+        "<b>If you lose your farm, you lose all your profit. </b>\n \n" + 
         "Let's go through the main components of the game. ";
 
         string buttonText = "Next";
@@ -150,15 +191,26 @@ public class TutorialManager : MonoBehaviour
         Debug.Log("Tutorial Context");
     }
 
+    private void TutorialYear()
+    {
+        // show the year and adapt the text to the game configuration
+        Debug.Log("Tutorial Year");
+        string title = "<color=#52433D>Tutorial 2/11</color>";
+        string message = "This is the year counter. \n A game has a total duration of " + PestApplication.Instance.theWorld.maxYear + " years. \n \n "+
+            "The game can end sooner for you if you do not survive a pest outbreak.";
+        string buttonText = "Next";
+
+        tutorialController.DisplayTutorialPanel(title, message, buttonText, year);
+    }
+
     private void TutorialFarm()
     {
         // show the tutorial window connected to the player farmer tile 
         Location farmLocation = PestApplication.Instance.theWorld.humanPlayer.farmLocation;
 
-        string title = "Tutorial 2/9";
-        string message = "This is your farm. It is circled in black for you to see it better. " +
-        "You can also see your player color in the top left circle. " +
-        "Your farm gives you two coins per year as long as it is safe from the pest. ";
+        string title = "<color=#52433D>Tutorial 3/11</color>";
+        string message = "<b>This is your farm</b>. It is circled in black for you to see it better. \n \n" +
+        "As long as the pest doesn't get you, your farm gives you <b>two coins per year.</b> ";
 
         string buttonText = "Next";
 
@@ -167,15 +219,42 @@ public class TutorialManager : MonoBehaviour
         Debug.Log("Tutorial Farm");
     }
 
+
+    private void TutorialPlayerIcon()
+    {
+
+        string title = "<color=#52433D>Tutorial 4/11</color>";
+        string message = "This is your player color that matches the color of your farm.";
+
+        string buttonText = "Next";
+
+        tutorialController.DisplayTutorialPanel(title, message, buttonText, playerIcon);
+
+        Debug.Log("Tutorial Farm");
+    }
+
+    private void TutorialWallet()
+    {
+        Debug.Log("Tutorial Wallet");
+        // show the wallet
+        string title = "<color=#52433D>Tutorial 5/11</color>";
+        string message = "This is your wallet. It shows how many coins you've collected throughout the game. \n \n " +
+            "If your're lucky and the pest doesn't get to your farm, at the end of the game, the money <b>in your wallet</b> will be converted into a <b>bonus</b>.";
+        string buttonText = "Next";
+
+        tutorialController.DisplayTutorialPanel(title, message, buttonText, wallet);
+    }
+
     private void TutorialPest()
     {
         // show the tutorial window connected to the pest farm
         Debug.Log("Tutorial Pest");
         Location pestLocation = PestApplication.Instance.theWorld.pestProgression.initialPestLocation;
 
-        string title = "Tutorial 3/9";
-        string message = "This is the pest. " + 
-        "If the farmers don't do anything, it will spread each year to one neighboring tile. ";
+        string title = "<color=#52433D>Tutorial 6/11</color>";
+        string message = "A paddy of this color identifies the pest. \n \n" +
+            "A pest outbreak occurs at an abandoned paddy and <b>spreads with a certain probability.</b> " +
+        "If not controlled, it will directly threaten the frontier of any farmer adjacent to it. ";
 
         string buttonText = "Next";
 
@@ -188,88 +267,99 @@ public class TutorialManager : MonoBehaviour
         Debug.Log("Tutorial Collective");
         Location pestLocation = PestApplication.Instance.theWorld.pestProgression.initialPestLocation;
 
-        string title = "Tutorial 4/9";
-        string message = "To reduce the risk of the pest spreading, farmers can contribute coins to a collective. " + 
-        "The more coins are collected, the less likely the pest will spread. ";
+        string title = "<color=#52433D>Tutorial 7/11</color>";
+        string message = "To reduce the risk of pest spreading, farmers can contribute to an agricultural collective. " + 
+        "The more coins collected, the less likely is the pest spreading. " +
+        "Each year farmers must decide <b>if and how much they want to contribute</b> to the collective.";
 
         string buttonText = "Next";
 
         tutorialController.DisplayTutorialPanel(title, message, buttonText, pestLocation);
     } 
-    private void TutorialWallet()
-    {
-         Debug.Log("Tutorial Wallet");
-        // show the wallet
-        string title = "Tutorial 5/9";
-        string message = "This is your wallet. It shows how much coins you have each year.";
-        string buttonText = "Next";
-
-        tutorialController.DisplayTutorialPanel(title, message, buttonText, wallet);
-    }
+    
 
     private void TutorialContribution()
     {
         // show the up, down, and pay buttons
         Debug.Log("Tutorial Contribution");
-        string title = "Tutorial 6/9";
-        string message = "This is where you decide each year how much coins you want to contribute to the collective. " +
-        "The coins you spend will be removed from your wallet. ";
+        string title = "<color=#52433D>Tutorial 8/11</color>";
+        string message = "A game turn starts setting a contribution to the agricultural collective. \n \n By moving arrows up and down and then hitting 'Pay', you decide how many coins you want to contribute to the collective, each year. " +
+        "The coins you spend will be subtracted from your wallet. ";
 
         string buttonText = "Next";
         tutorialController.DisplayTutorialPanel(title, message, buttonText, contribution);
     }
 
 
-    private void TutorialYear()
-    {
-        // show the year and adapt the text to the game configuration
-        Debug.Log("Tutorial Year");
-        string title = "Tutorial 7/9";
-        string message = "This is the year counter. To complete the game, you must reach year " + PestApplication.Instance.theWorld.maxYear + ". ";
-        string buttonText = "Next";
-        
-        tutorialController.DisplayTutorialPanel(title, message, buttonText, year);
-    }
+    
 
     private void TutorialChat()
     {
         // show the chat window and adapt the text to the condition
         Debug.Log("Tutorial Chat");
-        string title = "Tutorial 8/9";
+        string title = "<color=#52433D>Tutorial 9/11</color>";
         string buttonText = "Next";
         string message = "";
-        if(!PestApplication.Instance.chatManager.feedback.condition.Equals("control"))
-        {
-            message = "This box will contain information about the game progression. Occasionally, an artificial agent will give you feedback about your actions, so keep an eye out!";
-        }
-        else
-        {
-            message = "This box will contain information about the game progression. Keep an eye on it!";    
-        }
+        //if(!PestApplication.Instance.chatManager.feedback.condition.Equals("control"))
+        //{
+        //    message = "This box will contain a summary of what happened the previous year."+
+        //        "It will contain information about how many coins were collected during that year and the corresponding probability of pest spreading.";
 
+        //}
+        //else
+        //{
+        //    message = "This box will contain information about the game progression. Keep an eye on it!";    
+        //}
+        message = "This box will contain a summary of what happened the previous year." +
+                  "It will contain information about how many coins were collected during that year and the corresponding probability of pest spreading.";
 
         tutorialController.DisplayTutorialPanel(title, message, buttonText, chat);
+    }
+
+    private void TutorialAgent()
+    {
+        // show the chat window and adapt the text to the condition
+        Debug.Log("Tutorial Agent");
+        string title = "<color=#52433D>Tutorial 10/11</color>";
+        string buttonText = "Next";
+        string message = "";
+        //if (!PestApplication.Instance.chatManager.feedback.condition.Equals("control"))
+        //{
+        //    message = "Throughout the game this Artificial Agent will give you information about the game. Keep an eye on it!";
+
+        //}
+        //else
+        //{
+        //    message = "This box will contain information about the game progression. Keep an eye on it!"; // NOT SURE WHAT TO WRITE HERE
+        //}
+
+        message = "Throughout the game this Artificial Agent will give you some information about the game. Keep an eye on it! \n \n"+
+            "A message will pop up everytime it has something to say \n \n" +
+            "You can revisit its previous messages by clicking on it";
+        tutorialController.DisplayTutorialPanel(title, message, buttonText, agent);
     }
 
     private void TutorialTestGame()
     {
         // window without arrow explaning the test game
         Debug.Log("Tutorial Test Game");
-        string title = "Tutorial 9/9";
+        string title = "<color=#52433D>Tutorial 11/11</color>";
         string buttonText = "Start Test Game";
         string message = "";
 
         if(!PestApplication.Instance.chatManager.feedback.condition.Equals("control"))
         {
-            message = "Now you will play a test game against artificial players, so that you can familiarize yourself with the game. " + 
-            "During this test game, the artificial players will always contribute the same amount of coins. \n\n" + 
-            "Later you will be paired with human players to play the real game. \nYou will not receive feedback during the test game, only during the real game.  " ;
+            message = "Now you will play a <b><i>test game</i></b> against artificial players, so that you can familiarize yourself with the interface. " + 
+            "During this test game, the artificial players will always contribute the same amount of coins. \n\n" +
+            "After you will be paired with human players to play the <b><i>real game</i></b>. \nYou will not receive any feedback during the test game, only during the real game.  \n \n" +
+            "The coins gathered during the <b><i>test game</i></b> will not be part of your final bonus.";
         }
         else
         {
-            message = "Now you will play a test game against artificial players, so that you can familiarize yourself with the game. " + 
-            "During this test game, the artificial players will always contribute the same amount of coins. \n\n" + 
-            "Later you will be paired with human players to play the real game.  " ;
+            message = "Now you will play a <b><i>test game</i></b> against artificial players, so that you can familiarize yourself with the interface. " + 
+            "During this test game, the artificial players will always contribute the same amount of coins. \n\n" +
+            "After you will be paired with human players to play the <b><i>real game</i></b>. \n \n" +
+            "The coins gathered during the <b><i>test game</i></b> will not be part of your final bonus.";
         }
         
 
@@ -291,12 +381,26 @@ public class TutorialManager : MonoBehaviour
     {
         // window without arrow explaining the real game
         Debug.Log("Tutorial Study Game");
-        string title = "Ready to play!";
-        string message = "You will now we connected to " + (PestApplication.Instance.theWorld.activePlayers.Count - 1) + " othe players to play the study game. " + 
-        "Rembemer to check which color is your farm on the top left. Good luck!";
+        string title = "Let's play!";
+        string message = "You will now be connected to " + (PestApplication.Instance.theWorld.activePlayers.Count - 1) + " other players to play the real game. " + 
+        "Remember to check the color of your farm at the top hand-left side of the window.";
+        string buttonText = "Next";
+
+        tutorialController.DisplayTutorialPanel(title, message, buttonText);
+        tutorialController.DisplayFinalArrow();
+    }
+
+    private void TutorialStudyGamePart2()
+    {
+        // window without arrow explaining the real game
+        Debug.Log("Tutorial Study Game");
+        string title = "Let's play!";
+        string message = "Your wallet starts with this amount of coins. Good luck!";
         string buttonText = "Start Game";
 
         tutorialController.DisplayTutorialPanel(title, message, buttonText);
+        tutorialController.HideFinalArrow();
+        tutorialController.DisplayFinalArrowDown();
     }
 
 
@@ -316,5 +420,5 @@ public class TutorialManager : MonoBehaviour
     // };
 
 
-    
+
 }
