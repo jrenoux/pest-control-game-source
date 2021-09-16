@@ -18,21 +18,26 @@
             "actions": [3, 2, 1, 4, 5,
                         2, 2, 2, 2, 2,
                         2, 2, 2, 2, 2]
-
         },
         {
             "id": "blue",
-            "type": "fixed",
+            "type": "scripted",
             "farmLocation": {"x": 0, "y": -3},
             "wallet": 5, 
-            "revenuePerYear": 2
+            "revenuePerYear": 2,
+            "actions": [3, 2, 1, 4, 5,
+                2, 2, 2, 2, 2,
+                2, 2, 2, 2, 2]
         },
         {
             "id": "green",
-            "type": "fixed",
+            "type": "scripted",
             "farmLocation": {"x": 2, "y": -4},
             "wallet": 5, 
-            "revenuePerYear": 2
+            "revenuePerYear": 2,
+            "actions": [3, 2, 1, 4, 5,
+                2, 2, 2, 2, 2,
+                2, 2, 2, 2, 2]
         },
         {
             "id": "yellow",
@@ -43,10 +48,13 @@
         },
         {
             "id": "grey",
-            "type": "fixed",
+            "type": "scripted",
             "farmLocation": {"x": -2, "y": -1},
             "wallet": 5, 
-            "revenuePerYear": 2
+            "revenuePerYear": 2,
+            "actions": [3, 2, 1, 4, 5,
+                2, 2, 2, 2, 2,
+                2, 2, 2, 2, 2]
         }
     ],
 
@@ -55,20 +63,20 @@
         "initialPestLocation" : {"x": -2, "y": -5},
         "type": "scripted",
         "pattern": [
-            {"x": -1, "y": -5},
             {"x": -1, "y": -4},
             {"x": -1, "y": -3},
-            {"x": -1, "y": -2},
+            {"x": 0, "y": -4},
             {"x": 0, "y": -2},
-            {"x": 0, "y": -5},
-            {"x": -1, "y": -1}
+            {"x": -2, "y": -3},
+            {"x": -1, "y": -1},
+            {"x": 1, "y": -4}
         ],
         "years": [
+            1, 
             2, 
-            4, 
+            5, 
             7, 
             8, 
-            9, 
             11, 
             14
         ]
