@@ -64,7 +64,7 @@ public class ChatController : MonoBehaviour
     public void ConfirmInput()
     {
         //PestApplication.Instance.gameManager.ActionConfirmed();
-        //participantAnswerSection.SetActive(false);
+        participantAnswerSection.SetActive(false);
         PestApplication.Instance.menuController.ActivateMenu();
         DectivateAgentPanel();
 
