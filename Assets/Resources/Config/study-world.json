@@ -11,10 +11,14 @@
     "activePlayers": [
         {
             "id": "red",
-            "type": "prosocial",
+            "type": "scripted",
             "farmLocation": {"x": 0, "y": -5},
             "wallet": 5, 
-            "revenuePerYear": 2
+            "revenuePerYear": 2,
+            "actions": [3, 2, 1, 4, 5,
+                        2, 2, 2, 2, 2,
+                        2, 2, 2, 2, 2]
+
         },
         {
             "id": "blue",

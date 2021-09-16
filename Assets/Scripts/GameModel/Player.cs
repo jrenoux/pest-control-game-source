@@ -16,8 +16,11 @@ public class Player
 
     public int wallet {get;set;}
 
+    public List<int> actions {get;set;}
+
     public List<int> contributionsHistory;
     private int contribution {get; set;}
+    
 
     private GaussianRandom gaussianRandom = new GaussianRandom(RandomSingleton.GetInstance());
 
@@ -32,6 +35,19 @@ public class Player
         int contribution = 0;
         switch(type)
         {
+            case "scripted":
+            // gett current year
+            int currentYear = PestApplication.Instance.theWorld.currentYear;
+            if(currentYear > actions.Count)
+            {
+                // raise problem
+                Debug.LogError("no action set for year " + currentYear);
+                contribution = -1;
+            }
+            contribution = actions[currentYear - 1];
+            SetContribution(contribution);
+            break;
+
             case "prosocial":
             contribution = CalculateProsocialContribution();
             SetContribution(contribution);
@@ -57,7 +73,7 @@ public class Player
         }
         return contribution;
     }
-    
+
     private int CalculateProsocialContribution()
     {
         // TODO 
