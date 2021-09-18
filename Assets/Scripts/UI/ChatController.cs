@@ -13,6 +13,9 @@ public class ChatController : MonoBehaviour
     private GameObject agentPanel;
 
     [SerializeField]
+    private GameObject agent;
+
+    [SerializeField]
     private GameObject summaryPanel;
 
     [SerializeField]
@@ -156,6 +159,15 @@ public class ChatController : MonoBehaviour
     public void DeactivateSummary()
     {
         summaryPanel.SetActive(false);
+    }
+
+    public void ActivateAgent()
+    {
+        agent.SetActive(true);
+    }
+    public void DeactivateAgent()
+    {
+        agent.SetActive(false);
     }
 
 

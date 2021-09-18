@@ -19,6 +19,16 @@ public class ChatManager : MonoBehaviour
         feedback = JsonConvert.DeserializeObject<Feedback>(feedbackJson);
         allUtterances = GetFeedbackUtterances();
         messageList = new List<string>();   
+
+        // if control condition, we deactivate the agent panel alltogether
+        if(feedback.condition == "control")
+        {
+            PestApplication.Instance.chatController.DeactivateAgent();
+        }
+        else
+        {
+            PestApplication.Instance.chatController.ActivateAgent();
+        }
     }
 
     public (bool, string) SendFeedback()
