@@ -9,13 +9,13 @@ using System.Text;
 public class DataLogManager : MonoBehaviour
 {
     private System.Guid currentSessionId;
-    public string InitNewGameLog(string prolificId, string gameType, string condition, World theWorld)
+    public string InitNewGameLog(string prolificId, string gameType, string condition, long startGameTimestamp, World theWorld)
     {
         // setup the config information
         // create a new session ID
         currentSessionId = System.Guid.NewGuid();
         // serialize and stores the game config info
-        DataEntryGameConfig gameConfig = new DataEntryGameConfig(prolificId, currentSessionId.ToString(), condition, gameType, theWorld);
+        DataEntryGameConfig gameConfig = new DataEntryGameConfig(prolificId, currentSessionId.ToString(), condition, gameType, startGameTimestamp, theWorld);
 
         // store in DB
         string entityJson = JsonConvert.SerializeObject(gameConfig);

@@ -22,6 +22,8 @@ public class DataEntryRound
     private string userId;
     [JsonProperty]
     private string sessionId;
+    [JsonProperty]
+    private long playerActionTimestamp;
 
     public DataEntryRound(string userId, string sessionId, int roundNumber, HashSet<GridTile> currentMapState) 
     {
@@ -40,6 +42,11 @@ public class DataEntryRound
             map.Add(tile.ToString());
         }
                 
+    }
+
+    public void SetActionTimestamp(long timestamp)
+    {
+        this.playerActionTimestamp = timestamp;
     }
 
     public void SetContribution(int contribution)

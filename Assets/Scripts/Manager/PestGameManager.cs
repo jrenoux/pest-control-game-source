@@ -468,6 +468,11 @@ public class PestGameManager : MonoBehaviour
     {
         Debug.Log("PestGameManager.Paid");
         SetState(GameStates.ConfirmPlayerInput); // we go to the confirm state
+        // We log the timestamp of the contribution
+        DateTimeOffset now = (DateTimeOffset)DateTime.UtcNow;
+
+		long actionTimestamp = now.ToUnixTimeMilliseconds(); // 1565642183
+        roundLog.SetActionTimestamp(actionTimestamp);
     }
 
     public void ActionConfirmed()

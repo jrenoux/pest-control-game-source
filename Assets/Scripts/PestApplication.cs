@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
+using System;
 
 using Newtonsoft.Json;
 
@@ -81,8 +82,13 @@ public sealed class PestApplication
         testWorld.Init();
 
         theWorld = testWorld;
-        
-        sessionId = logManager.InitNewGameLog(prolificID, "test", chatManager.feedback.condition, theWorld);
+    
+		DateTimeOffset now = (DateTimeOffset)DateTime.UtcNow;
+
+		long startTestTimestamp = now.ToUnixTimeMilliseconds(); // 1565642183
+        Debug.Log(startTestTimestamp);
+
+        sessionId = logManager.InitNewGameLog(prolificID, "test", chatManager.feedback.condition, startTestTimestamp, theWorld);
 
         // Force map draw
         gameBoardController.GameBoardChanged();
@@ -100,7 +106,12 @@ public sealed class PestApplication
 
         theWorld = studyWorld;
 
-        sessionId = logManager.InitNewGameLog(prolificID, "study", chatManager.feedback.condition, theWorld);
+
+        DateTimeOffset now = (DateTimeOffset)DateTime.UtcNow;
+
+		long startStudyTimestamp = now.ToUnixTimeMilliseconds(); // 1565642183
+
+        sessionId = logManager.InitNewGameLog(prolificID, "study", chatManager.feedback.condition, startStudyTimestamp, theWorld);
 
         // force map redraw
         gameBoardController.GameBoardChanged();
