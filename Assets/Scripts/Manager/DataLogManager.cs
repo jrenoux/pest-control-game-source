@@ -9,25 +9,29 @@ using System.Text;
 public class DataLogManager : MonoBehaviour
 {
     private System.Guid currentSessionId;
-    public string InitNewGameLog(string prolificId, string gameType, string condition, long startGameTimestamp, World theWorld)
+    public DataEntryGameConfig InitNewGameLog(string prolificId, string gameType, string condition, World theWorld)
     {
         // setup the config information
         // create a new session ID
         currentSessionId = System.Guid.NewGuid();
         // serialize and stores the game config info
-        DataEntryGameConfig gameConfig = new DataEntryGameConfig(prolificId, currentSessionId.ToString(), condition, gameType, startGameTimestamp, theWorld);
+        DataEntryGameConfig gameConfig = new DataEntryGameConfig(prolificId, currentSessionId.ToString(), condition, gameType, theWorld);
 
+        // returns the gameConfig object
+        return gameConfig;
+
+    }
+
+    public void SaveGameConfig(DataEntryGameConfig config)
+    {
         // store in DB
-        string entityJson = JsonConvert.SerializeObject(gameConfig);
+        string entityJson = JsonConvert.SerializeObject(config);
         StartCoroutine(Upload(entityJson, result => {
             Debug.Log("MongoDB New Game Upload: " + result);
         }));
 
         // for debug we print it
         Debug.Log(entityJson);
-
-        // returns the session ID
-        return currentSessionId.ToString();
 
     }
 

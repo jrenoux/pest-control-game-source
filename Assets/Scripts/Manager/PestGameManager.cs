@@ -148,18 +148,19 @@ public class PestGameManager : MonoBehaviour
             if(isTestGame)
             {
                 roundLog = new DataEntryRound(PestApplication.Instance.prolificID, 
-                                            PestApplication.Instance.sessionId,
+                                            PestApplication.Instance.gameConfig.sessionId,
                                             PestApplication.Instance.theWorld.currentYear, 
                                             PestApplication.Instance.theWorld.tileList);
             }
             else
             {
                 roundLog = new DataEntryRound(PestApplication.Instance.prolificID, 
-                                            PestApplication.Instance.sessionId,
+                                            PestApplication.Instance.gameConfig.sessionId,
                                             PestApplication.Instance.theWorld.currentYear, 
                                             PestApplication.Instance.theWorld.tileList);
             }
-            
+            // record the beginning of the round
+            roundLog.SetStartRoundTimestamp(PestApplication.Instance.GetCurrentTimestamp());
         }
         
     }
@@ -394,6 +395,10 @@ public class PestGameManager : MonoBehaviour
 
     private void PrepareForNextYear()
     {
+        // save the log and reset it
+        PestApplication.Instance.logManager.SaveRound(roundLog);
+        roundLog = null;
+
         World theWorld = PestApplication.Instance.theWorld;
         if(theWorld.currentYear == theWorld.maxYear)
         {
@@ -406,14 +411,6 @@ public class PestGameManager : MonoBehaviour
             theWorld.currentYear = theWorld.currentYear + 1;
             SetState(GameStates.WaitingForPlayerInput);
         }
-        // save the log and reset it
-        PestApplication.Instance.logManager.SaveRound(roundLog);
-        roundLog = null;
-
-
-        
-
-
 
     }
 
@@ -511,6 +508,4 @@ public class PestGameManager : MonoBehaviour
     {
         SetState(GameStates.PrepareForNextYear);
     }
-        
-
 }

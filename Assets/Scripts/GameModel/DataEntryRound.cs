@@ -24,6 +24,8 @@ public class DataEntryRound
     private string sessionId;
     [JsonProperty]
     private long playerActionTimestamp;
+    [JsonProperty]
+    private long startRoundTimestamp; 
 
     public DataEntryRound(string userId, string sessionId, int roundNumber, HashSet<GridTile> currentMapState) 
     {
@@ -47,6 +49,11 @@ public class DataEntryRound
     public void SetActionTimestamp(long timestamp)
     {
         this.playerActionTimestamp = timestamp;
+    }
+
+    public void SetStartRoundTimestamp(long timestamp)
+    {
+        this.startRoundTimestamp = timestamp;
     }
 
     public void SetContribution(int contribution)

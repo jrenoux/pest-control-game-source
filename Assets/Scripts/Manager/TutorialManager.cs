@@ -138,6 +138,9 @@ public class TutorialManager : MonoBehaviour
 
     public void NextTutorial() 
     {
+        // Log when the "next" button has been clicked
+        PestApplication.Instance.gameConfig.AddTutorialClickTimestamp(PestApplication.Instance.GetCurrentTimestamp());
+
         if(currentState != TutorialState.End)
         {
 

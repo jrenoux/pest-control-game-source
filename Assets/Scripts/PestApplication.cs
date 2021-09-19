@@ -37,7 +37,7 @@ public sealed class PestApplication
     public bool debug {get;} = true;
 
     public  DataLogManager logManager {get;}
-    public string sessionId {get; set;}
+    public DataEntryGameConfig gameConfig {get; private set;}
 
 
     //////////////////////////////////////////////Contructior
@@ -83,12 +83,7 @@ public sealed class PestApplication
 
         theWorld = testWorld;
     
-		DateTimeOffset now = (DateTimeOffset)DateTime.UtcNow;
-
-		long startTestTimestamp = now.ToUnixTimeMilliseconds(); // 1565642183
-        Debug.Log(startTestTimestamp);
-
-        sessionId = logManager.InitNewGameLog(prolificID, "test", chatManager.feedback.condition, startTestTimestamp, theWorld);
+		gameConfig = logManager.InitNewGameLog(prolificID, "test", chatManager.feedback.condition, theWorld);
 
         // Force map draw
         gameBoardController.GameBoardChanged();
@@ -106,14 +101,17 @@ public sealed class PestApplication
 
         theWorld = studyWorld;
 
-
-        DateTimeOffset now = (DateTimeOffset)DateTime.UtcNow;
-
-		long startStudyTimestamp = now.ToUnixTimeMilliseconds(); // 1565642183
-
-        sessionId = logManager.InitNewGameLog(prolificID, "study", chatManager.feedback.condition, startStudyTimestamp, theWorld);
+        gameConfig = logManager.InitNewGameLog(prolificID, "study", chatManager.feedback.condition, theWorld);
 
         // force map redraw
         gameBoardController.GameBoardChanged();
+    }
+
+    public long GetCurrentTimestamp()
+    {
+        DateTimeOffset now = (DateTimeOffset)DateTime.UtcNow;
+        long timestamp = now.ToUnixTimeMilliseconds(); // 1565642183
+
+        return timestamp;
     }
 }
