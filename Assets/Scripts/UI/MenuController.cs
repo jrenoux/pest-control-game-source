@@ -77,6 +77,9 @@ public class MenuController : MonoBehaviour
     [SerializeField]
     private Text earningsText;
 
+    [SerializeField]
+    private GameObject testGameWatermark;
+
     public bool endGame {get; set;}
 
     private Sprite ROBOT_NEUTRAL, ROBOT_TALKING;
@@ -86,6 +89,7 @@ public class MenuController : MonoBehaviour
         Reset();
         ROBOT_NEUTRAL = Resources.Load<Sprite>("Sprites/robot_neutral");
         ROBOT_TALKING = Resources.Load<Sprite>("Sprites/robot_talking");
+        testGameWatermark.SetActive(false);
     }
 
     void Update()
@@ -272,5 +276,14 @@ public class MenuController : MonoBehaviour
     public void SetNeutralRobot()
     {
         robotButton.transform.GetComponent<Image>().sprite = ROBOT_NEUTRAL;
+    }
+
+    public void ActivateTestGameWatermark()
+    {
+        this.testGameWatermark.SetActive(true);
+    }
+    public void DeactivateTestGameWatermark()
+    {
+        this.testGameWatermark.SetActive(false);
     }
 }

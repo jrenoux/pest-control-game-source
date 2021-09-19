@@ -70,12 +70,14 @@ public class ProtocolManager : MonoBehaviour
     {
         Debug.Log("Start Test Game");
         PestApplication.Instance.gameManager.StartGame(true);
+        PestApplication.Instance.menuController.ActivateTestGameWatermark();
     }
 
     public void StartStudyTutorial() 
     {
         PestApplication.Instance.SetupStudyGame();
         PestApplication.Instance.tutorialManager.StartStudyTutorial();
+        PestApplication.Instance.menuController.DeactivateTestGameWatermark();
     }
 
     public void StartStudyGame()

@@ -104,6 +104,5 @@ public sealed class PestApplication
 
         // force map redraw
         gameBoardController.GameBoardChanged();
-
     }
 }
