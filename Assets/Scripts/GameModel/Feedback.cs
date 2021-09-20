@@ -23,6 +23,11 @@ public class Feedback
         {
             int fpos = Random.Range(0, utterances.Count);
             var utt = utterances[fpos];
+            while (currentyear == 1 && utt.Contains("{"))
+            {
+                fpos = Random.Range(0, utterances.Count);
+                utt = utterances[fpos];
+            }
             RemoveUtteranceFromList(fpos, utterances);
             return ReplaceNumericVariables(utt);
         }
