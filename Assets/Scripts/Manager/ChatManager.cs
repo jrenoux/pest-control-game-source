@@ -97,6 +97,11 @@ public class ChatManager : MonoBehaviour
         PestApplication.Instance.chatController.EmptyMessageList();
     }
 
+    public void PlayerInputConfirmed()
+    {
+        PestApplication.Instance.gameManager.StartNewYear();
+    }
+
     //TODO select by condition
     // The goal is to have 6 feedback lines per condition
     // The function below is working for the condition PA + PS

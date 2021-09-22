@@ -20,9 +20,9 @@
                         2, 2, 2, 2, 2]
         },
         {
-            "id": "blue",
+            "id": "yellow",
             "type": "scripted",
-            "farmLocation": {"x": 0, "y": -3},
+            "farmLocation": {"x": 1, "y": -1},
             "wallet": 10, 
             "revenuePerYear": 5,
             "actions": [3, 2, 1, 4, 5,
@@ -31,20 +31,20 @@
         },
         {
             "id": "green",
-            "type": "scripted",
+            "type": "human",
             "farmLocation": {"x": 2, "y": -4},
+            "wallet": 10, 
+            "revenuePerYear": 5
+        },
+        {
+            "id": "blue",
+            "type": "scripted",
+            "farmLocation": {"x": 0, "y": -3},
             "wallet": 10, 
             "revenuePerYear": 5,
             "actions": [3, 2, 1, 4, 5,
                 2, 2, 2, 2, 2,
                 2, 2, 2, 2, 2]
-        },
-        {
-            "id": "yellow",
-            "type": "human",
-            "farmLocation": {"x": 1, "y": -1},
-            "wallet": 10, 
-            "revenuePerYear": 5
         },
         {
             "id": "grey",
@@ -66,7 +66,7 @@
             {"x": -1, "y": -4},
             {"x": -1, "y": -3},
             {"x": 0, "y": -4},
-            {"x": 0, "y": -5},
+            {"x": 1, "y": -4},
             {"x": 0, "y": -2},
             {"x": -2, "y": -3},
             {"x": -1, "y": -1}

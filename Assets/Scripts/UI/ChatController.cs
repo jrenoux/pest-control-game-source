@@ -70,7 +70,7 @@ public class ChatController : MonoBehaviour
         participantAnswerSection.SetActive(false);
         PestApplication.Instance.menuController.ActivateMenu();
         DectivateAgentPanel();
-
+        PestApplication.Instance.chatManager.PlayerInputConfirmed();
     }
 
     public void CancelInput()
@@ -97,7 +97,6 @@ public class ChatController : MonoBehaviour
         PestApplication.Instance.menuController.ActivateMenu();
         PestApplication.Instance.menuController.SetNeutralRobot();
         agentPanel.SetActive(false);
-        PestApplication.Instance.gameManager.StartNewYear();
     }
 
     public void ToggleAgentPanel()

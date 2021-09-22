@@ -3,7 +3,7 @@
     "maxX": 2,
     "minY": -5,
     "maxY": -1, 
-    "maxYear": 5,
+    "maxYear": 10,
     "tutorial": true,
     "easeOfPestControl": 0.8,
 
