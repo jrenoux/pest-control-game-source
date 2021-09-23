@@ -420,7 +420,7 @@ public class PestGameManager : MonoBehaviour
 
     private bool PestHasProgressed(int totalContribution)
     {
-        double threshold = GetSpreadingThreshold(totalContribution / 10.0);
+        double threshold = GetSpreadingThreshold(totalContribution);
         double p = random.NextDouble();
         Debug.Log("p: " + p + ", threshold: " + threshold);
         
@@ -438,7 +438,7 @@ public class PestGameManager : MonoBehaviour
 
     private double GetSpreadingThreshold(double totalContribution)
     {
-        double reducedContribution = totalContribution / 10.0;
+        double reducedContribution = totalContribution * 0.5;
         World theWorld = PestApplication.Instance.theWorld;
         double threshold = (theWorld.easeOfPestControl * reducedContribution) / (1 + theWorld.easeOfPestControl * reducedContribution);
         return threshold;
