@@ -414,7 +414,8 @@ public class TutorialManager : MonoBehaviour
         Debug.Log("Tutorial Study Game");
         string title = "Let's play!";
         string message = "You will now be connected to " + (PestApplication.Instance.theWorld.activePlayers.Count - 1) + " other players to play the real game. " + 
-        "Remember to check the color of your farm at the top hand-left side of the window.";
+        "Remember to check the color of your farm at the top hand-left side of the window.\n\n" +
+        "For the game to work properly, it is important you <b>do not tab out of the game</b> until you reach the end of the game.";
         string buttonText = "Next";
 
         tutorialController.DisplayTutorialPanel(title, message, buttonText);
