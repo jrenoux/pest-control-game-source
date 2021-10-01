@@ -92,9 +92,10 @@ public class ChatManager : MonoBehaviour
 
     public void Reset()
     {
-        Debug.Log("Resetting the chat");
-        messageList.Clear();
-        PestApplication.Instance.chatController.EmptyMessageList();
+    //    Debug.Log("Resetting the chat");
+     //   messageList.Clear();
+     //   PestApplication.Instance.chatController.EmptyMessageList();
+        PestApplication.Instance.chatController.DeactivateSummary();
     }
 
     public void PlayerInputConfirmed()
