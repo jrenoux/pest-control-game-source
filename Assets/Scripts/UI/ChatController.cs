@@ -33,6 +33,9 @@ public class ChatController : MonoBehaviour
     [SerializeField]
     private Text successMessage;
 
+    [SerializeField]
+    private Text farmLostMessage;
+
     private List<GameObject> messageList;
 
     public void Start()
@@ -118,7 +121,7 @@ public class ChatController : MonoBehaviour
     /*** SUMMARY ***/
 
 
-    public void ActivateSummary(int ncoins, double pspreading, int year)
+    public void ActivateSummary(int ncoins, double pspreading, string farmLost, int year)
     { 
         coinsCollected.text = ncoins.ToString();
         probabilitySpreading.text = ((int)pspreading).ToString();
@@ -152,6 +155,11 @@ public class ChatController : MonoBehaviour
         else
         {
             successMessage.text= "The Pest Control was <color=red>unsuccessful</color>.";
+            // check if a player lost their farm this turn
+            if(farmLost != "")
+            {
+                successMessage.text = successMessage.text + "\n\nPlayer <color=" + farmLost + ">" + farmLost + "</color> has lost their farm.";
+            }
         }
     }
 

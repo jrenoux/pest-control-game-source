@@ -348,8 +348,8 @@ public class PestGameManager : MonoBehaviour
 
         double threshold = GetSpreadingThreshold(totalContribution);
         double probaSpread = (1 - threshold) * 100;
-
-        PestApplication.Instance.chatController.ActivateSummary(totalContribution, probaSpread, PestApplication.Instance.theWorld.currentYear);
+        
+        PestApplication.Instance.chatController.ActivateSummary(totalContribution, probaSpread, PestApplication.Instance.theWorld.playerLostThisTurn, PestApplication.Instance.theWorld.currentYear);
 
        
         PestApplication.Instance.menuController.ChangePestControlResult("earnings", "You've earned " + PestApplication.Instance.theWorld.humanPlayer.revenuePerYear + " coins from your farm.");        

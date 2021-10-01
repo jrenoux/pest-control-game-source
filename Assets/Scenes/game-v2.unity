@@ -477,8 +477,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.1823, y: -168.4342}
-  m_SizeDelta: {x: 235.9439, y: 55.1464}
+  m_AnchoredPosition: {x: 1.1823, y: -149.30688}
+  m_SizeDelta: {x: 235.9439, y: 116.5047}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &50901674
 MonoBehaviour:
@@ -513,7 +513,11 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Success
+  m_Text: 'The pest control was <color=red>unsuccessful</color>.
+
+
+    Player <color=yellow>yellow</color>
+    has lost their farm'
 --- !u!222 &50901675
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1435,7 +1439,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &237496812
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1688,7 +1692,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 65.6, y: 90.6}
+  m_AnchoredPosition: {x: 64.8, y: 114.4}
   m_SizeDelta: {x: 179.2335, y: 52.458}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &318671063
@@ -1967,7 +1971,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 177.93, y: -0.0015870926}
-  m_SizeDelta: {x: 400, y: 0}
+  m_SizeDelta: {x: 400, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &463195295
 MonoBehaviour:
@@ -2597,10 +2601,10 @@ RectTransform:
   m_Father: {fileID: 1528971235}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 300, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 200, y: -80}
+  m_SizeDelta: {x: 300, y: 21.786238}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &775272103
 MonoBehaviour:
@@ -2753,7 +2757,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -62.3, y: -66.9}
+  m_AnchoredPosition: {x: -51.6, y: -18.6}
   m_SizeDelta: {x: 43.155, y: 29.4896}
   m_Pivot: {x: 0.8055042, y: 0.49999997}
 --- !u!114 &827481722
@@ -2781,7 +2785,7 @@ MonoBehaviour:
     m_FontSize: 24
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 2
+    m_MinSize: 0
     m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0
@@ -3261,7 +3265,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &914182960
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4746,6 +4750,7 @@ MonoBehaviour:
   previousYear: {fileID: 568026431}
   riskImage: {fileID: 1509774670}
   successMessage: {fileID: 50901674}
+  farmLostMessage: {fileID: 0}
 --- !u!1 &1344262806
 GameObject:
   m_ObjectHideFlags: 0
@@ -5613,7 +5618,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000015378, y: -4.6}
+  m_AnchoredPosition: {x: 0.000015378, y: 41.4}
   m_SizeDelta: {x: 90.9254, y: 52.1064}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1509774670
@@ -5838,10 +5843,10 @@ RectTransform:
   m_Father: {fileID: 463195294}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 400, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 200, y: -155}
+  m_SizeDelta: {x: 400, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1528971236
 MonoBehaviour:
@@ -6053,10 +6058,10 @@ RectTransform:
   m_Father: {fileID: 463195294}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 400, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 200, y: -270}
+  m_SizeDelta: {x: 400, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1553635821
 MonoBehaviour:
@@ -6859,7 +6864,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -5.5, y: 90.6}
+  m_AnchoredPosition: {x: -6.2999806, y: 114.399994}
   m_SizeDelta: {x: 46.0637, y: 27.4792}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1720764344
@@ -7017,7 +7022,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.1823, y: -80.9}
+  m_AnchoredPosition: {x: 3.438202, y: -31.80003}
   m_SizeDelta: {x: 182.1438, y: 70.912}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1774004332
@@ -7053,7 +7058,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: ' <b> %</b> chance of pest spreading'
+  m_Text: ' <b> %</b> chance
+
+    of pest spreading'
 --- !u!222 &1774004333
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7390,10 +7397,10 @@ RectTransform:
   m_Father: {fileID: 463195294}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 400, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 200, y: -35}
+  m_SizeDelta: {x: 400, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1925472413
 MonoBehaviour:
@@ -7801,7 +7808,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -86.8, y: 97.001}
+  m_AnchoredPosition: {x: -87.59998, y: 120.800995}
   m_SizeDelta: {x: 87.2904, y: 51.7033}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1963335562

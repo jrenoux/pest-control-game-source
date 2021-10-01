@@ -29,6 +29,8 @@ public class World
     private System.Random random;
     private int pestSpreadingIndex;
 
+    public string playerLostThisTurn {get; private set;}
+
 
     
     public World() {
@@ -154,7 +156,12 @@ public class World
             }
             if(found)
             {
+                playerLostThisTurn = playerToRemove.id;
                 activePlayers.Remove(playerToRemove);
+            }
+            else
+            {
+                playerLostThisTurn = "";
             }
         }
     }
