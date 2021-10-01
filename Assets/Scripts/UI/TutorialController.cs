@@ -22,6 +22,17 @@ public class TutorialController : MonoBehaviour
     [SerializeField]
     private GameObject finalArrowDown;
 
+    private enum CardinalAngles:int {
+        N = 315,
+        NW = 0,
+        W = 45,
+        SW = 90,
+        S = 135,
+        SE = 180,
+        E = 225,
+        NE = 270
+    }
+
     public void Start() 
     {
         tutorialIntroduction.SetActive(false);
@@ -102,7 +113,9 @@ public class TutorialController : MonoBehaviour
     {
         // pointing at a given gameobject
         Vector3 pointToPointAt = new Vector3Int(0,0,0);
-        int arrowAngle = 0;
+        // popuplocation
+        Vector2 popupRelativeLocation = new Vector2(0,0);
+        CardinalAngles arrowAngle = CardinalAngles.N;
         // find the center of the gameobject
         RectTransform rectTransform = uiObject.GetComponent<RectTransform>();
         if(rectTransform == null)
@@ -136,21 +149,30 @@ public class TutorialController : MonoBehaviour
                 Debug.Log("bottom left");
                 // left
                 // arrow point SW
-                arrowAngle = 315;
+                arrowAngle = CardinalAngles.SW;
+                // box is NE
+                popupRelativeLocation.x = 1;
+                popupRelativeLocation.y = -1;
             }
             else if(gameObjectCenter.x < screenSecondLineX)
             {
                 Debug.Log("bottom center");
                 // center
                 // arrow point S
-                arrowAngle = 0;
+                arrowAngle = CardinalAngles.S;
+                // box is N
+                popupRelativeLocation.x = 0;
+                popupRelativeLocation.y = -1;
             }
             else
             {
                 Debug.Log("bottom right");
                 // right
                 // arrow point SE
-                arrowAngle = 45;
+                arrowAngle = CardinalAngles.SE;
+                // box is NW
+                popupRelativeLocation.x = -1;
+                popupRelativeLocation.y = -1;
             }
             
         }
@@ -166,7 +188,10 @@ public class TutorialController : MonoBehaviour
                 // anchor is on the right
                 pointToPointAt.x = gameObjectCenter.x + rectTransform.rect.width / 2;
                 // arrow points W
-                arrowAngle = 270;
+                arrowAngle = CardinalAngles.W;
+                // popup is E
+                popupRelativeLocation.x = 1;
+                popupRelativeLocation.y = 0;
             }
             else if(gameObjectCenter.x < screenSecondLineX)
             {
@@ -174,8 +199,11 @@ public class TutorialController : MonoBehaviour
                 // center
                 // anchor is on the right as well
                 pointToPointAt.x = gameObjectCenter.x + rectTransform.rect.width / 2;
-                // arrow points left as well
-                arrowAngle = 270;
+                // arrow points W as well
+                arrowAngle = CardinalAngles.W;
+                // popup is E
+                popupRelativeLocation.x = 1;
+                popupRelativeLocation.y = 0;
             }
             else
             {
@@ -183,8 +211,12 @@ public class TutorialController : MonoBehaviour
                 // right
                 // anchor is on the left
                 pointToPointAt.x = gameObjectCenter.x - rectTransform.rect.width / 2;
-                // arrow points right
-                arrowAngle = 90;
+                // arrow points E
+                arrowAngle = CardinalAngles.E;
+                // popup is W
+                popupRelativeLocation.x = -1;
+                popupRelativeLocation.y = 0;
+
             }
         }
         else
@@ -198,21 +230,30 @@ public class TutorialController : MonoBehaviour
                 Debug.Log("top left");
                 // left
                 // arrow points NW
-                arrowAngle = 225;
+                arrowAngle = CardinalAngles.NW;
+                // popup is SE
+                popupRelativeLocation.x = 1;
+                popupRelativeLocation.y = 1;
             }
             else if(gameObjectCenter.x < screenSecondLineX)
             {
                 Debug.Log("top center");
                 // center
                 // arrow points N
-                arrowAngle = 180;
+                arrowAngle = CardinalAngles.N;
+                // popup is S
+                popupRelativeLocation.x = 0;
+                popupRelativeLocation.y = 1;
             }
             else
             {
                 Debug.Log("top right");
                 // right
                 // arrow points NE
-                arrowAngle = 135;
+                arrowAngle = CardinalAngles.NE;
+                // popup is SW
+                popupRelativeLocation.x = -1;
+                popupRelativeLocation.y = 1;
             }
             
         }
@@ -229,35 +270,35 @@ public class TutorialController : MonoBehaviour
         Debug.Log("Displayng for tile " + tile);
         
         Vector3 tileCoordinates = camera.WorldToScreenPoint(tilemap.GetCellCenterWorld(new Vector3Int(tile.x, tile.y, 0)));
-        tileCoordinates.y = tileCoordinates.y - 64; // this is needed because the sprite of the tile is not centered
+        tileCoordinates.y = tileCoordinates.y - 20; // this is needed because the sprite of the tile is not centered
         // check where is the tile compared to the screen center
         // finds the center of the screen
         int screenCenterX = Screen.width / 2 ;
         int screenCenterY = Screen.height / 2;
-        int arrowAngle = 0;
+        CardinalAngles arrowAngle = CardinalAngles.N;
         if(tileCoordinates.x < screenCenterX && tileCoordinates.y < screenCenterY)
         {
             // bottom left
             // the box goes NE so arrow points SW
-            arrowAngle = 315;
+            arrowAngle = CardinalAngles.SW;
         }
         else if(tileCoordinates.x < screenCenterX && tileCoordinates.y >= screenCenterY)
         {
             // top left
             // the box goes SE so arrow points NW
-            arrowAngle = 225;
+            arrowAngle = CardinalAngles.NW;
         }
         else if(tileCoordinates.x >= screenCenterX && tileCoordinates.y < screenCenterY)
         {
             // bottom right
             // the box goes NW so arrow points SE
-            arrowAngle = 45;
+            arrowAngle = CardinalAngles.SE;
         }
         else if(tileCoordinates.x >= screenCenterX && tileCoordinates.y >= screenCenterY)
         {
             // top right
             // the box goes SW so arrow Point NE
-            arrowAngle = 135;
+            arrowAngle = CardinalAngles.NE;
         }
 
 
@@ -294,14 +335,14 @@ public class TutorialController : MonoBehaviour
     }
 
     private void DisplayTutorialPanelAtPoint(string title, string message, string buttonText, 
-                                Vector3 pointToPointAt, int arrowAngle)
+                                Vector3 pointToPointAt, CardinalAngles arrowAngle)
     {
         // display the tutorial popup to point at a given point
         Vector3 arrowLocation = new Vector3(0,0,0);
         Vector3 popupLocation = new Vector3(0,0,0);
         Quaternion arrowRotation = Quaternion.Euler(0,0,0);
         
-        Debug.Log("Position: (" + pointToPointAt.x + "," + pointToPointAt.y + ")");
+        //Debug.Log("Position: (" + pointToPointAt.x + "," + pointToPointAt.y + ")");
         int arrowWidth = (int)arrowImage.gameObject.GetComponent<RectTransform>().rect.width;
         int arrowHeight = (int)arrowImage.gameObject.GetComponent<RectTransform>().rect.height;
         RectTransform rt = tutorialPopup.GetComponent<RectTransform>();
@@ -309,7 +350,9 @@ public class TutorialController : MonoBehaviour
         float popupHeight = rt.sizeDelta.y * rt.localScale.y;
         Debug.Log("(" + popupWidth + "," + popupHeight +")");
 
-        if(arrowAngle == 0)
+
+
+        if(arrowAngle == CardinalAngles.S)
         {
             // box N of point, arrow points S
             arrowLocation.x = pointToPointAt.x;
@@ -319,44 +362,44 @@ public class TutorialController : MonoBehaviour
             popupLocation.y = (int)(arrowLocation.y + (popupHeight / 2 + arrowHeight / 2));
 
         }
-        else if(arrowAngle == 45)
+        else if(arrowAngle == CardinalAngles.SE)
         {
             // box NW of the point, arrow points SE
             arrowLocation.x = (int)(pointToPointAt.x - arrowWidth / 2);
             arrowLocation.y = (int)(pointToPointAt.y + arrowHeight / 2);
             
-            popupLocation.x = (int)(arrowLocation.x - (popupWidth / 2 + arrowWidth * 0.80));
-            popupLocation.y = (int)(arrowLocation.y + (popupWidth / 2 - arrowHeight * 0.10));
+            popupLocation.x = (int)(arrowLocation.x - (popupWidth / 2 + arrowWidth));
+            popupLocation.y = (int)(arrowLocation.y + (popupHeight / 2 - arrowHeight));
 
         }
-        else if(arrowAngle == 90)
+        else if(arrowAngle == CardinalAngles.E)
         {
             // box W of the point, arrow points E
             arrowLocation.x = (int)(pointToPointAt.x - arrowWidth / 2);
             arrowLocation.y = pointToPointAt.y;
 
-            popupLocation.x = (int)(arrowLocation.x - popupWidth / 2 - arrowWidth * 1.2);
+            popupLocation.x = (int)(arrowLocation.x - popupWidth / 2 - arrowWidth);
             popupLocation.y = arrowLocation.y;
         } 
-        else if(arrowAngle == 135)
+        else if(arrowAngle == CardinalAngles.NE)
         {
             // box SW of the point, arrow points NE
             arrowLocation.x = (int)(pointToPointAt.x - arrowWidth / 2);
             arrowLocation.y = (int)(pointToPointAt.y - arrowHeight / 2);
 
-            popupLocation.x = (int)(arrowLocation.x - (popupWidth / 2 + arrowWidth * 0.80));
-            popupLocation.y = (int)(arrowLocation.y - (popupWidth / 2 - arrowHeight * 0.10));
+            popupLocation.x = (int)(arrowLocation.x - (popupWidth / 2 + arrowWidth));
+            popupLocation.y = (int)(arrowLocation.y - (popupHeight / 2 - arrowHeight));
         }
-        else if(arrowAngle == 180)
+        else if(arrowAngle == CardinalAngles.N)
         {
             // box S of the point, arrow points N
             arrowLocation.x = pointToPointAt.x;
             arrowLocation.y = (int)(pointToPointAt.y - arrowHeight / 2);
 
             popupLocation.x = arrowLocation.x;
-            popupLocation.y = (int)(arrowLocation.y - (popupWidth / 2 - arrowHeight /2));
+            popupLocation.y = (int)(arrowLocation.y - (popupHeight / 2 - arrowHeight /2));
         }
-        else if(arrowAngle == 225)
+        else if(arrowAngle == CardinalAngles.NW)
         {
             // box SE of the point, arrow points NW
             // we display the pop-up on the bottom right
@@ -364,20 +407,20 @@ public class TutorialController : MonoBehaviour
             arrowLocation.y = (int)(pointToPointAt.y - arrowHeight / 2);
 
             // popup position is based on the arrow position and popup size
-            popupLocation.x = (int)(arrowLocation.x + popupWidth / 2 + arrowWidth * 0.80);
-            popupLocation.y = (int)(arrowLocation.y - popupWidth / 2 - arrowHeight * 0.10);
+            popupLocation.x = (int)(arrowLocation.x + popupWidth / 2 + arrowWidth);
+            popupLocation.y = (int)(arrowLocation.y - popupHeight / 2 - arrowHeight);
         }
-        else if(arrowAngle == 270)
+        else if(arrowAngle == CardinalAngles.W)
        {
             // box E of the point, arrow points W
             arrowLocation.x = (int)(pointToPointAt.x + arrowHeight / 2);
             arrowLocation.y = pointToPointAt.y;
 
-            popupLocation.x = (int)(arrowLocation.x + (popupWidth / 2 + arrowWidth * 0.80));
+            popupLocation.x = (int)(arrowLocation.x + (popupWidth / 2 + arrowWidth));
             popupLocation.y = arrowLocation.y;
 
        } 
-       else if(arrowAngle == 315)
+       else if(arrowAngle == CardinalAngles.SW)
        {
             // box NE of the point, arrow points SW
             // we display the popup on the top right of the point
@@ -385,11 +428,11 @@ public class TutorialController : MonoBehaviour
             arrowLocation.y = (int)(pointToPointAt.y + arrowHeight / 2);
 
             // popup position is based on the arrow position and popup size
-            popupLocation.x = (int)(arrowLocation.x + popupWidth / 2 + arrowWidth * 0.80);
-            popupLocation.y = (int)(arrowLocation.y + popupWidth / 2 + arrowHeight * 0.10);
+            popupLocation.x = (int)(arrowLocation.x + popupWidth / 2 + arrowWidth);
+            popupLocation.y = (int)(arrowLocation.y + popupHeight / 2 + arrowHeight);
        }
 
-        arrowRotation = Quaternion.Euler(0,0,arrowAngle);
+        arrowRotation = Quaternion.Euler(0,0,(int)arrowAngle);
         tutorialPopup.transform.position = popupLocation;  
         arrowImage.transform.position = arrowLocation;
         arrowImage.transform.rotation = arrowRotation;  

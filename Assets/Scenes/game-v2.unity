@@ -1238,13 +1238,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 210846656}
-  m_LocalRotation: {x: -0, y: -0, z: 0.50454414, w: 0.86338586}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2009141218}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 60.602}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -177.92998, y: -0.000007391}
@@ -8137,7 +8137,7 @@ MonoBehaviour:
   contribution: {fileID: 211407089}
   year: {fileID: 2007936011}
   chat: {fileID: 1318811543}
-  agent: {fileID: 967068240}
+  agent: {fileID: 1664043485}
 --- !u!114 &2038431234
 MonoBehaviour:
   m_ObjectHideFlags: 0
