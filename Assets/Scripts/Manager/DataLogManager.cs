@@ -41,6 +41,24 @@ public class DataLogManager : MonoBehaviour
         string entityJson = JsonConvert.SerializeObject(round);
         StartCoroutine(Upload(entityJson, result => {
             Debug.Log("MongoDB Save Round Upload: " + result);
+            if (!result)
+            {
+                StartCoroutine(Upload(entityJson, result => {
+                    Debug.Log("MongoDB Save Round Upload RETRYING (1): " + result);
+                    if (!result)
+                    {
+                        StartCoroutine(Upload(entityJson, result => {
+                            Debug.Log("MongoDB Save Round Upload RETRYING (2): " + result);
+                            if (!result)
+                            {
+                                StartCoroutine(Upload(entityJson, result => {
+                                    Debug.Log("MongoDB Save Round Upload RETRYING (3): " + result);
+                                }));
+                            }
+                        }));
+                    }
+                }));
+            }
         }));
         Debug.Log(entityJson);
     }
