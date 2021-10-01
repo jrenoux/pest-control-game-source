@@ -253,7 +253,8 @@ public class TutorialManager : MonoBehaviour
         // show the wallet
         string title = "<color=#52433D>Tutorial " + shownTutorialNb + "/" + nbTutorialSteps + "</color>";
         string message = "This is your wallet. It shows how many coins you've collected throughout the game. \n \n " +
-            "If your're lucky and the pest doesn't get to your farm, at the end of the game, the money <b>in your wallet</b> will be converted into a <b>bonus</b>.";
+            "At the end of the game, all the players that did <b>not</b> get caught by the pest will see the money <b>in their wallet</b> converted in a <b>bonus</b>.";
+            //"If your're lucky and the pest doesn't get to your farm, at the end of the game, the money <b>in your wallet</b> will be converted into a <b>bonus</b>.";
         string buttonText = "Next";
 
         tutorialController.DisplayTutorialPanel(title, message, buttonText, wallet);
