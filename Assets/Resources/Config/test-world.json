@@ -5,7 +5,7 @@
     "maxY": -1, 
     "maxYear": 10,
     "tutorial": true,
-    "easeOfPestControl": 0.3,
+    "easeOfPestControl": 0.1,
 
 
     "activePlayers": [
@@ -14,35 +14,35 @@
             "type": "copycat",
             "farmLocation": {"x": 0, "y": -5},
             "wallet": 5, 
-            "revenuePerYear": 3
+            "revenuePerYear": 5
         },
         {
             "id": "blue",
             "type": "copycat",
             "farmLocation": {"x": 0, "y": -3},
             "wallet": 5, 
-            "revenuePerYear": 3
+            "revenuePerYear": 5
         },
         {
             "id": "green",
             "type": "copycat",
             "farmLocation": {"x": 2, "y": -4},
             "wallet": 5, 
-            "revenuePerYear": 3
+            "revenuePerYear": 5
         },
         {
             "id": "yellow",
             "type": "copycat",
             "farmLocation": {"x": 1, "y": -1},
             "wallet": 5, 
-            "revenuePerYear": 3
+            "revenuePerYear": 5
         },
         {
             "id": "grey",
             "type": "human",
             "farmLocation": {"x": -2, "y": -1},
             "wallet": 5, 
-            "revenuePerYear": 3
+            "revenuePerYear": 5
         }
     ],
 
