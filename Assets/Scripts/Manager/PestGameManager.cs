@@ -35,6 +35,8 @@ public class PestGameManager : MonoBehaviour
     private bool allPlayerConnected = false;
     public List<int> collective;
 
+    private int totalContribution = 0; 
+
     public void Awake()
     {
         random =  RandomSingleton.GetInstance(seed);
@@ -264,7 +266,7 @@ public class PestGameManager : MonoBehaviour
         PestApplication app = PestApplication.Instance;
         World theWorld = app.theWorld;
         GridTile pestTile;
-        int totalContribution = 0;
+        totalContribution = 0;
         foreach (Player player in theWorld.activePlayers)
         {
             totalContribution = totalContribution + player.GetContribution();
@@ -341,16 +343,7 @@ public class PestGameManager : MonoBehaviour
     }
 
     IEnumerator CollectRevenue()
-    {
-
-        int totalContribution = 0;
-
-        foreach (Player player in PestApplication.Instance.theWorld.activePlayers)
-        {
-            totalContribution = totalContribution + player.GetContribution();
-            Debug.Log("Player " + player.id + " paid " + player.GetContribution());
-        }
-        
+    {       
         //PestApplication.Instance.chatManager.SendLogMessage("You've earned " + PestApplication.Instance.theWorld.humanPlayer.revenuePerYear + " coins from your farm.");
 
         double threshold = GetSpreadingThreshold(totalContribution);
