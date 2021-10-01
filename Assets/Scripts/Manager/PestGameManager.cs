@@ -261,7 +261,6 @@ public class PestGameManager : MonoBehaviour
     private void PerformPestControl()
     {
         
-
         PestApplication app = PestApplication.Instance;
         World theWorld = app.theWorld;
         GridTile pestTile;
@@ -345,6 +344,20 @@ public class PestGameManager : MonoBehaviour
     {
 
         int totalContribution = 0;
+
+        foreach (Player player in PestApplication.Instance.theWorld.activePlayers)
+        {
+            totalContribution = totalContribution + player.GetContribution();
+            Debug.Log("Player " + player.id + " paid " + player.GetContribution());
+        }
+        
+        //PestApplication.Instance.chatManager.SendLogMessage("You've earned " + PestApplication.Instance.theWorld.humanPlayer.revenuePerYear + " coins from your farm.");
+
+        double threshold = GetSpreadingThreshold(totalContribution);
+        double probaSpread = (1 - threshold) * 100;
+
+        PestApplication.Instance.chatController.ActivateSummary(totalContribution, probaSpread, PestApplication.Instance.theWorld.currentYear);
+
        
         PestApplication.Instance.menuController.ChangePestControlResult("earnings", "You've earned " + PestApplication.Instance.theWorld.humanPlayer.revenuePerYear + " coins from your farm.");        
 
@@ -357,20 +370,13 @@ public class PestGameManager : MonoBehaviour
 
         PestApplication.Instance.menuController.DeactivateAddedCoins();
 
-        foreach (Player player in PestApplication.Instance.theWorld.activePlayers)
+        // correct the revenue
+        foreach(Player player in PestApplication.Instance.theWorld.activePlayers)
         {
-            totalContribution = totalContribution + player.GetContribution();
-            Debug.Log("Player " + player.id + " paid " + player.GetContribution());
             player.CollectRevenue();
         }
+
         
-        //PestApplication.Instance.chatManager.SendLogMessage("You've earned " + PestApplication.Instance.theWorld.humanPlayer.revenuePerYear + " coins from your farm.");
-
-        double threshold = GetSpreadingThreshold(totalContribution);
-        double probaSpread = (1 - threshold) * 100;
-
-        PestApplication.Instance.chatController.ActivateSummary(totalContribution, probaSpread, PestApplication.Instance.theWorld.currentYear);
-
     }
 
 

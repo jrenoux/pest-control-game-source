@@ -127,23 +127,23 @@ public class ChatController : MonoBehaviour
 
         switch (pspreading)
         {
-            case double n when n >= 80.0:
-
+            case double n when (n >= 80.0):
                 riskImage.sprite = Resources.Load<Sprite>("Sprites/bad");
                 break;
-            case double n when n >= 60.0:
+            case double n when (n >= 60.0):
                 riskImage.sprite = Resources.Load<Sprite>("Sprites/poor");
                 break;
-            case double n when n >= 50.0:
+            case double n when (n >= 40.0):
                 riskImage.sprite = Resources.Load<Sprite>("Sprites/fair");
                 break;
-            case double n when n < 50.0:
+            case double n when (n >= 20.0):
                 riskImage.sprite = Resources.Load<Sprite>("Sprites/good");
                 break;
-            case double n when n <= 10.0:
+            case double n when (n >= 0.0):
                 riskImage.sprite = Resources.Load<Sprite>("Sprites/excelent");
                 break;
-        }
+            
+                    }
 
         if (PestApplication.Instance.theWorld.pestProgression.latestPestControlSuccess)
         {
