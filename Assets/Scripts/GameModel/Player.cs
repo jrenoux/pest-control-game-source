@@ -32,7 +32,6 @@ public class Player
 
     public int CalculateContribution()
     {
-        int contribution = 0;
         switch(type)
         {
             case "scripted":
@@ -59,8 +58,13 @@ public class Player
             break;
 
             case "fixed": 
-            contribution = this.revenuePerYear / 2;
+            contribution = (int)Math.Ceiling((double)this.revenuePerYear / 2.0);
             SetContribution(contribution); 
+            break;
+
+            case "copycat":
+            // the agent pays the same amount as the human
+            contribution = PestApplication.Instance.theWorld.humanPlayer.GetContribution();
             break;
 
             case "human":

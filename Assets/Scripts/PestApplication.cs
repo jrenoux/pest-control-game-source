@@ -28,8 +28,8 @@ public sealed class PestApplication
     ///////////////////////////////////////// Model objects
     public World theWorld {get; set;} = null;
 
-    private World testWorld = null;
-    private World studyWorld = null;
+    public World testWorld {get; private set;}
+    public World studyWorld {get; private set;}
 
 
     ///////////////////////////////////////// Other objects
@@ -55,6 +55,14 @@ public sealed class PestApplication
         gameBoardController = GameObject.Find("GameBoardSection").GetComponent<GameBoardController>();
         startGameController = GameObject.Find("StartGameSection").GetComponent<StartGameController>();
         logManager = GameObject.Find("Managers").GetComponent<DataLogManager>();
+
+        // init the test world
+        string testWorldJson = Resources.Load<TextAsset>(@"Config/test-world").text;
+        this.testWorld = JsonConvert.DeserializeObject<World>(testWorldJson);
+
+        // init the study world
+        string studyWorldJson = Resources.Load<TextAsset>(@"Config/study-world").text;
+        this.studyWorld = JsonConvert.DeserializeObject<World>(studyWorldJson);
     }
 
     /////////////////////////////////////////////Singleton method
@@ -74,11 +82,7 @@ public sealed class PestApplication
     }
 
     public void SetupTestGame()
-    {
-        // init the test world
-        string testWorldJson = Resources.Load<TextAsset>(@"Config/test-world").text;
-        this.testWorld = JsonConvert.DeserializeObject<World>(testWorldJson);
-       
+    {       
         testWorld.Init();
 
         theWorld = testWorld;
@@ -92,10 +96,7 @@ public sealed class PestApplication
 
     public void SetupStudyGame()
     {
-        // init the study world
-        // init the world
-        string studyWorldJson = Resources.Load<TextAsset>(@"Config/study-world").text;
-        this.studyWorld = JsonConvert.DeserializeObject<World>(studyWorldJson);
+        
        
         studyWorld.Init();
 

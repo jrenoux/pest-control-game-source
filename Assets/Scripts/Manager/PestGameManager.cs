@@ -72,7 +72,6 @@ public class PestGameManager : MonoBehaviour
                     StartCoroutine(PlayArtificialPlayersRound());
                     break;
                 case GameStates.InitiatePestControl:
-                    
                     //StartCoroutine(PerformPestControl());
                     Debug.Log("State = Initiate pest control");
                     StartCoroutine(InitiatePestControl());
@@ -198,6 +197,7 @@ public class PestGameManager : MonoBehaviour
         PestApplication app = PestApplication.Instance;
         int contribution = app.menuController.ProcessContribution();
         app.theWorld.humanPlayer.SetContribution(contribution);
+        Debug.Log("The human player paid " + app.theWorld.humanPlayer.GetContribution());
         
         SetState(GameStates.WaitingForOtherPlayers);
     }
@@ -345,7 +345,17 @@ public class PestGameManager : MonoBehaviour
     {
 
         int totalContribution = 0;
-        
+       
+        PestApplication.Instance.menuController.ChangePestControlResult("earnings", "You've earned " + PestApplication.Instance.theWorld.humanPlayer.revenuePerYear + " coins from your farm.");        
+
+        // display the coins gained
+        PestApplication.Instance.menuController.ActivateAddedCoins(PestApplication.Instance.theWorld.humanPlayer.revenuePerYear);
+ 
+        PestApplication.Instance.menuController.ActivatePestControlResult();
+        yield return new WaitForSeconds(3);
+        PestApplication.Instance.menuController.DeactivatePestControlResultPopUp();
+
+        PestApplication.Instance.menuController.DeactivateAddedCoins();
 
         foreach (Player player in PestApplication.Instance.theWorld.activePlayers)
         {
@@ -353,19 +363,13 @@ public class PestGameManager : MonoBehaviour
             Debug.Log("Player " + player.id + " paid " + player.GetContribution());
             player.CollectRevenue();
         }
-        PestApplication.Instance.menuController.ChangePestControlResult("earnings", "You've earned " + PestApplication.Instance.theWorld.humanPlayer.revenuePerYear + " coins from your farm.");
+        
         //PestApplication.Instance.chatManager.SendLogMessage("You've earned " + PestApplication.Instance.theWorld.humanPlayer.revenuePerYear + " coins from your farm.");
 
         double threshold = GetSpreadingThreshold(totalContribution);
         double probaSpread = (1 - threshold) * 100;
 
         PestApplication.Instance.chatController.ActivateSummary(totalContribution, probaSpread, PestApplication.Instance.theWorld.currentYear);
-
-        PestApplication.Instance.menuController.ActivatePestControlResult();
-        yield return new WaitForSeconds(3);
-        PestApplication.Instance.menuController.DeactivatePestControlResultPopUp();
-
-        
 
     }
 
@@ -438,7 +442,8 @@ public class PestGameManager : MonoBehaviour
 
     private double GetSpreadingThreshold(double totalContribution)
     {
-        double reducedContribution = totalContribution * 0.5;
+        //double reducedContribution = totalContribution * 0.5;
+        double reducedContribution = totalContribution;
         World theWorld = PestApplication.Instance.theWorld;
         double threshold = (theWorld.easeOfPestControl * reducedContribution) / (1 + theWorld.easeOfPestControl * reducedContribution);
         return threshold;

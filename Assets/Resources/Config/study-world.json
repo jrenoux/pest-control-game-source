@@ -5,7 +5,7 @@
     "maxY": -1, 
     "maxYear": 15,
     "tutorial": true,
-    "easeOfPestControl": 0.5,
+    "easeOfPestControl": 0.2,
 
 
     "activePlayers": [

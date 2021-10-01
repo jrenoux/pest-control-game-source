@@ -208,7 +208,7 @@ public class TutorialManager : MonoBehaviour
         // show the year and adapt the text to the game configuration
         Debug.Log("Tutorial Year");
         string title = "<color=#52433D>Tutorial " + shownTutorialNb + "/" + nbTutorialSteps + "</color>";
-        string message = "This is the year counter. \n A game has a total duration of " + PestApplication.Instance.theWorld.maxYear + " years. \n \n "+
+        string message = "This is the year counter. \n The game stops at the end of year " + PestApplication.Instance.studyWorld.maxYear + ". \n \n "+
             "The game can end sooner for you if you do not survive a pest outbreak.";
         string buttonText = "Next";
 
@@ -223,7 +223,7 @@ public class TutorialManager : MonoBehaviour
 
         string title = "<color=#52433D>Tutorial " + shownTutorialNb + "/" + nbTutorialSteps + "</color>";
         string message = "<b>This is your farm</b>. It is circled in black for you to see it better. \n \n" +
-        "As long as the pest doesn't get you, your farm gives you <b>two coins per year.</b> ";
+        "As long as the pest doesn't get you, your farm gives you <b>" + PestApplication.Instance.theWorld.humanPlayer.revenuePerYear +" coins per year.</b> ";
 
         string buttonText = "Next";
 
@@ -300,7 +300,7 @@ public class TutorialManager : MonoBehaviour
         // show the up, down, and pay buttons
         Debug.Log("Tutorial Contribution");
         string title = "<color=#52433D>Tutorial " + shownTutorialNb + "/" + nbTutorialSteps + "</color>";
-        string message = "A game turn starts setting a contribution to the agricultural collective. \n \n By moving arrows up and down and then hitting 'Pay', you decide how many coins you want to contribute to the collective, each year. " +
+        string message = "A game turn starts with setting a contribution to the agricultural collective. \n \n By moving arrows up and down and then hitting 'Pay', you decide how many coins you want to contribute to the collective each year. " +
         "The coins you spend will be subtracted from your wallet. ";
 
         string buttonText = "Next";
@@ -359,7 +359,7 @@ public class TutorialManager : MonoBehaviour
             //    message = "This box will contain information about the game progression. Keep an eye on it!"; // NOT SURE WHAT TO WRITE HERE
             //}
 
-            message = "Throughout the game this Artificial Agent will give you some information about the game. Keep an eye on it! \n \n"+
+            message =  "This is <b>Rob the Bot</b>! It will give you some information about the game to help you while you play. Keep an eye on it! \n \n"+
                 "A message will pop up everytime it has something to say \n \n" +
                 "You can revisit its previous messages by clicking on it";
             tutorialController.DisplayTutorialPanel(title, message, buttonText, agent);
@@ -378,6 +378,7 @@ public class TutorialManager : MonoBehaviour
         if(!PestApplication.Instance.chatManager.feedback.condition.Equals("control"))
         {
             message = "Now you will play a <b><i>test game</i></b> against artificial players, so that you can familiarize yourself with the interface. " + 
+            "The test game is a bit shorter than the real game: it ends at the end of year " + PestApplication.Instance.testWorld.maxYear + ". " +
             "During this test game, the artificial players will always contribute the same amount of coins. \n\n" +
             "After you will be paired with human players to play the <b><i>real game</i></b>. \nYou will not receive any feedback during the test game, only during the real game.  \n \n" +
             "The coins gathered during the <b><i>test game</i></b> will not be part of your final bonus.";
