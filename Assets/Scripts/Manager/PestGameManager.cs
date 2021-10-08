@@ -417,11 +417,7 @@ public class PestGameManager : MonoBehaviour
 
     }
 
-    private
-
     ///////////////////////////////////////////////////////////////////// Private functions used by the State Machine
-    
-
 
     private bool PestHasProgressed(int totalContribution)
     {
