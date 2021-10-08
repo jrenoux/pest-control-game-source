@@ -417,6 +417,8 @@ public class PestGameManager : MonoBehaviour
 
     }
 
+    private
+
     ///////////////////////////////////////////////////////////////////// Private functions used by the State Machine
     
 
@@ -460,6 +462,11 @@ public class PestGameManager : MonoBehaviour
         currentGameState = GameStates.GameEnded;
         PestApplication.Instance.menuController.ActivateEndGamePopup("GAME OVER \nThe pest has reached your farm");
         PestApplication.Instance.chatController.DeactivateSummary();
+
+        // save the log and reset it (because this is usually done in prepare for next year, and if you loose the game you don't go through prepare for next year)
+        PestApplication.Instance.logManager.SaveRound(roundLog);
+        roundLog = null;
+        
     }
 
 
