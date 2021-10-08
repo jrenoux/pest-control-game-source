@@ -3,9 +3,9 @@
     "maxX": 2,
     "minY": -5,
     "maxY": -1, 
-    "maxYear": 10,
+    "maxYear": 7,
     "tutorial": true,
-    "easeOfPestControl": 0.1,
+    "easeOfPestControl": 0.2,
 
 
     "activePlayers": [
