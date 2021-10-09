@@ -287,7 +287,7 @@ public class TutorialManager : MonoBehaviour
         string title = "<color=#52433D>Tutorial " + shownTutorialNb + "/" + nbTutorialSteps + "</color>";
         string message = "To reduce the risk of pest spreading, farmers can contribute to an agricultural collective. " + 
         "The more coins collected, the less likely is the pest spreading. " +
-        "Each year farmers must decide <b>if and how much they want to contribute</b> to the collective.";
+        "Each year, farmers must decide <b>if and how much they want to contribute</b> to the collective.";
 
         string buttonText = "Next";
 
@@ -301,7 +301,7 @@ public class TutorialManager : MonoBehaviour
         // show the up, down, and pay buttons
         Debug.Log("Tutorial Contribution");
         string title = "<color=#52433D>Tutorial " + shownTutorialNb + "/" + nbTutorialSteps + "</color>";
-        string message = "A game turn starts with setting a contribution to the agricultural collective. \n \n By moving arrows up and down and then hitting 'Pay', you decide how many coins you want to contribute to the collective each year. " +
+        string message = "A game turn starts with setting a contribution to the agricultural collective. \n \n By moving arrows up and down and then clicking 'Pay', you decide how many coins you want to contribute to the collective each year. " +
         "The coins you spend will be subtracted from your wallet. ";
 
         string buttonText = "Next";
@@ -330,7 +330,7 @@ public class TutorialManager : MonoBehaviour
         //    message = "This box will contain information about the game progression. Keep an eye on it!";    
         //}
         message = "This box will contain a summary of what happened the previous year." +
-                  "It will contain information about how many coins were collected during that year and the corresponding probability of pest spreading.";
+                  "It will contain information about how many coins were collected during that year and the corresponding probability of pest spreading. It will also show if a player has lost their farm this turn";
 
         tutorialController.DisplayTutorialPanel(title, message, buttonText, chat);
     }
@@ -381,7 +381,7 @@ public class TutorialManager : MonoBehaviour
             message = "Now you will play a <b><i>test game</i></b> against artificial players, so that you can familiarize yourself with the interface. " + 
             "The test game is a bit shorter than the real game: it ends at the end of year " + PestApplication.Instance.testWorld.maxYear + ". " +
             "During this test game, the artificial players will always contribute as many coins as you do. \n\n" +
-            "After you will be paired with human players to play the <b><i>real game</i></b>. \nYou will not receive any feedback during the test game, only during the real game.  \n \n" +
+            "You will then be paired with human players to play the <b><i>real game</i></b>. \nYou will not receive any feedback during the test game, only during the real game.  \n \n" +
             "The coins gathered during the <b><i>test game</i></b> will not be part of your final bonus.";
         }
         else
@@ -389,7 +389,7 @@ public class TutorialManager : MonoBehaviour
             message = "Now you will play a <b><i>test game</i></b> against artificial players, so that you can familiarize yourself with the interface. " + 
             "The test game is a bit shorter than the real game: it ends at the end of year " + PestApplication.Instance.testWorld.maxYear + ". " +
             "During this test game, the artificial players will always contribute as many coins as you do. \n\n" +
-            "After you will be paired with human players to play the <b><i>real game</i></b>. \n \n" +
+            "You will then be paired with human players to play the <b><i>real game</i></b>. \n \n" +
             "The coins gathered during the <b><i>test game</i></b> will not be part of your final bonus.";
         }
         
@@ -418,8 +418,8 @@ public class TutorialManager : MonoBehaviour
         "For the game to work properly, it is important you <b>do not tab out of the game</b> until you reach the end of the game.";
         string buttonText = "Next";
 
-        tutorialController.DisplayTutorialPanel(title, message, buttonText);
-        tutorialController.DisplayFinalArrow();
+        tutorialController.DisplayTutorialPanel(title, message, buttonText, playerIcon);
+        
     }
 
     private void TutorialStudyGamePart2()
@@ -431,9 +431,7 @@ public class TutorialManager : MonoBehaviour
         string message = "Your wallet starts with this amount of coins. Good luck!";
         string buttonText = "Start Game";
 
-        tutorialController.DisplayTutorialPanel(title, message, buttonText);
-        tutorialController.HideFinalArrow();
-        tutorialController.DisplayFinalArrowDown();
+        tutorialController.DisplayTutorialPanel(title, message, buttonText,wallet);
     }
 
 

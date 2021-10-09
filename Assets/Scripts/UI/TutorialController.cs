@@ -63,6 +63,7 @@ public class TutorialController : MonoBehaviour
     public void DeactivateTutorialPopup()
     {
         tutorialPopup.SetActive(false);
+        arrow.SetActive(false);
     }
 
     public void NextButtonClicked()
@@ -335,7 +336,7 @@ public class TutorialController : MonoBehaviour
         else if(arrowAngle == CardinalAngles.E)
         {
             // box W of the point, arrow points E
-            arrowLocation.x = (int)(pointToPointAt.x - arrowWidth * 0.7);
+            arrowLocation.x = (int)(pointToPointAt.x - arrowWidth * 0.5);
             arrowLocation.y = pointToPointAt.y;
 
             popupLocation.x = (int)(arrowLocation.x - popupWidth / 2 - arrowWidth * 0.3);
