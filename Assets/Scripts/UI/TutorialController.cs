@@ -114,13 +114,11 @@ public class TutorialController : MonoBehaviour
         // get the center
         Vector3 gameObjectCenter = rectTransform.position;
 
-        // for comparison we cut the screen in 3 and get nine tiles
-        int screenFirstLineX = Screen.width / 3; 
-        int screenSecondLineX = 2 * screenFirstLineX;
+        // for comparison we cut the screen in 2 * 3 and get 6 tiles (left, right, top, middle, bottom)
+        int screenMiddleX = Screen.width / 2;
         int screenFirstLineY = Screen.height / 3;
         int screenSecondLineY = 2 * screenFirstLineY;
-        Debug.Log("screenFirstLineX = " + screenFirstLineX);
-        Debug.Log("ScreenSecondLineX = " + screenSecondLineX);
+        Debug.Log("screenFirstLineX = " + screenMiddleX);
         Debug.Log("screenFirstLineY = " + screenFirstLineY);
         Debug.Log("ScreenSecondLineY = " + screenSecondLineY);
         Debug.Log("gameObjectCenter = " + gameObjectCenter);
@@ -133,7 +131,7 @@ public class TutorialController : MonoBehaviour
             // anchor is top of the object
             pointToPointAt.x = gameObjectCenter.x;
             pointToPointAt.y = gameObjectCenter.y + objectHeight / 2;
-            if(gameObjectCenter.x < screenFirstLineX)
+            if(gameObjectCenter.x < screenMiddleX)
             {
                 Debug.Log("bottom left");
                 // left
@@ -141,16 +139,6 @@ public class TutorialController : MonoBehaviour
                 arrowAngle = CardinalAngles.SW;
                 // box is NE
                 popupRelativeLocation.x = 1;
-                popupRelativeLocation.y = -1;
-            }
-            else if(gameObjectCenter.x < screenSecondLineX)
-            {
-                Debug.Log("bottom center");
-                // center
-                // arrow point S
-                arrowAngle = CardinalAngles.S;
-                // box is N
-                popupRelativeLocation.x = 0;
                 popupRelativeLocation.y = -1;
             }
             else
@@ -170,25 +158,13 @@ public class TutorialController : MonoBehaviour
             // middle
             // anchor is on one side
             pointToPointAt.y = gameObjectCenter.y;
-            if(gameObjectCenter.x < screenFirstLineX)
+            if(gameObjectCenter.x < screenMiddleX)
             {
                 Debug.Log("middle left");
                 // left
                 // anchor is on the right
                 pointToPointAt.x = gameObjectCenter.x + objectWidth / 2;
                 // arrow points W
-                arrowAngle = CardinalAngles.W;
-                // popup is E
-                popupRelativeLocation.x = 1;
-                popupRelativeLocation.y = 0;
-            }
-            else if(gameObjectCenter.x < screenSecondLineX)
-            {
-                Debug.Log("middle center");
-                // center
-                // anchor is on the right as well
-                pointToPointAt.x = gameObjectCenter.x + objectWidth / 2;
-                // arrow points W as well
                 arrowAngle = CardinalAngles.W;
                 // popup is E
                 popupRelativeLocation.x = 1;
@@ -214,7 +190,7 @@ public class TutorialController : MonoBehaviour
             // anchor is on the bottom
             pointToPointAt.x = gameObjectCenter.x;
             pointToPointAt.y = gameObjectCenter.y - objectHeight / 2;
-            if(gameObjectCenter.x < screenFirstLineX)
+            if(gameObjectCenter.x < screenMiddleX)
             {
                 Debug.Log("top left");
                 // left
@@ -222,16 +198,6 @@ public class TutorialController : MonoBehaviour
                 arrowAngle = CardinalAngles.NW;
                 // popup is SE
                 popupRelativeLocation.x = 1;
-                popupRelativeLocation.y = 1;
-            }
-            else if(gameObjectCenter.x < screenSecondLineX)
-            {
-                Debug.Log("top center");
-                // center
-                // arrow points N
-                arrowAngle = CardinalAngles.N;
-                // popup is S
-                popupRelativeLocation.x = 0;
                 popupRelativeLocation.y = 1;
             }
             else
