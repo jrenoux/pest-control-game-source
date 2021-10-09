@@ -1,6 +1,45 @@
 {
-    "condition": "control",
+    "condition": "ps-pa",
     "feedbackItems": [
-         
+         {
+            "round": 1,
+            "type": "PA",
+            "utterance": [
+            "If the pest does not get to a player, all the money in their wallet will be converted into a bonus in the end.",
+            "When a player reaches the final year without being caught by the pest, the coins in their wallet are converted into a bonus."
+            ]
+        },
+        {
+            "round": 5,
+            "type": "PA",
+            "utterance": ["The more farmers contribute to the collective, the lesser the probability of pest spreading.",
+            "The number of coins collected each year impacts the probability of pest spreading."
+            ]
+        },
+         {
+            "round": 11,
+            "type": "PA",
+            "utterance": ["When the pest arrives to a farm, it gets destroyed and that farmer loses the game. This implies that remaining farmers need to contribute more to the collective to prevent pest spreading.",
+            "A farmer loses the game when the pest gets to their tile. Having less farmers in the game means that the individual contributions to the collective have to be higher to maintain the risk of pest spreading."
+            ]
+        },
+        {
+            "round": 3,
+            "type": "PS",
+            "utterance": ["Note that if each farmer contributes 3 coins per year, the risk of pest spreading will reduce to 25%.",
+            "Note that no contribution to the collective will increase the probability of pest spreading."]
+        },
+        {
+            "round": 7,
+            "type": "PS",
+            "utterance": ["The collective has gathered {collectiveAVG} coins, on average, per year.",
+            "Each farmer has contributed {farmerContributionAVG} coins, on average, per year."]
+        },
+        {
+            "round": 9,
+            "type": "PS",
+            "utterance": ["Your contribution directly affects the risk of pest spreading and at the same time your final bonus.",
+            "How much you contribute each year affects both your bonus and the probability of pest spreading."]
+        }
     ]
 }

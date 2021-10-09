@@ -380,20 +380,20 @@ public class TutorialManager : MonoBehaviour
         {
             message = "Now you will play a <b><i>test game</i></b> against artificial players, so that you can familiarize yourself with the interface. " + 
             "The test game is a bit shorter than the real game: it ends at the end of year " + PestApplication.Instance.testWorld.maxYear + ". " +
-            "During this test game, the artificial players will always contribute the same amount of coins. \n\n" +
+            "During this test game, the artificial players will always contribute as many coins as you do. \n\n" +
             "After you will be paired with human players to play the <b><i>real game</i></b>. \nYou will not receive any feedback during the test game, only during the real game.  \n \n" +
             "The coins gathered during the <b><i>test game</i></b> will not be part of your final bonus.";
         }
         else
         {
             message = "Now you will play a <b><i>test game</i></b> against artificial players, so that you can familiarize yourself with the interface. " + 
-            "During this test game, the artificial players will always contribute the same amount of coins. \n\n" +
+            "The test game is a bit shorter than the real game: it ends at the end of year " + PestApplication.Instance.testWorld.maxYear + ". " +
+            "During this test game, the artificial players will always contribute as many coins as you do. \n\n" +
             "After you will be paired with human players to play the <b><i>real game</i></b>. \n \n" +
             "The coins gathered during the <b><i>test game</i></b> will not be part of your final bonus.";
         }
         
 
-        
 
         tutorialController.DisplayTutorialPanel(title, message, buttonText);
     }

@@ -114,7 +114,7 @@ public class ChatManager : MonoBehaviour
 
         for (int i = 0; i < feedback.feedbackItems.Count; i = i + 1)
         {
-            int s = Random.Range(0, 2);
+            int s = Random.Range(0, feedback.feedbackItems[i].utterance.Count);
             fList.Add(feedback.feedbackItems[i].utterance[s]);
         }
         return fList;
