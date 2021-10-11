@@ -108,6 +108,20 @@ public sealed class PestApplication
         gameBoardController.GameBoardChanged();
     }
 
+    public DataEntryEndGame EndGame(string gameType, long timestamp)
+    {
+        // get the final wallet value
+        int finalWallet = theWorld.humanPlayer.wallet;
+
+        Debug.Log("Game finished with " + finalWallet + " coins in wallet");
+
+
+        DataEntryEndGame endGame = new DataEntryEndGame(this.prolificID, logManager.currentSessionId.ToString(),
+        gameType, chatManager.feedback.condition, timestamp, finalWallet);
+
+        return endGame;
+    }
+
     public long GetCurrentTimestamp()
     {
         DateTimeOffset now = (DateTimeOffset)DateTime.UtcNow;

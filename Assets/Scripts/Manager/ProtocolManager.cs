@@ -20,6 +20,7 @@ public class ProtocolManager : MonoBehaviour
     {
         if(hasStateChanged)
         {
+            Debug.Log("Game State has changed. New state is " + currentState);
             switch(currentState)
             {
                 case ProtocolStates.Start:
@@ -30,19 +31,15 @@ public class ProtocolManager : MonoBehaviour
                     hasStateChanged = false;
                     StartTestTutorial();
                     break;
-
                 case ProtocolStates.TestGame:
                     StartTestGame();
                     break;
-
                 case ProtocolStates.StudyTutorial:
                     StartStudyTutorial();
                     break;
-
                 case ProtocolStates.StudyGame:
                     StartStudyGame();
-                    break;
-
+                    break;    
                 case ProtocolStates.Questionnaire:
                     StartQuestionnaire();
                     break;
@@ -81,8 +78,6 @@ public class ProtocolManager : MonoBehaviour
         long startTestGameTimestamp = PestApplication.Instance.GetCurrentTimestamp();
         Debug.Log(startTestGameTimestamp);
         PestApplication.Instance.gameConfig.SetStartGameTimestamp(startTestGameTimestamp);
-
-        // the config is finished, we upload the log
         PestApplication.Instance.logManager.SaveGameConfig(PestApplication.Instance.gameConfig);
 
 
@@ -92,6 +87,7 @@ public class ProtocolManager : MonoBehaviour
 
     public void StartStudyTutorial() 
     {
+        Debug.Log("StartStudyTutorial");
         PestApplication.Instance.SetupStudyGame();
 
         long startStudyTutorialTimestamp = PestApplication.Instance.GetCurrentTimestamp();
@@ -103,7 +99,6 @@ public class ProtocolManager : MonoBehaviour
 
 
     }
-
     public void StartStudyGame()
     {
         Debug.Log("Start Study Game");
@@ -129,6 +124,7 @@ public class ProtocolManager : MonoBehaviour
         hasStateChanged = true;
         currentState = state;
     }
+
 
     ////////////////////////////////////////////////////Action functions
     public void StartTutorialClicked(string prolificID) 
@@ -159,12 +155,20 @@ public class ProtocolManager : MonoBehaviour
         if(currentState == ProtocolStates.TestGame)
         {
             // test game finished
-            Debug.Log("Going to study Tutorial");
+            long endTestGameTimestamp = PestApplication.Instance.GetCurrentTimestamp();
+            DataEntryEndGame endGame = PestApplication.Instance.EndGame("test", endTestGameTimestamp);
+            PestApplication.Instance.logManager.SaveEndGame(endGame);
+
+            Debug.Log("Going to Study Tutorial");
             SetState(ProtocolStates.StudyTutorial);
         }
         else if (currentState == ProtocolStates.StudyGame)
         {
-            Debug.Log("Going to questionnaire");
+            long endStudyGameTimestamp = PestApplication.Instance.GetCurrentTimestamp();
+            DataEntryEndGame endGame = PestApplication.Instance.EndGame("study", endStudyGameTimestamp);
+            PestApplication.Instance.logManager.SaveEndGame(endGame);
+
+            Debug.Log("Going to Questionnaire");
             SetState(ProtocolStates.Questionnaire);
         }
     }

@@ -8,7 +8,7 @@ using System.Text;
 
 public class DataLogManager : MonoBehaviour
 {
-    private System.Guid currentSessionId;
+    public System.Guid currentSessionId {get; private set;}
     public DataEntryGameConfig InitNewGameLog(string prolificId, string gameType, string condition, World theWorld)
     {
         // setup the config information
@@ -60,6 +60,17 @@ public class DataLogManager : MonoBehaviour
                 }));
             }
         }));
+        Debug.Log(entityJson);
+    }
+
+    public void SaveEndGame(DataEntryEndGame endGame)
+    {
+        string entityJson = JsonConvert.SerializeObject(endGame);
+        StartCoroutine(Upload(entityJson, result => {
+            Debug.Log("MongoDB New Game Upload: " + result);
+        }));
+
+        // for debug we print it
         Debug.Log(entityJson);
     }
 
