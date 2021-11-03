@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
 using System;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 using Newtonsoft.Json;
 
@@ -63,6 +65,35 @@ public sealed class PestApplication
         // init the study world
         string studyWorldJson = Resources.Load<TextAsset>(@"Config/study-world").text;
         this.studyWorld = JsonConvert.DeserializeObject<World>(studyWorldJson);
+
+        // retrieve the prolific ID from URL
+        string url = Application.absoluteURL;
+        Debug.Log("url = " + url);
+        Uri bUri = new Uri(url);
+
+        var query = bUri.Query.Replace("?", "");
+        var queryValues = query.Split('&').Select(q => q.Split('='))
+                   .ToDictionary(k => k[0], v => v[1]);
+        string id;
+        if(queryValues.TryGetValue("prolificid", out id)) 
+        {
+            // we test that it follows the right format
+            // prolific IDs contain 24 alphanumerical characters 
+            if(ValidateProlificID(id))
+            {
+                prolificID = id;
+            }
+            else
+            {
+                prolificID = "";
+            }
+        }
+        else 
+        {
+            // it didn't work, we store an empty value
+            prolificID = "";
+        }
+        Debug.Log("prolificid = " + prolificID);
     }
 
     /////////////////////////////////////////////Singleton method
@@ -96,8 +127,6 @@ public sealed class PestApplication
 
     public void SetupStudyGame()
     {
-        
-       
         studyWorld.Init();
 
         theWorld = studyWorld;
@@ -128,5 +157,21 @@ public sealed class PestApplication
         long timestamp = now.ToUnixTimeMilliseconds(); // 1565642183
 
         return timestamp;
+    }
+
+    public bool ValidateProlificID(string id) 
+    {
+        var regex = @"^\w{24}$";
+
+            var match = Regex.Match(id, regex, RegexOptions.IgnoreCase);
+
+            if (match.Success)
+            {
+                return true;
+            }
+            else
+            {
+                return false;        
+            }
     }
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Text.RegularExpressions;
+
 public class StartGameController : MonoBehaviour
 {
     [SerializeField]
@@ -12,6 +12,9 @@ public class StartGameController : MonoBehaviour
     [SerializeField]
     private Button startButton;
 
+    [SerializeField]
+    private GameObject prolificSection;
+
     public void Update()
     {
 
@@ -19,11 +22,20 @@ public class StartGameController : MonoBehaviour
     public void DisplayInitOverlay()
     {
         initOverlay.SetActive(true);
-        // button deactivated
-        startButton.interactable = false;
+        if(PestApplication.Instance.prolificID.Equals(""))
+        {
+            // we didn't get the id, we need the field
+            prolificSection.gameObject.SetActive(true);
 
-        // activate the button when the prolific number has been entered
-
+            // button deactivated
+            startButton.interactable = false;
+        }
+        else 
+        {
+            prolificSection.gameObject.SetActive(false);
+            startButton.interactable = true;
+        }
+        
     }
 
     public void OnProlificFieldEdited()
@@ -31,12 +43,7 @@ public class StartGameController : MonoBehaviour
         bool isValid = false;
         string prolificID = prolificInputField.text;
         // test that the prolific ID is valid
-        // prolific IDs contain 24 alphanumerical characters 
-        var regex = @"^\w{24}$";
-
-        var match = Regex.Match(prolificID, regex, RegexOptions.IgnoreCase);
-
-        if (match.Success)
+        if (PestApplication.Instance.ValidateProlificID(prolificID))
         {
             startButton.interactable = true;
         }
@@ -53,10 +60,10 @@ public class StartGameController : MonoBehaviour
         // revome the init overlay
         initOverlay.SetActive(false);
 
-        // get the prolific ID
-        string prolificID = prolificInputField.text;
-        
 
+        // get the prolific ID from the text field 
+        string prolificID = prolificInputField.text;
+         
         // inform the protocol manager
         PestApplication.Instance.protocolManager.StartTutorialClicked(prolificID);
 

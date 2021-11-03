@@ -897,7 +897,7 @@ GameObject:
   - component: {fileID: 179262313}
   - component: {fileID: 179262312}
   m_Layer: 5
-  m_Name: Image
+  m_Name: ProlificSection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1218,6 +1218,7 @@ MonoBehaviour:
   initOverlay: {fileID: 459252461}
   prolificInputField: {fileID: 1937915260}
   startButton: {fileID: 114934578}
+  prolificSection: {fileID: 179262310}
 --- !u!1 &210846656
 GameObject:
   m_ObjectHideFlags: 0

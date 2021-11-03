@@ -129,8 +129,12 @@ public class ProtocolManager : MonoBehaviour
     ////////////////////////////////////////////////////Action functions
     public void StartTutorialClicked(string prolificID) 
     {
-        // store the prolificID
-        PestApplication.Instance.prolificID = prolificID;
+        // store the prolificID if it's not already set
+        if(PestApplication.Instance.prolificID == "")
+        {
+            PestApplication.Instance.prolificID = prolificID;
+        }
+
         SetState(ProtocolStates.TestTutorial);
     }
 
