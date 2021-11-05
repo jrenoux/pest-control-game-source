@@ -27,6 +27,8 @@ public sealed class PestApplication
     public TutorialController tutorialController {get;}
     public StartGameController startGameController {get;}
 
+    public EndGameSliderController endGameController {get;}
+
     ///////////////////////////////////////// Model objects
     public World theWorld {get; set;} = null;
 
@@ -56,6 +58,8 @@ public sealed class PestApplication
         tutorialController = GameObject.Find("TutorialSection").GetComponent<TutorialController>();
         gameBoardController = GameObject.Find("GameBoardSection").GetComponent<GameBoardController>();
         startGameController = GameObject.Find("StartGameSection").GetComponent<StartGameController>();
+        endGameController = GameObject.Find("EndGameSlider").GetComponent<EndGameSliderController>();
+
         logManager = GameObject.Find("Managers").GetComponent<DataLogManager>();
 
         // init the test world
@@ -68,31 +72,27 @@ public sealed class PestApplication
 
         // retrieve the prolific ID from URL
         string url = Application.absoluteURL;
+        prolificID = "";
         Debug.Log("url = " + url);
-        Uri bUri = new Uri(url);
+        if(!url.Equals(""))
+        {
+            Uri bUri = new Uri(url);
 
-        var query = bUri.Query.Replace("?", "");
-        var queryValues = query.Split('&').Select(q => q.Split('='))
+            var query = bUri.Query.Replace("?", "");
+            var queryValues = query.Split('&').Select(q => q.Split('='))
                    .ToDictionary(k => k[0], v => v[1]);
-        string id;
-        if(queryValues.TryGetValue("prolificid", out id)) 
-        {
-            // we test that it follows the right format
-            // prolific IDs contain 24 alphanumerical characters 
-            if(ValidateProlificID(id))
+            string id;
+            if(queryValues.TryGetValue("prolificid", out id)) 
             {
-                prolificID = id;
-            }
-            else
-            {
-                prolificID = "";
+                // we test that it follows the right format
+                // prolific IDs contain 24 alphanumerical characters 
+                if(ValidateProlificID(id))
+                {
+                    prolificID = id;
+                }
             }
         }
-        else 
-        {
-            // it didn't work, we store an empty value
-            prolificID = "";
-        }
+        
         Debug.Log("prolificid = " + prolificID);
     }
 
@@ -137,16 +137,16 @@ public sealed class PestApplication
         gameBoardController.GameBoardChanged();
     }
 
-    public DataEntryEndGame EndGame(string gameType, long timestamp)
+    public DataEntryEndGame EndGame(string gameType, long timestamp, float charityDonation)
     {
         // get the final wallet value
         int finalWallet = theWorld.humanPlayer.wallet;
 
         Debug.Log("Game finished with " + finalWallet + " coins in wallet");
-
+        Debug.Log("The player donated " + charityDonation.ToString() + " to charity.");
 
         DataEntryEndGame endGame = new DataEntryEndGame(this.prolificID, logManager.currentSessionId.ToString(),
-        gameType, chatManager.feedback.condition, timestamp, finalWallet);
+        gameType, chatManager.feedback.condition, timestamp, finalWallet, charityDonation);
 
         return endGame;
     }

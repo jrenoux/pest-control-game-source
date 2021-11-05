@@ -14,9 +14,12 @@ public class DataEntryEndGame
     private long endGameTimestamp;
     [JsonProperty]
     private int finalWallet;
+    [JsonProperty]
+    private float charityDonation;
 
     public DataEntryEndGame(string prolificId, string sessionId, 
-    string gameType, string condition, long endGameTimestamp, int finalWallet)
+    string gameType, string condition, long endGameTimestamp, int finalWallet,
+    float charityDonation)
     {
         this.prolificId = prolificId;
         this.sessionId = sessionId;
@@ -24,5 +27,6 @@ public class DataEntryEndGame
         this.gameType = gameType;
         this.endGameTimestamp = endGameTimestamp;
         this.finalWallet = finalWallet;
+        this.charityDonation = charityDonation;
     }
 }

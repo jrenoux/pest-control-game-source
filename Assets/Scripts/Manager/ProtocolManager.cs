@@ -7,6 +7,7 @@ public enum ProtocolStates
     TestGame, // start a fully random test game
     StudyTutorial,
     StudyGame, // start the scripted game, that is going to be analyzed
+    CharityQuestion,
     Questionnaire, // display the link to the questionnaires
 }
 public class ProtocolManager : MonoBehaviour
@@ -15,6 +16,8 @@ public class ProtocolManager : MonoBehaviour
     private bool hasStateChanged = false;
 
     private string sessionId;
+
+    private long endGameTimestamp;
 
     public void Update()
     {
@@ -40,6 +43,9 @@ public class ProtocolManager : MonoBehaviour
                 case ProtocolStates.StudyGame:
                     StartStudyGame();
                     break;    
+                case ProtocolStates.CharityQuestion: 
+                    StartCharityQuestion();
+                    break;
                 case ProtocolStates.Questionnaire:
                     StartQuestionnaire();
                     break;
@@ -113,6 +119,12 @@ public class ProtocolManager : MonoBehaviour
         PestApplication.Instance.gameManager.StartGame(false);
     }
 
+    public void StartCharityQuestion()
+    {
+        Debug.Log("Charity Question");
+        PestApplication.Instance.endGameController.ActivateSliderPopup();
+    }
+
     public void StartQuestionnaire() 
     {
         Debug.Log("Start Questionnaires");
@@ -156,11 +168,14 @@ public class ProtocolManager : MonoBehaviour
     {
         Debug.Log("Game Finished");
         
+        // deactivate game menu
+        PestApplication.Instance.menuController.DeactivateMenu();
+        // get the current timestamp
+        endGameTimestamp = PestApplication.Instance.GetCurrentTimestamp();
         if(currentState == ProtocolStates.TestGame)
         {
             // test game finished
-            long endTestGameTimestamp = PestApplication.Instance.GetCurrentTimestamp();
-            DataEntryEndGame endGame = PestApplication.Instance.EndGame("test", endTestGameTimestamp);
+            DataEntryEndGame endGame = PestApplication.Instance.EndGame("test", endGameTimestamp, 0.0f);
             PestApplication.Instance.logManager.SaveEndGame(endGame);
 
             Debug.Log("Going to Study Tutorial");
@@ -168,13 +183,20 @@ public class ProtocolManager : MonoBehaviour
         }
         else if (currentState == ProtocolStates.StudyGame)
         {
-            long endStudyGameTimestamp = PestApplication.Instance.GetCurrentTimestamp();
-            DataEntryEndGame endGame = PestApplication.Instance.EndGame("study", endStudyGameTimestamp);
-            PestApplication.Instance.logManager.SaveEndGame(endGame);
-
-            Debug.Log("Going to Questionnaire");
-            SetState(ProtocolStates.Questionnaire);
+            Debug.Log("Going to charity question");
+            SetState(ProtocolStates.CharityQuestion);
         }
+    }
+
+    public void Donate(float value) 
+    {
+        // we save the donated value
+        DataEntryEndGame endGame = PestApplication.Instance.EndGame("study", endGameTimestamp, value);
+        PestApplication.Instance.logManager.SaveEndGame(endGame);
+
+        // and we go to the questionnaire
+        Debug.Log("Going to the questionnaire");
+        SetState(ProtocolStates.Questionnaire);
     }
 
     

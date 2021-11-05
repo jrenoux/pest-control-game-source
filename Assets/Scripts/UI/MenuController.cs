@@ -105,9 +105,28 @@ public class MenuController : MonoBehaviour
         if(PestApplication.Instance.theWorld != null)
         {
             year.text = PestApplication.Instance.theWorld.currentYear.ToString();
-            walletText.text = PestApplication.Instance.theWorld.humanPlayer.wallet.ToString();
-            string playerColor = PestApplication.Instance.theWorld.humanPlayer.id;
-            playerColorToken.sprite = Resources.Load<Sprite>("Sprites/circle_" + playerColor);
+            if(walletText == null)
+            {
+                Debug.Log("It's walletText");
+            }
+            else if(PestApplication.Instance.theWorld == null)
+            {
+                Debug.Log("It's the world O.o");
+            }
+            else if(PestApplication.Instance.theWorld.humanPlayer == null)
+            {
+                Debug.Log("It's the human player!");
+            }
+            else if(PestApplication.Instance.theWorld.humanPlayer.wallet == null)
+            {
+                Debug.Log("It's the human player's wallet");
+            }
+            else 
+            {
+                walletText.text = PestApplication.Instance.theWorld.humanPlayer.wallet.ToString();
+                string playerColor = PestApplication.Instance.theWorld.humanPlayer.id;
+                playerColorToken.sprite = Resources.Load<Sprite>("Sprites/circle_" + playerColor);
+            }
         }
         
     }
@@ -155,6 +174,8 @@ public class MenuController : MonoBehaviour
 
     public void ActivateEndGamePopup(string text)
     {
+        // deactivate menu
+        DeactivateMenu();
         endGamePopupText.text = text;
         endGamePopup.SetActive(true);
     }
