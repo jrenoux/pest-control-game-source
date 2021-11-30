@@ -122,7 +122,7 @@ public class ProtocolManager : MonoBehaviour
     public void StartCharityQuestion()
     {
         Debug.Log("Charity Question");
-        PestApplication.Instance.endGameController.ActivateSliderPopup();
+        PestApplication.Instance.charityController.ActivateSliderPopup();
     }
 
     public void StartQuestionnaire() 

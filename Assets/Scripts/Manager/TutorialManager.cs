@@ -360,7 +360,7 @@ public class TutorialManager : MonoBehaviour
             //    message = "This box will contain information about the game progression. Keep an eye on it!"; // NOT SURE WHAT TO WRITE HERE
             //}
 
-            message =  "This is <b>Rob the Bot</b>! It will give you some information about the game to help you while you play. Keep an eye on it! \n \n"+
+            message =  "This is <b>Pat the Bot</b>! It will give you some information about the game to help you while you play. Keep an eye on it! \n \n"+
                 "A message will pop up everytime it has something to say \n \n" +
                 "You can revisit its previous messages by clicking on it";
             tutorialController.DisplayTutorialPanel(title, message, buttonText, agent);

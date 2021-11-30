@@ -27,7 +27,7 @@ public sealed class PestApplication
     public TutorialController tutorialController {get;}
     public StartGameController startGameController {get;}
 
-    public EndGameSliderController endGameController {get;}
+    public CharityPopupController charityController {get;}
 
     ///////////////////////////////////////// Model objects
     public World theWorld {get; set;} = null;
@@ -58,7 +58,7 @@ public sealed class PestApplication
         tutorialController = GameObject.Find("TutorialSection").GetComponent<TutorialController>();
         gameBoardController = GameObject.Find("GameBoardSection").GetComponent<GameBoardController>();
         startGameController = GameObject.Find("StartGameSection").GetComponent<StartGameController>();
-        endGameController = GameObject.Find("EndGameSlider").GetComponent<EndGameSliderController>();
+        charityController = GameObject.Find("CharityPopup").GetComponent<CharityPopupController>();
 
         logManager = GameObject.Find("Managers").GetComponent<DataLogManager>();
 
