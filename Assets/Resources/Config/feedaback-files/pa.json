@@ -4,8 +4,7 @@
          {
             "round": 1,
             "type": "PA",
-            "utterance": [
-            "If the pest does not get to a player, all the money in their wallet will be converted into a bonus in the end."
+            "utterance": ["If the pest does not get to a player, all the money in their wallet will be converted into a bonus in the end."
             ]
         },
         {
@@ -17,7 +16,7 @@
          {
             "round": 11,
             "type": "PA",
-            "utterance": ["When the pest arrives to a farm, it gets destroyed and that farmer loses the game. This implies that remaining farmers need to contribute more to the collective to prevent pest spreading."
+            "utterance": ["When the pest arrives to a farm, it gets destroyed and that farmer loses the game. The remaining farmers then need to contribute more to the collective to prevent pest spreading."
             ]
         },
         {
@@ -33,7 +32,7 @@
         {
             "round": 9,
             "type": "PA",
-            "utterance": ["A farmer loses the game when the pest gets to their tile. Having less farmers in the game means that the individual contributions to the collective have to be higher to maintain the risk of pest spreading."]
+            "utterance": ["A farmer loses the game when the pest gets to their tile. Having less farmers means that the individual contributions to the collective must be higher to maintain a low risk of pest spreading."]
         }
     ]
 }

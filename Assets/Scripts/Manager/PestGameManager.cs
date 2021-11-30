@@ -336,7 +336,7 @@ public class PestGameManager : MonoBehaviour
         }
         else
         {
-            app.menuController.ChangePestControlResult("pest","The Pest Control was <color=red>unsuccessful</color>.");
+            app.menuController.ChangePestControlResult("pest","The Pest Control was <color=#CC2200>unsuccessful</color>.");
             //PestApplication.Instance.chatManager.SendLogMessage("The Pest Control was unsuccessful");
         }
         SetState(GameStates.CollectRevenue);

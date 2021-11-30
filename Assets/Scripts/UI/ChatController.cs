@@ -154,7 +154,7 @@ public class ChatController : MonoBehaviour
         }
         else
         {
-            successMessage.text= "The Pest Control was <color=red>unsuccessful</color>.";
+            successMessage.text= "The Pest Control was <color=#CC2200>unsuccessful</color>.";
             // check if a player lost their farm this turn
             if(farmLost != "")
             {
