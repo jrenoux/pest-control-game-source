@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 public class DataEntryEndGame
 {
     [JsonProperty]
-    private string prolificId;
+    private string userId;
     [JsonProperty]
     private string sessionId;
     [JsonProperty]
@@ -17,11 +17,11 @@ public class DataEntryEndGame
     [JsonProperty]
     private float charityDonation;
 
-    public DataEntryEndGame(string prolificId, string sessionId, 
+    public DataEntryEndGame(string userId, string sessionId, 
     string gameType, string condition, long endGameTimestamp, int finalWallet,
     float charityDonation)
     {
-        this.prolificId = prolificId;
+        this.userId = userId;
         this.sessionId = sessionId;
         this.condition = condition;
         this.gameType = gameType;

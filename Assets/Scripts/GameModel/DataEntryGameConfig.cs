@@ -9,7 +9,7 @@ public class DataEntryGameConfig
     World theWorld;
 
     [JsonProperty]
-    private string prolificId;
+    private string userId;
     [JsonProperty]
     public string sessionId {get; private set;}
     [JsonProperty]
@@ -23,9 +23,9 @@ public class DataEntryGameConfig
     [JsonProperty]
     private List<long> tutorialClicksTimestamps; 
 
-    public DataEntryGameConfig(string prolificId, string sessionId, string condition, string gameType, World theWorld)
+    public DataEntryGameConfig(string userId, string sessionId, string condition, string gameType, World theWorld)
     {
-        this.prolificId = prolificId;
+        this.userId = userId;
         this.sessionId = sessionId;
         this.condition = condition;
         this.theWorld = theWorld;
