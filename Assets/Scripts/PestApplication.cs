@@ -82,7 +82,7 @@ public sealed class PestApplication
             var queryValues = query.Split('&').Select(q => q.Split('='))
                    .ToDictionary(k => k[0], v => v[1]);
             string id;
-            if(queryValues.TryGetValue("prolificid", out id)) 
+            if(queryValues.TryGetValue("prolificID", out id)) 
             {
                 // we test that it follows the right format
                 // prolific IDs contain 24 alphanumerical characters 

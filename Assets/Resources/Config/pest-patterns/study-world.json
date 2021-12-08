@@ -1,0 +1,84 @@
+{
+    "minX": -2, 
+    "maxX": 2,
+    "minY": -5,
+    "maxY": -1, 
+    "maxYear": 15,
+    "tutorial": true,
+    "easeOfPestControl": 0.2,
+
+
+    "activePlayers": [
+        {
+            "id": "red",
+            "type": "scripted",
+            "farmLocation": {"x": 0, "y": -5},
+            "wallet": 5, 
+            "revenuePerYear": 5,
+            "actions": [2, 2, 2, 2, 3,
+                        3, 3, 3, 3, 3,
+                        5, 6, 6, 5, 5]
+        },
+        {
+            "id": "yellow",
+            "type": "scripted",
+            "farmLocation": {"x": 1, "y": -1},
+            "wallet": 5, 
+            "revenuePerYear": 5,
+            "actions": [2, 2, 2, 2, 2,
+                1, 3, 2, 3, 2,
+                3, 3, 2, 2, 2]
+        },
+        {
+            "id": "green",
+            "type": "human",
+            "farmLocation": {"x": 2, "y": -4},
+            "wallet": 5, 
+            "revenuePerYear": 5
+        },
+        {
+            "id": "blue",
+            "type": "scripted",
+            "farmLocation": {"x": 0, "y": -3},
+            "wallet": 5, 
+            "revenuePerYear": 5,
+            "actions": [3, 4, 5, 5, 5,
+                5, 5]
+        },
+        {
+            "id": "grey",
+            "type": "scripted",
+            "farmLocation": {"x": -2, "y": -1},
+            "wallet": 5, 
+            "revenuePerYear": 5,
+            "actions": [2, 1, 3, 3, 2,
+                3, 4, 4, 5, 5,
+                5, 5, 5, 5, 5]
+        }
+    ],
+
+   
+    "pestProgression": {
+        "initialPestLocation" : {"x": -2, "y": -5},
+        "type": "scripted",
+        "pattern": [
+            {"x": -1, "y": -4},
+            {"x": -1, "y": -3},
+            {"x": 0, "y": -4},
+            {"x": 0, "y": -3},
+            {"x": -1, "y": -2},
+            {"x": 0, "y": -2},
+            {"x": 1, "y": -2}
+        ],
+        "years": [
+            1, 
+            2, 
+            5, 
+            7, 
+            8, 
+            11, 
+            14
+        ]
+
+    }
+}

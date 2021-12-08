@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using TMPro;
 
 public class MenuController : MonoBehaviour
 {
@@ -72,7 +73,7 @@ public class MenuController : MonoBehaviour
     private GameObject popupPestSuccess;
 
     [SerializeField]
-    private Text successText;
+    private TMP_Text successText;
 
     [SerializeField]
     private Text earningsText;
@@ -98,6 +99,8 @@ public class MenuController : MonoBehaviour
         testGameWatermark.SetActive(false);
 
         addedCoins.SetActive(false);
+        //DeactivatePestControlPopUp();
+        //DeactivatePestControlResultPopUp();
     }
 
     void Update()
@@ -133,10 +136,15 @@ public class MenuController : MonoBehaviour
 
     public void ActivateMenu()
     {
-        upButton.interactable = true;
-        downButton.interactable = true;
-        payButton.interactable = true;
-        //robotButton.interactable = true;
+        // the menu should only be activated if the game is in waitingforplayerinput state
+        if(PestApplication.Instance.gameManager.currentGameState 
+        == GameStates.WaitingForPlayerInput)
+        {
+            upButton.interactable = true;
+            downButton.interactable = true;
+            payButton.interactable = true;
+            //robotButton.interactable = true;
+        }
     }
 
     public void DeactivateMenu()

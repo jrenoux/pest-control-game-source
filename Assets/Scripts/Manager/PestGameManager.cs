@@ -25,7 +25,7 @@ public class PestGameManager : MonoBehaviour
 {
     private bool gameStateHasChanged = false;
     private int? seed = null; // TODO how do I deal with this? 
-    private GameStates currentGameState = GameStates.WaitingForPlayerInput;
+    public GameStates currentGameState {get; private set;}  = GameStates.WaitingForPlayerInput; 
 
     private System.Random random; 
     private bool isTestGame;
@@ -331,12 +331,12 @@ public class PestGameManager : MonoBehaviour
 
         if (PestApplication.Instance.theWorld.pestProgression.latestPestControlSuccess)
         {
-            app.menuController.ChangePestControlResult("pest", "The Pest Control was <color=#48a7c7>successful</color>!");
+            app.menuController.ChangePestControlResult("pest", "The Pest Control was <mark=#48a7c770>successful</mark>.");
             //PestApplication.Instance.chatManager.SendLogMessage("The Pest Control was successful");
         }
         else
         {
-            app.menuController.ChangePestControlResult("pest","The Pest Control was <color=#CC2200>unsuccessful</color>.");
+            app.menuController.ChangePestControlResult("pest","The Pest Control was <mark=#CC220070>unsuccessful</mark>.");
             //PestApplication.Instance.chatManager.SendLogMessage("The Pest Control was unsuccessful");
         }
         SetState(GameStates.CollectRevenue);

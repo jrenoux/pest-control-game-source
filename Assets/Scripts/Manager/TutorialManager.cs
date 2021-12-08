@@ -208,8 +208,8 @@ public class TutorialManager : MonoBehaviour
         // show the year and adapt the text to the game configuration
         Debug.Log("Tutorial Year");
         string title = "<color=#52433D>Tutorial " + shownTutorialNb + "/" + nbTutorialSteps + "</color>";
-        string message = "This is the year counter. \n The game stops at the end of year " + PestApplication.Instance.studyWorld.maxYear + ". \n \n "+
-            "The game can end sooner for you if you do not survive a pest outbreak.";
+        string message = "This is the year counter. \n The game stops at the end of <b> year " + PestApplication.Instance.studyWorld.maxYear + "</b>. \n \n "+
+            "The game might end sooner for you the pest reaches your farm.";
         string buttonText = "Next";
 
         tutorialController.DisplayTutorialPanel(title, message, buttonText, year);
@@ -270,7 +270,7 @@ public class TutorialManager : MonoBehaviour
         string title = "<color=#52433D>Tutorial " + shownTutorialNb + "/" + nbTutorialSteps + "</color>";
         string message = "A paddy of this color identifies the pest. \n \n" +
             "A pest outbreak occurs at an abandoned paddy and <b>spreads with a certain probability.</b> " +
-        "If not controlled, it will directly threaten the frontier of any farmer adjacent to it. ";
+        "If not controlled, it will directly threaten any farmer adjacent to it. ";
 
         string buttonText = "Next";
 
@@ -302,7 +302,7 @@ public class TutorialManager : MonoBehaviour
         Debug.Log("Tutorial Contribution");
         string title = "<color=#52433D>Tutorial " + shownTutorialNb + "/" + nbTutorialSteps + "</color>";
         string message = "A game turn starts with setting a contribution to the agricultural collective. \n \n By moving arrows up and down and then clicking 'Pay', you decide how many coins you want to contribute to the collective each year. " +
-        "The coins you spend will be subtracted from your wallet. ";
+        "The coins you spend will be substracted from your wallet. ";
 
         string buttonText = "Next";
         tutorialController.DisplayTutorialPanel(title, message, buttonText, contribution);
@@ -415,7 +415,7 @@ public class TutorialManager : MonoBehaviour
         string title = "Let's play!";
         string message = "You will now be connected to " + (PestApplication.Instance.theWorld.activePlayers.Count - 1) + " other players to play the real game. " + 
         "Remember to check the color of your farm at the top hand-left side of the window.\n\n" +
-        "For the game to work properly, it is important you <b>do not tab out of the game</b> until you reach the end of the game.";
+        "For the game to work properly, it is important you <b>do not tab out of the game window</b> until you reach the end of the game.";
         string buttonText = "Next";
 
         tutorialController.DisplayTutorialPanel(title, message, buttonText, playerIcon);
