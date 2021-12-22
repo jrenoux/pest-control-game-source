@@ -47,6 +47,7 @@ public sealed class PestApplication
     //////////////////////////////////////////////Contructior
     PestApplication()
     {
+        Debug.unityLogger.logEnabled = false;
         chatManager = GameObject.Find("Managers").GetComponent<ChatManager>();
         gameManager = GameObject.Find("Managers").GetComponent<PestGameManager>();
         tutorialManager = GameObject.Find("Managers").GetComponent<TutorialManager>();
