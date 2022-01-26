@@ -76,29 +76,34 @@ public class DataLogManager : MonoBehaviour
 
     IEnumerator Upload(string content, System.Action<bool> callback = null)
     {
-        using (UnityWebRequest request = new UnityWebRequest("https://eu-central-1.aws.webhooks.mongodb-realm.com/api/client/v2.0/app/pestcontrolgame-dnxqz/service/UnityRequests/incoming_webhook/webhook0", "POST"))
+        string yourMongoInstance = ""; // TODO fill it here! 
+        if(yourMongoInstance != "") 
         {
-            request.SetRequestHeader("Content-Type", "application/json");
-            byte[] bodyRaw = Encoding.UTF8.GetBytes(content);
-            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-            request.downloadHandler = new DownloadHandlerBuffer();
-            yield return request.SendWebRequest();
+            using (UnityWebRequest request = new UnityWebRequest(yourMongoInstance, "POST"))
+            {
+                request.SetRequestHeader("Content-Type", "application/json");
+                byte[] bodyRaw = Encoding.UTF8.GetBytes(content);
+                request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+                request.downloadHandler = new DownloadHandlerBuffer();
+                yield return request.SendWebRequest();
 
-            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
-            {
-                Debug.Log(request.error);
-                if (callback != null)
+                if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
                 {
-                    callback.Invoke(false);
+                    Debug.Log(request.error);
+                    if (callback != null)
+                    {
+                        callback.Invoke(false);
+                    }
                 }
-            }
-            else
-            {
-                if (callback != null)
+                else
                 {
-                    callback.Invoke(request.downloadHandler.text != "{}");
+                    if (callback != null)
+                    {
+                        callback.Invoke(request.downloadHandler.text != "{}");
+                    }
                 }
             }
         }
+        
     }
 }
