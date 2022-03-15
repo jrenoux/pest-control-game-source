@@ -76,7 +76,7 @@ public class DataLogManager : MonoBehaviour
 
     IEnumerator Upload(string content, System.Action<bool> callback = null)
     {
-        string yourMongoInstance = ""; // TODO fill it here! 
+        string yourMongoInstance = "";
         if(yourMongoInstance != "") 
         {
             using (UnityWebRequest request = new UnityWebRequest(yourMongoInstance, "POST"))

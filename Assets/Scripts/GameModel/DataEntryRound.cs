@@ -26,6 +26,9 @@ public class DataEntryRound
     private long playerActionTimestamp;
     [JsonProperty]
     private long startRoundTimestamp; 
+    // TODO log wallet before contribution
+    [JsonProperty]
+    private int wallet;
 
     public DataEntryRound(string userId, string sessionId, int roundNumber, HashSet<GridTile> currentMapState) 
     {
@@ -56,8 +59,10 @@ public class DataEntryRound
         this.startRoundTimestamp = timestamp;
     }
 
-    public void SetContribution(int contribution)
+    public void SetContribution(int walletBeforeContribution, int contribution)
     {
+        this.wallet = walletBeforeContribution;
+        Debug.Log("WalleT: " + this.wallet);
         if(this.contribution == -1)
         {
             // no contribution has been set yet

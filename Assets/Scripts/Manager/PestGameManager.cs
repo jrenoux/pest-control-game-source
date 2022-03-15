@@ -170,7 +170,7 @@ public class PestGameManager : MonoBehaviour
     {
         Debug.Log("PestGameManager.ConfirmPlayerInput");
         // log the amount
-        roundLog.SetContribution(PestApplication.Instance.menuController.GetCurrentContribution());
+        roundLog.SetContribution(PestApplication.Instance.theWorld.humanPlayer.wallet, PestApplication.Instance.menuController.GetCurrentContribution());
         PestApplication.Instance.menuController.DeactivateMenu();
         // we send feedback through the chat manager only if this is the study game.
         //bool feedbackSent = false;
